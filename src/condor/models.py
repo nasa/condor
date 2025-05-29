@@ -220,7 +220,7 @@ class Options:
     attribute to map the solver function [it could actually be the callable?
     scipy.minimize, lol sorry Kenny, you can change it after release once I'm bored]
     implementations dictionary needs to key on solver and be the arg/kwarg location for
-    the numeric callbacks (for this model/paramters) and a few other things like initial
+    the numeric callbacks (for this model/parameters) and a few other things like initial
     state. Current version is pretty close, hopefully
 
     Goal: ensure API works to pass in *args and **kwargs easily; Do later
