@@ -262,7 +262,7 @@ class MyTrajectory(TrajectoryModel):
     model = some_ode_class # not sure if this is an API or convention
 
     # add outputs that depend on either integral or terminal terms
-    integrand_term.output1 = ... #some expressin
+    integrand_term.output1 = ... #some expressing
     terminal_term.output2 = ... # some expression
 
     # or both
