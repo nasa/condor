@@ -292,7 +292,7 @@ class ODESystem(ModelTemplate):
     `u=DynamicsModel.t`, implementations will use this symbol
     directly for fields)
 
-    parameter - auxilary variables (constant-in-time) that determine system behavior
+    parameter - auxiliary variables (constant-in-time) that determine system behavior
 
     state - fully defines evolution of system driven by ODEs
 
