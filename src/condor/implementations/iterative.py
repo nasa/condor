@@ -260,7 +260,7 @@ class CasadiNlpsolImplementation(OptimizationProblem):
                 print_time=False,
                 ipopt=self.options,
                 # print_level = 0-2: nothing, 3-4: summary, 5: iter table (default)
-                # tol=1E-14, # tighter tol for sensitivty
+                # tol=1E-14, # tighter tol for sensitivity
                 # accept_every_trial_step="yes",
                 # max_iter=1000,
                 # constr_viol_tol=10.,
