@@ -109,7 +109,7 @@ primary to a template, define fields and pre-loaded symbols
 
 a user model: inherit from a template
 "read" user-defined elements, including output from embedded models
-inherit user-copies of fields, prepare to be be runnable -- substitue placeholder
+inherit user-copies of fields, prepare to be be runnable -- substitute placeholder
 elements with their subs (or defaults)
 copy & extend any submodel templates
 
