@@ -1114,7 +1114,7 @@ class ModelType(BaseModelType):
         """perform placeholder substitution
 
         how to do an embedded model placeholder? use a deferred system to define? would
-        user models need to substitue, or would same basic mechanism work?
+        user models need to substitute, or would same basic mechanism work?
         """
         # process placeholders
         # TODO -- if default = None, keep it as a dummy variable
