@@ -587,7 +587,7 @@ class TrajectoryAnalysis(
     #: final time; may not be reached if the system has a terminating :class:`Event`
     #: occurring before ``tf``
     tf = placeholder(default=np.inf)  # TODO use placeholder with default = None
-    #: intitial time (default 0)
+    #: initial time (default 0)
     t0 = placeholder(default=0.0)
 
     # TODO: how to make trajectory outputs that depend on other state's outputs without
