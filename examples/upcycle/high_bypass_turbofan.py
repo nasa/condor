@@ -303,7 +303,7 @@ class MPhbtf(pyc.MPCycle):
 
     def setup(self):
 
-        self.pyc_add_pnt('DESIGN', HBTF(thermo_method='TABULAR')) # Create an instace of the High Bypass ratio Turbofan
+        self.pyc_add_pnt('DESIGN', HBTF(thermo_method='TABULAR')) # Create an instance of the High Bypass ratio Turbofan
 
         self.set_input_defaults('DESIGN.inlet.MN', 0.751)
         self.set_input_defaults('DESIGN.fan.MN', 0.4578)
