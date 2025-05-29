@@ -943,7 +943,7 @@ class AdjointSystem(System):
             # nothing about segment_idx will get used the first time (terminal event)
             # and would be out-of-bounds if if tried -- simulate will use the yielded
             # time to determine initial condition, then calls next to set endpoint of
-            # next segment then propoagate it.
+            # next segment then propagate it.
 
             # so on first iteration, will not propoagate, will hit first iteration of
             # simulate's loop and call next-yield. so do terminal update (can optimize
