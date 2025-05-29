@@ -1536,7 +1536,7 @@ submodels from atmosphere etc models from Condor-Flight?
 placeholders: elements defined by library creators to allow user inputs; condor provides
 substitution mechanisms, etc. ~ expected uer input
 
-submodels are mdoels that don't make sense w/o their parent, maybe add configuration (like
+submodels are models that don't make sense w/o their parent, maybe add configuration (like
 singleton). inner_to arg becomes modifying? because submodels only exist to modify their
 parent?  maybe submodel modifies its superior? 
 
