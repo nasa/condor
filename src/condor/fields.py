@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 # of creating input field elements to a super-system based on input field elements that
 # the sub-system require that aren't matching outputs of previous sub-systems (exact
 # name matching or define dictionary where key is current subsystem input name and value
-# is previous subsytem output name to connect) and
+# is previous subsystem output name to connect) and
 # want to do something like
 """
 class AnyTopeofModel(co....):
