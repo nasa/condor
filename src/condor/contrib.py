@@ -428,7 +428,7 @@ class ODESystem(ModelTemplate):
     # TODO: add event times/event channels to SimulationResult during detection
 
     # TODO: don't like hacks to simupy to make it work... especially the success
-    # checking stuff -- is that neccessary anymore?
+    # checking stuff -- is that necessary anymore?
 
     #: independent variable :math:`t`
     t = placeholder(default=None)
