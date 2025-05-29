@@ -803,7 +803,7 @@ class ModelTemplateType(BaseModelType):
         cls, model_name, bases, as_template=False, model_metaclass=None, **kwargs
     ):
         if model_metaclass is not None:
-            log.debug("processing for model metaclass asssigned, prepare")
+            log.debug("processing for model metaclass assigned, prepare")
         if cls.is_user_model(bases) and not as_template:
             log.debug(
                 "dispatch __prepare__ for user model %s, %s",
