@@ -72,7 +72,7 @@ __new__ is cleanup of standard class attributes before passing to type().__new__
 finalization after -- I guess it's possible the finalization could happen in __init__ or
 even __init_subclass__?
 
-customize meta so only have relevant attriburtes
+customize meta so only have relevant attributes
 too hard to use different metaclasses for base/template/user ? times special types like
 submodel, assemblycomponent.
 if template inherits from base, user inherits from template, what happens? special types
