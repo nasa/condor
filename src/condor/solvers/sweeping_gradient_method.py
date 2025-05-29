@@ -953,7 +953,7 @@ class AdjointSystem(System):
             # so update for terminal event is right, but could optimize performance for
             # special cases/maybe need distinct expression for update (to implement
             # update from from true terminal condition to effect of an immediate update)
-            # then when this yields initial event (i.e., index=1) will THEN propoagate
+            # then when this yields initial event (i.e., index=1) will THEN propagate
             # backwards to initial condition.
 
         # then exits above loop, will have just simulated to t0 and handled any possible
