@@ -85,7 +85,7 @@ casadi_implementations.ODESystem = 'a reference to check exists'
 import condor as co
 
 but probably should just figure out hooks to do that? Could create local dict of backend
-that gets updated with backend.implementations at the top of this file, then libary/user
+that gets updated with backend.implementations at the top of this file, then library/user
 code could update it (add/overwrite)
 """
 
