@@ -942,7 +942,7 @@ class AdjointSystem(System):
             yield result.state_result.t[event.index]
             # nothing about segment_idx will get used the first time (terminal event)
             # and would be out-of-bounds if if tried -- simulate will use the yielded
-            # time to determine inital condition, then calls next to set endpoint of
+            # time to determine initial condition, then calls next to set endpoint of
             # next segment then propoagate it.
 
             # so on first iteration, will not propoagate, will hit first iteration of
