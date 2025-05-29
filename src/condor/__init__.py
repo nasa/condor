@@ -48,7 +48,7 @@ submodel template:
     extension?? kwargs need to be optional, then just another layer of dispatch.
 
 assembly/component model template:
-    specify rules for acceptable child/parent (but also methods for later modificaiton)
+    specify rules for acceptable child/parent (but also methods for later modification)
     template extension classes by default 
 
 user assembly/component model creation:
