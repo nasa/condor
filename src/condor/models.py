@@ -881,7 +881,7 @@ class ModelTemplateType(BaseModelType):
         if model_metaclass is not None:
             new_cls.user_model_metaclass = model_metaclass
             model_metaclass.baseclass_for_inheritance = new_cls
-            log.debug("processing for model metaclass asssigned, new")
+            log.debug("processing for model metaclass assigned, new")
 
         if as_template:
             impl = getattr(implementations, new_cls.__mro__[1].__name__, None)
