@@ -317,7 +317,7 @@ class ODESystem(ModelTemplate):
 
     I guess block diagram is nice for simulating something like saturation block --
     create event and switch modes? but I guess that's re-creatable with modes. But maybe
-    needs control/subsitution -- I guess what I'm calling "control" is really an
+    needs control/substitution -- I guess what I'm calling "control" is really an
     (explicit) algebraic state? I guess this is really the same as an "output" and is in
     fact how simupy implements it. maybe convert output to a freefield that takes an
     expression (like constraint, I guess?) and then "make" is only in mode and adds
