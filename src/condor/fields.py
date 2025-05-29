@@ -56,7 +56,7 @@ class AnyTopeofModel(co....):
 # just literally promotes=*?
 
 
-# TODO defensive chek to make sure trajectory analysis doesn't over write odemodel
+# TODO defensive check to make sure trajectory analysis doesn't over write odemodel
 # dynamic output?
 # todo inner_to is only for ode system. should backref have a better name than
 # `inner_to`? Maybe even ODESystem....
