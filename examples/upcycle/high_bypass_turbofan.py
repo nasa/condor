@@ -94,7 +94,7 @@ class HBTF(pyc.Cycle):
         #HP-shaft connections
         self.connect('hpc.trq', 'hp_shaft.trq_0')
         self.connect('hpt.trq', 'hp_shaft.trq_1')
-        #Ideally expanding flow by conneting flight condition static pressure to nozzle exhaust pressure
+        #Ideally expanding flow by connecting flight condition static pressure to nozzle exhaust pressure
         self.connect('fc.Fl_O:stat:P', 'core_nozz.Ps_exhaust')
         self.connect('fc.Fl_O:stat:P', 'byp_nozz.Ps_exhaust')
         
