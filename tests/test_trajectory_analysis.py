@@ -40,7 +40,7 @@ def test_ct_lqr():
 
     lqr_are = DblIntLQR(K)
 
-    # causes an AttributeError, I guess becuase the Jacobian hasn't been requested?
+    # causes an AttributeError, I guess because the Jacobian hasn't been requested?
     # jac_callback = lqr_are.implementation.callback.jac_callback
     # jac_callback(K, [0])
 
