@@ -66,7 +66,7 @@ user model creation
     (python )inherit methods for binding, accessing IO data, etc.--not part of class creation
 
 
-so __prepare__ has to handle all the accesible element and field injection (accessing/copying/etc), 
+so __prepare__ has to handle all the accessible element and field injection (accessing/copying/etc), 
 CondorClassDict has to handle assignment for elements/submodels/etc
 __new__ is cleanup of standard class attributes before passing to type().__new__ and
 finalization after -- I guess it's possible the finalization could happen in __init__ or
