@@ -710,7 +710,7 @@ class Event(
     extraneous implementation constructions.
     then when trajectory analysis is evaluated and bound, add events... somewhere. Maybe
     the _res.e elements get replaced by the evaluated Event models (so one for each
-    occurance of the event)??? function isn't necessary, so maybe get an index instead.
+    occurrence of the event)??? function isn't necessary, so maybe get an index instead.
 
     """
     # TODO: singleton field event.function is very similar to objective in
