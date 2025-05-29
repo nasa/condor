@@ -25,7 +25,7 @@ class HBTF(pyc.Cycle):
 
 
     def setup(self):
-        #Setup the problem by including all the relavant components here - comp, burner, turbine etc
+        #Setup the problem by including all the relevant components here - comp, burner, turbine etc
         
         #Create any relavent short hands here:
         design = self.options['design']
