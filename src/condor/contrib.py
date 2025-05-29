@@ -454,7 +454,7 @@ class TrajectoryAnalysisMetaData(SubmodelMetaData):
 
 
 class TrajectoryAnalysisType(SubmodelType):
-    """Handle kwargs for including/excluding events (also need to include/exlcude
+    """Handle kwargs for including/excluding events (also need to include/exclude
         modes?), injecting bound events (event functions, updates) to model, etc.
 
         A common use case will be to bind the parameters then only update the state...
