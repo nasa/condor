@@ -394,7 +394,7 @@ class ODESystem(ModelTemplate):
 
     # TODO switch to scikits.odes, especially updating update function API to get an
     # array of length num_events w/ elements 0 for did not occur and +/-1 for direction
-    # don't use nan's to terminate? althogh, can't code-gen termination?
+    # don't use nan's to terminate? although, can't code-gen termination?
 
     # --> MAKE SURE scikits.odes is re-entrant. AND important TODO: figure out how to
     # create new implementation instances as needed for parallelization. Not sure if
