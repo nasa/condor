@@ -217,7 +217,7 @@ class Options:
 
     re-writing implementations to be backend agnostic (through "wrapper" layer ), the
     option class won't need to be named after a backend; maybe just take __solver__
-    attribute to map the solver funciton [it could actually be the callable?
+    attribute to map the solver function [it could actually be the callable?
     scipy.minimize, lol sorry Kenny, you can change it after release once I'm bored]
     implementations dictionary needs to key on solver and be the arg/kwarg location for
     the numeric callbacks (for this model/paramters) and a few other things like initial
