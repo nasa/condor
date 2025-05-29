@@ -388,7 +388,7 @@ class ODESystem(ModelTemplate):
     # TODO: does the simulation result need to be included in the template somehow?
     # Or is this an implementation detail and current approach is fine? Or how to
     # indicate that time, state, and output fields are time varying and should be
-    # written as an arrray and not to eg the database?
+    # written as an array and not to eg the database?
 
     # SimuPy-coupled TODO
 
