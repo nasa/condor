@@ -101,7 +101,7 @@ class HBTF(pyc.Cycle):
         #Create a balance component
         # Balances can be a bit confusing, here's some explanation -
         #   State Variables:
-        #           (W)        Inlet mass flow rate to implictly balance thrust
+        #           (W)        Inlet mass flow rate to implicitly balance thrust
         #                      LHS: perf.Fn  == RHS: Thrust requirement (set when TF is instantiated)
         #
         #           (FAR)      Fuel-air ratio to balance Tt4
