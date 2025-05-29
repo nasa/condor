@@ -250,7 +250,7 @@ class AircraftMission(SGM):
 class trajectory_analysis(model=some_ode_class,):
     class output1(output):
         integrand_cost = expression(model.state, control, etc)
-        terminal_cost = expressino(...)
+        terminal_cost = expression(...)
 
     input = ....
     model.p = input
