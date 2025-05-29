@@ -702,7 +702,7 @@ class AssignedField(Field, default_direction=Direction.output):
                 # TODO: I guess if this accepts model instances, it becomes recursive to
                 # allow dot access to sub systems? Actually, this breaks the idea of
                 # both system encapsolation and implementations. So don't do it, but
-                # document it. Can programatically add sub-system outputs though. For
+                # document it. Can programmatically add sub-system outputs though. For
                 # these reasons, ditch intermediate stuff.
                 **asdict(symbol_data),
             )
