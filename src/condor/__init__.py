@@ -17,7 +17,7 @@ from condor.models import Options
 ##################
 """
 ModelTemplate flag for user_model (default True)
-If false, can add placeholders, returns a tempalte instead of model
+If false, can add placeholders, returns a template instead of model
 
 
 
