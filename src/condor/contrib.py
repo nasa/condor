@@ -585,7 +585,7 @@ class TrajectoryAnalysis(
     #: additional output calculated from the terminal state and/or integrand terms
     trajectory_output = TrajectoryOutputField()
     #: final time; may not be reached if the system has a terminating :class:`Event`
-    #: occuring before ``tf``
+    #: occurring before ``tf``
     tf = placeholder(default=np.inf)  # TODO use placeholder with default = None
     #: intitial time (default 0)
     t0 = placeholder(default=0.0)
