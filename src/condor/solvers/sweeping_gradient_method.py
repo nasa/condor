@@ -945,7 +945,7 @@ class AdjointSystem(System):
             # time to determine initial condition, then calls next to set endpoint of
             # next segment then propagate it.
 
-            # so on first iteration, will not propoagate, will hit first iteration of
+            # so on first iteration, will not propagate, will hit first iteration of
             # simulate's loop and call next-yield. so do terminal update (can optimize
             # code to reduce computations if needed) then loop.
             # self.update(event)
