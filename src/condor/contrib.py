@@ -643,7 +643,7 @@ class TrajectoryAnalysis(
         # places embedded models came from -- I guess just events and modals?
 
 
-# TODO: need to exlcude fields, particularly dot, initial, etc.
+# TODO: need to exclude fields, particularly dot, initial, etc.
 # define which fields get lifted completely, which become "read only" (can't generate
 # new state) etc.
 # maybe allow creation of new parameters (into ODESystem parameter field), access to
