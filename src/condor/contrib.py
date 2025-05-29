@@ -412,7 +412,7 @@ class ODESystem(ModelTemplate):
 
     # TODO: currently, to get a discrete time control need to augment state and provide
     # a separate initializer, even though it's  generally going to be the same
-    # expression as the update. Should that be fixed in simupy? event funciton = 0 -> do
+    # expression as the update. Should that be fixed in simupy? event function = 0 -> do
     # update? I can fix it in casadi shooting_gradient_method.py as well.
 
     # or is initial where we want it? consistent with initial conition processing for
