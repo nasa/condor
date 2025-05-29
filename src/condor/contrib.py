@@ -341,7 +341,7 @@ class ODESystem(ModelTemplate):
 
     """
 
-    # TODO: indepdent var  needs its own descriptor type? OR do we want user classes to do
+    # TODO: independent var  needs its own descriptor type? OR do we want user classes to do
     # t = DynamicsModel.independent_variable ? That would allow leaving it like this and
     # consumers still know what it is
     # or just set it to t and always use it? trying this way...
