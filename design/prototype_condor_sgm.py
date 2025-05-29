@@ -26,7 +26,7 @@ class BaseLinCovCW:
     # can create state rate from overloading simupy but can't inherently inspect
     # interior signals, only IO which is very systems-y. May need symbolic vector to
     # dispatch operations? neat.
-    # neeed to automate passing up of metadata from a simupy bd -- 
+    # need to automate passing up of metadata from a simupy bd -- 
     # similar system output as attribute dict with state keysa, ?? o
     # can't have computational blocks?? unless they provide a derivative?
     # need to create own symbolic representation 
