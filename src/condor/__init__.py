@@ -159,7 +159,7 @@ __new__ is:
 
   final bind fields
   process inheriting submodel templates
-  if implementaiton exists
+  if implementation exists
       create input field dataclasses (why not earlier??)
       bind implementation
       bind dataclasses (attach qualname etc)
