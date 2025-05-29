@@ -7,7 +7,7 @@ Tabular Data
 # %%
 # It is often useful to interpolate pre-existing data. For this, the
 # :class:`~condor.contrib.TableLookup` model provides a convenient way to specify the
-# interpolant input and output data. This model also provids an example of using a
+# interpolant input and output data. This model also provides an example of using a
 # :class:`~condor.contrib.ExternalSolverWrapper` by wrapping  uses the `ndsplines
 # <https://ndsplines.readthedocs.io/>`_ library to perform the interpolation and
 # compute derivatives as needed for tensor-product B-splines.  Note that this table
