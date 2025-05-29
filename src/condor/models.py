@@ -1448,7 +1448,7 @@ ModelTemplateType.user_model_baseclass = Model
 Do we need class inheritance? "as_template" flag should suffice
 
 Case 1: defining a new model template -- very fiew fields, just copy and paste;
-manipulate and re-use implementaitons etc
+manipulate and re-use implementations etc
 
 Case 2: defining a new user model -- use sub-models or functions that perform
 declarative operations for you? Need to think about this, I guess it should be possible
