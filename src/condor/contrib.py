@@ -872,7 +872,7 @@ class ExternalSolverWrapperType(ModelTemplateType):
         # gets called on instantiation of the user wrapper, so COULD return the
         # condor model instead of the wrapper class -- perhaps this is more condoric,
         # not sure what's preferable
-        # actully, this can get used instead of create model with init wrapper? no,
+        # actually, this can get used instead of create model with init wrapper? no,
         # don't have access to instance yet.
         # print(cls, "__call__")
         wrapper_object = super().__call__(*args, **kwargs)
