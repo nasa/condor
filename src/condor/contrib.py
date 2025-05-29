@@ -287,7 +287,7 @@ class ODESystem(ModelTemplate):
     """
 
     """
-    t - indepdendent variable of ODE, notionally time but can be used
+    t - independent variable of ODE, notionally time but can be used
     for anything. Used directly by subclasses (e.g., user code may use
     `u=DynamicsModel.t`, implementations will use this symbol
     directly for fields)
