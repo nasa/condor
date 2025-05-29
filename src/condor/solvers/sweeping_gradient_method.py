@@ -439,7 +439,7 @@ class NextTimeFromSlice:
         return t < self.start
 
     def after_stop(self, t):
-        # if t is exactly stop time, this has already occured
+        # if t is exactly stop time, this has already occurred
         if self.direction < 0:
             return t <= self.stop
         return t >= self.stop
