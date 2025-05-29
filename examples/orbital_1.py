@@ -212,7 +212,7 @@ class TotalDeltaV(co.OptimizationProblem):
     # inheritance... I suppose the originally Hohmann model could easily be written to
     # include more parameters to solve all permutations of this problem... weights for
     # each output, upper bounds for each output (and combinations?)
-    # what about including a default for a paremter at a model level? no, just make a
+    # what about including a default for a parameter at a model level? no, just make a
     # dict like unbounded_kwargs to fill in with a large number/inf
     pos_disp_max = parameter()
     constraint(sim.final_pos_disp-pos_disp_max, upper_bound=0.)
