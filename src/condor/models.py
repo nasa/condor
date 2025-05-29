@@ -1267,7 +1267,7 @@ class Model(metaclass=ModelType):
         if missing_args or extra_args:
             error_message = f"While calling {field._model.__class__.__name__}, "
             if extra_args:
-                error_message += f"recieved extra arguments: {extra_args}"
+                error_message += f"received extra arguments: {extra_args}"
             if extra_args and missing_args:
                 error_message += " and "
             if missing_args:
