@@ -129,7 +129,7 @@ class AlgebraicSystem(ModelTemplate, model_metaclass=AlgebraicSystemType):
             var = getattr(cls, k)
             if var.field_type is not cls.variable:
                 raise ValueError(
-                    "Use set initial to set the initialier for variables, attempting to set {k}"
+                    "Use set initial to set the initializer for variables, attempting to set {k}"
                 )
             var.initializer = v
 
