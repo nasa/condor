@@ -209,7 +209,7 @@ class TrajectoryAnalysis:
                     if isinstance(at_time_start, symbol_class) or at_time_start != 0.0:
                         e_expr = e_expr * (model.t >= at_time_start)
                         # if there is a start offset, add a linear term to provide a
-                        # zero-crossing at first occurance
+                        # zero-crossing at first occurrence
                         pre_term = (at_time_start - model.t) * (
                             model.t <= at_time_start
                         )

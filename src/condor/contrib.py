@@ -129,7 +129,7 @@ class AlgebraicSystem(ModelTemplate, model_metaclass=AlgebraicSystemType):
             var = getattr(cls, k)
             if var.field_type is not cls.variable:
                 raise ValueError(
-                    "Use set initial to set the initialier for variables, attempting to set {k}"
+                    "Use set initial to set the initializer for variables, attempting to set {k}"
                 )
             var.initializer = v
 
@@ -223,7 +223,7 @@ class OptimizationProblem(ModelTemplate, model_metaclass=OptimizationProblemType
             var = getattr(cls, k)
             if var.field_type is not cls.variable:
                 raise ValueError(
-                    "Use set initial to set the initialier for variables, attempting to set {k}"
+                    "Use set initial to set the initializer for variables, attempting to set {k}"
                 )
             var.initializer = v
 
@@ -285,12 +285,12 @@ class ODESystem(ModelTemplate):
     """
 
     """
-    t - indepdendent variable of ODE, notionally time but can be used
+    t - independent variable of ODE, notionally time but can be used
     for anything. Used directly by subclasses (e.g., user code may use
     `u=DynamicsModel.t`, implementations will use this symbol
     directly for fields)
 
-    parameter - auxilary variables (constant-in-time) that determine system behavior
+    parameter - auxiliary variables (constant-in-time) that determine system behavior
 
     state - fully defines evolution of system driven by ODEs
 
@@ -315,7 +315,7 @@ class ODESystem(ModelTemplate):
 
     I guess block diagram is nice for simulating something like saturation block --
     create event and switch modes? but I guess that's re-creatable with modes. But maybe
-    needs control/subsitution -- I guess what I'm calling "control" is really an
+    needs control/substitution -- I guess what I'm calling "control" is really an
     (explicit) algebraic state? I guess this is really the same as an "output" and is in
     fact how simupy implements it. maybe convert output to a freefield that takes an
     expression (like constraint, I guess?) and then "make" is only in mode and adds
@@ -339,7 +339,7 @@ class ODESystem(ModelTemplate):
 
     """
 
-    # TODO: indepdent var  needs its own descriptor type? OR do we want user classes to do
+    # TODO: independent var  needs its own descriptor type? OR do we want user classes to do
     # t = DynamicsModel.independent_variable ? That would allow leaving it like this and
     # consumers still know what it is
     # or just set it to t and always use it? trying this way...
@@ -386,13 +386,13 @@ class ODESystem(ModelTemplate):
     # TODO: does the simulation result need to be included in the template somehow?
     # Or is this an implementation detail and current approach is fine? Or how to
     # indicate that time, state, and output fields are time varying and should be
-    # written as an arrray and not to eg the database?
+    # written as an array and not to eg the database?
 
     # SimuPy-coupled TODO
 
     # TODO switch to scikits.odes, especially updating update function API to get an
     # array of length num_events w/ elements 0 for did not occur and +/-1 for direction
-    # don't use nan's to terminate? althogh, can't code-gen termination?
+    # don't use nan's to terminate? although, can't code-gen termination?
 
     # --> MAKE SURE scikits.odes is re-entrant. AND important TODO: figure out how to
     # create new implementation instances as needed for parallelization. Not sure if
@@ -410,7 +410,7 @@ class ODESystem(ModelTemplate):
 
     # TODO: currently, to get a discrete time control need to augment state and provide
     # a separate initializer, even though it's  generally going to be the same
-    # expression as the update. Should that be fixed in simupy? event funciton = 0 -> do
+    # expression as the update. Should that be fixed in simupy? event function = 0 -> do
     # update? I can fix it in casadi shooting_gradient_method.py as well.
 
     # or is initial where we want it? consistent with initial conition processing for
@@ -426,7 +426,7 @@ class ODESystem(ModelTemplate):
     # TODO: add event times/event channels to SimulationResult during detection
 
     # TODO: don't like hacks to simupy to make it work... especially the success
-    # checking stuff -- is that neccessary anymore?
+    # checking stuff -- is that necessary anymore?
 
     #: independent variable :math:`t`
     t = placeholder(default=None)
@@ -452,7 +452,7 @@ class TrajectoryAnalysisMetaData(SubmodelMetaData):
 
 
 class TrajectoryAnalysisType(SubmodelType):
-    """Handle kwargs for including/excluding events (also need to include/exlcude
+    """Handle kwargs for including/excluding events (also need to include/exclude
         modes?), injecting bound events (event functions, updates) to model, etc.
 
         A common use case will be to bind the parameters then only update the state...
@@ -584,9 +584,9 @@ class TrajectoryAnalysis(
     #: additional output calculated from the terminal state and/or integrand terms
     trajectory_output = TrajectoryOutputField()
     #: final time; may not be reached if the system has a terminating :class:`Event`
-    #: occuring before ``tf``
+    #: occurring before ``tf``
     tf = placeholder(default=np.inf)  # TODO use placeholder with default = None
-    #: intitial time (default 0)
+    #: initial time (default 0)
     t0 = placeholder(default=0.0)
 
     # TODO: how to make trajectory outputs that depend on other state's outputs without
@@ -646,7 +646,7 @@ class TrajectoryAnalysis(
         # places embedded models came from -- I guess just events and modals?
 
 
-# TODO: need to exlcude fields, particularly dot, initial, etc.
+# TODO: need to exclude fields, particularly dot, initial, etc.
 # define which fields get lifted completely, which become "read only" (can't generate
 # new state) etc.
 # maybe allow creation of new parameters (into ODESystem parameter field), access to
@@ -713,7 +713,7 @@ class Event(
     extraneous implementation constructions.
     then when trajectory analysis is evaluated and bound, add events... somewhere. Maybe
     the _res.e elements get replaced by the evaluated Event models (so one for each
-    occurance of the event)??? function isn't necessary, so maybe get an index instead.
+    occurrence of the event)??? function isn't necessary, so maybe get an index instead.
 
     """
     # TODO: singleton field event.function is very similar to objective in
@@ -875,7 +875,7 @@ class ExternalSolverWrapperType(ModelTemplateType):
         # gets called on instantiation of the user wrapper, so COULD return the
         # condor model instead of the wrapper class -- perhaps this is more condoric,
         # not sure what's preferable
-        # actully, this can get used instead of create model with init wrapper? no,
+        # actually, this can get used instead of create model with init wrapper? no,
         # don't have access to instance yet.
         # print(cls, "__call__")
         wrapper_object = super().__call__(*args, **kwargs)

@@ -44,7 +44,7 @@ AssignedField, BaseElement, BoundedAssignmentField,
 ##################
 """
 ModelTemplate flag for user_model (default True)
-If false, can add placeholders, returns a tempalte instead of model
+If false, can add placeholders, returns a template instead of model
 
 
 
@@ -75,7 +75,7 @@ submodel template:
     extension?? kwargs need to be optional, then just another layer of dispatch.
 
 assembly/component model template:
-    specify rules for acceptable child/parent (but also methods for later modificaiton)
+    specify rules for acceptable child/parent (but also methods for later modification)
     template extension classes by default 
 
 user assembly/component model creation:
@@ -93,13 +93,13 @@ user model creation
     (python )inherit methods for binding, accessing IO data, etc.--not part of class creation
 
 
-so __prepare__ has to handle all the accesible element and field injection (accessing/copying/etc), 
+so __prepare__ has to handle all the accessible element and field injection (accessing/copying/etc), 
 CondorClassDict has to handle assignment for elements/submodels/etc
 __new__ is cleanup of standard class attributes before passing to type().__new__ and
 finalization after -- I guess it's possible the finalization could happen in __init__ or
 even __init_subclass__?
 
-customize meta so only have relevant attriburtes
+customize meta so only have relevant attributes
 too hard to use different metaclasses for base/template/user ? times special types like
 submodel, assemblycomponent.
 if template inherits from base, user inherits from template, what happens? special types
@@ -135,8 +135,8 @@ a submodel template: inherit SubmodelTemplate
 primary to a template, define fields and pre-loaded symbols
 
 a user model: inherit from a template
-"read" user-defined elements, including output from embeded models
-inherit user-copies of fields, prepare to be be runnable -- substitue placeholder
+"read" user-defined elements, including output from embedded models
+inherit user-copies of fields, prepare to be be runnable -- substitute placeholder
 elements with their subs (or defaults)
 copy & extend any submodel templates
 
@@ -186,7 +186,7 @@ __new__ is:
 
   final bind fields
   process inheriting submodel templates
-  if implementaiton exists
+  if implementation exists
       create input field dataclasses (why not earlier??)
       bind implementation
       bind dataclasses (attach qualname etc)

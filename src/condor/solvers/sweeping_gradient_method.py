@@ -438,7 +438,7 @@ class NextTimeFromSlice:
         return t < self.start
 
     def after_stop(self, t):
-        # if t is exactly stop time, this has already occured
+        # if t is exactly stop time, this has already occurred
         if self.direction < 0:
             return t <= self.stop
         return t >= self.stop
@@ -939,10 +939,10 @@ class AdjointSystem(System):
             yield result.state_result.t[event.index]
             # nothing about segment_idx will get used the first time (terminal event)
             # and would be out-of-bounds if if tried -- simulate will use the yielded
-            # time to determine inital condition, then calls next to set endpoint of
-            # next segment then propoagate it.
+            # time to determine initial condition, then calls next to set endpoint of
+            # next segment then propagate it.
 
-            # so on first iteration, will not propoagate, will hit first iteration of
+            # so on first iteration, will not propagate, will hit first iteration of
             # simulate's loop and call next-yield. so do terminal update (can optimize
             # code to reduce computations if needed) then loop.
             # self.update(event)
@@ -950,7 +950,7 @@ class AdjointSystem(System):
             # so update for terminal event is right, but could optimize performance for
             # special cases/maybe need distinct expression for update (to implement
             # update from from true terminal condition to effect of an immediate update)
-            # then when this yields initial event (i.e., index=1) will THEN propoagate
+            # then when this yields initial event (i.e., index=1) will THEN propagate
             # backwards to initial condition.
 
         # then exits above loop, will have just simulated to t0 and handled any possible

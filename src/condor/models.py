@@ -221,10 +221,10 @@ class Options:
 
     re-writing implementations to be backend agnostic (through "wrapper" layer ), the
     option class won't need to be named after a backend; maybe just take __solver__
-    attribute to map the solver funciton [it could actually be the callable?
+    attribute to map the solver function [it could actually be the callable?
     scipy.minimize, lol sorry Kenny, you can change it after release once I'm bored]
     implementations dictionary needs to key on solver and be the arg/kwarg location for
-    the numeric callbacks (for this model/paramters) and a few other things like initial
+    the numeric callbacks (for this model/parameters) and a few other things like initial
     state. Current version is pretty close, hopefully
 
     Goal: ensure API works to pass in *args and **kwargs easily; Do later
@@ -824,7 +824,7 @@ class ModelTemplateType(BaseModelType):
         cls, model_name, bases, as_template=False, model_metaclass=None, **kwargs
     ):
         if model_metaclass is not None:
-            log.debug("prcessing for model metaclass asssigned, prepare")
+            log.debug("processing for model metaclass assigned, prepare")
         if cls.is_user_model(bases) and not as_template:
             log.debug(
                 "dispatch __prepare__ for user model %s, %s",
@@ -927,7 +927,7 @@ class ModelTemplateType(BaseModelType):
         if model_metaclass is not None:
             new_cls.user_model_metaclass = model_metaclass
             model_metaclass.baseclass_for_inheritance = new_cls
-            log.debug("prcessing for model metaclass asssigned, new")
+            log.debug("processing for model metaclass assigned, new")
 
         if as_template:
             impl = ModelType.get_implementation_class(new_cls)
@@ -1182,7 +1182,7 @@ class ModelType(BaseModelType):
         """perform placeholder substitution
 
         how to do an embedded model placeholder? use a deferred system to define? would
-        user models need to substitue, or would same basic mechanism work?
+        user models need to substitute, or would same basic mechanism work?
         """
         # process placeholders
         # TODO -- if default = None, keep it as a dummy variable
@@ -1297,7 +1297,7 @@ class Model(metaclass=ModelType):
         if missing_args or extra_args:
             error_message = f"While calling {field._model}, "
             if extra_args:
-                error_message += f"recieved extra arguments: {extra_args}"
+                error_message += f"received extra arguments: {extra_args}"
             if extra_args and missing_args:
                 error_message += " and "
             if missing_args:
@@ -1503,7 +1503,7 @@ ModelTemplateType.user_model_baseclass = Model
 Do we need class inheritance? "as_template" flag should suffice
 
 Case 1: defining a new model template -- very fiew fields, just copy and paste;
-manipulate and re-use implementaitons etc
+manipulate and re-use implementations etc
 
 Case 2: defining a new user model -- use sub-models or functions that perform
 declarative operations for you? Need to think about this, I guess it should be possible
@@ -1591,7 +1591,7 @@ submodels from atmosphere etc models from Condor-Flight?
 placeholders: elements defined by library creators to allow user inputs; condor provides
 substitution mechanisms, etc. ~ expected uer input
 
-submodels are mdoels that don't make sense w/o their parent, maybe add configuration (like
+submodels are models that don't make sense w/o their parent, maybe add configuration (like
 singleton). inner_to arg becomes modifying? because submodels only exist to modify their
 parent?  maybe submodel modifies its superior? 
 

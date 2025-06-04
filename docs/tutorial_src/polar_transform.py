@@ -27,7 +27,7 @@ class PolarTransform(co.ExplicitSystem):
 
 
 # %%
-# In general, once you've defined any system in Condor, you can just evaulate it
+# In general, once you've defined any system in Condor, you can just evaluate it
 # numerically by passing in numbers:
 
 p = PolarTransform(x=3, y=4)

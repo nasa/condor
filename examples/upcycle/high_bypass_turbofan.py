@@ -22,9 +22,9 @@ class HBTF(pyc.Cycle):
 
 
     def setup(self):
-        #Setup the problem by including all the relavant components here - comp, burner, turbine etc
+        #Setup the problem by including all the relevant components here - comp, burner, turbine etc
         
-        #Create any relavent short hands here:
+        #Create any relevant short hands here:
         design = self.options['design']
         
         USE_TABULAR = True
@@ -91,14 +91,14 @@ class HBTF(pyc.Cycle):
         #HP-shaft connections
         self.connect('hpc.trq', 'hp_shaft.trq_0')
         self.connect('hpt.trq', 'hp_shaft.trq_1')
-        #Ideally expanding flow by conneting flight condition static pressure to nozzle exhaust pressure
+        #Ideally expanding flow by connecting flight condition static pressure to nozzle exhaust pressure
         self.connect('fc.Fl_O:stat:P', 'core_nozz.Ps_exhaust')
         self.connect('fc.Fl_O:stat:P', 'byp_nozz.Ps_exhaust')
         
         #Create a balance component
         # Balances can be a bit confusing, here's some explanation -
         #   State Variables:
-        #           (W)        Inlet mass flow rate to implictly balance thrust
+        #           (W)        Inlet mass flow rate to implicitly balance thrust
         #                      LHS: perf.Fn  == RHS: Thrust requirement (set when TF is instantiated)
         #
         #           (FAR)      Fuel-air ratio to balance Tt4
@@ -300,7 +300,7 @@ class MPhbtf(pyc.MPCycle):
 
     def setup(self):
 
-        self.pyc_add_pnt('DESIGN', HBTF(thermo_method='TABULAR')) # Create an instace of the High Bypass ratio Turbofan
+        self.pyc_add_pnt('DESIGN', HBTF(thermo_method='TABULAR')) # Create an instance of the High Bypass ratio Turbofan
 
         self.set_input_defaults('DESIGN.inlet.MN', 0.751)
         self.set_input_defaults('DESIGN.fan.MN', 0.4578)

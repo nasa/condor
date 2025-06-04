@@ -78,7 +78,7 @@ class LinCovCW(co.ODESystem):
     dot[C] = Fcal @ C + C @ Fcal.T + Cov_prop_offset
     dot[tt] = 1.
 
-    # TODO: in generla case, this should be a dfhat/dx(hat) instead of exact Acw
+    # TODO: in general case, this should be a dfhat/dx(hat) instead of exact Acw
     # and should be reflected in bottom right corner of Fcal as well
     dot[P] = Acw @ P + P @ Acw.T + P_prop_offset
 

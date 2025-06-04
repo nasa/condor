@@ -15,7 +15,7 @@ solvers.
 # it
 
 # would like implementation to be the interface between model field and the callback,
-# but some of the helpers (eg initializer, state settter, etc) generate functions, not
+# but some of the helpers (eg initializer, state setter, etc) generate functions, not
 # just collect expressions.
 
 # TODO figure out how to use names for casadi callback layer

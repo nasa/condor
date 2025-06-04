@@ -246,7 +246,7 @@ def symbol_generator(name, n, m=1, symmetric=False, diagonal=0, dynamic=False, *
     ----------
     name : string
         Base name for variables; each variable is name_ij, which
-        admitedly only works clearly for n,m < 10
+        admittedly only works clearly for n,m < 10
     n : int
         Number of rows
     m : int

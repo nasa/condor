@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 # of creating input field elements to a super-system based on input field elements that
 # the sub-system require that aren't matching outputs of previous sub-systems (exact
 # name matching or define dictionary where key is current subsystem input name and value
-# is previous subsytem output name to connect) and
+# is previous subsystem output name to connect) and
 # want to do something like
 """
 class AnyTopeofModel(co....):
@@ -56,7 +56,7 @@ class AnyTopeofModel(co....):
 # just literally promotes=*?
 
 
-# TODO defensive chek to make sure trajectory analysis doesn't over write odemodel
+# TODO defensive check to make sure trajectory analysis doesn't over write odemodel
 # dynamic output?
 # todo inner_to is only for ode system. should backref have a better name than
 # `inner_to`? Maybe even ODESystem....
@@ -807,7 +807,7 @@ class AssignedField(Field, default_direction=Direction.output):
                 # TODO: I guess if this accepts model instances, it becomes recursive to
                 # allow dot access to sub systems? Actually, this breaks the idea of
                 # both system encapsolation and implementations. So don't do it, but
-                # doument it. Can programatically add sub-system outputs though. For
+                # document it. Can programmatically add sub-system outputs though. For
                 # these reasons, ditch intermediate stuff.
                 **asdict(symbol_data),
             )

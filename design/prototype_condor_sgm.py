@@ -26,7 +26,7 @@ class BaseLinCovCW:
     # can create state rate from overloading simupy but can't inherently inspect
     # interior signals, only IO which is very systems-y. May need symbolic vector to
     # dispatch operations? neat.
-    # neeed to automate passing up of metadata from a simupy bd -- 
+    # need to automate passing up of metadata from a simupy bd -- 
     # similar system output as attribute dict with state keysa, ?? o
     # can't have computational blocks?? unless they provide a derivative?
     # need to create own symbolic representation 
@@ -250,7 +250,7 @@ class AircraftMission(SGM):
 class trajectory_analysis(model=some_ode_class,):
     class output1(output):
         integrand_cost = expression(model.state, control, etc)
-        terminal_cost = expressino(...)
+        terminal_cost = expression(...)
 
     input = ....
     model.p = input
@@ -262,7 +262,7 @@ class MyTrajectory(TrajectoryModel):
     model = some_ode_class # not sure if this is an API or convention
 
     # add outputs that depend on either integral or terminal terms
-    integrand_term.output1 = ... #some expressin
+    integrand_term.output1 = ... #some expressing
     terminal_term.output2 = ... # some expression
 
     # or both
