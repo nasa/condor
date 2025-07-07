@@ -216,22 +216,29 @@ def symmetric_to_unique(value, symbolic=True):
 def unique_to_symmetric(unique, symbolic=True):
     """helper function for wrapping a symmetric symbol"""
     count = unique.shape[0]
-    n = m = int((np.sqrt(1 + 8 * count) - 1) / 2)
+    n = m = int((np.sqrt(1 + 8 * count) - 1) // 2)  # use integer division
+
     if symbolic:
-        # using an empty MX is unverifiable by casadi.is_equal, but concatenating the
-        # iniddividual elements from a list works
         matrix_symbols = np.empty((n, m), dtype=np.object_)
     else:
         use_shape = (n, m) if unique.shape[1] == 1 else (n, m, unique.shape[1])
         matrix_symbols = np.empty(use_shape)
-    indices = np.tril_indices(n)
-    for kk, (i, j) in enumerate(zip(*indices)):
-        matrix_symbols[i, j] = unique[kk]
-        if i != j:
-            matrix_symbols[j, i] = unique[kk]
+
+    # Vectorized fill for lower triangular indices
+    tril_i, tril_j = np.tril_indices(n)
+    matrix_symbols[tril_i, tril_j] = (
+        unique[:, 0] if unique.ndim == 2 and unique.shape[1] == 1 else unique
+    )
+    matrix_symbols[tril_j, tril_i] = matrix_symbols[
+        tril_i, tril_j
+    ]  # fill upper triangle
+
     if symbolic:
-        symbol_list = matrix_symbols.tolist()
-        matrix_symbols = casadi.vcat([casadi.hcat(row) for row in symbol_list])
+        # matrix_symbols is (n,m) of casadi.MX/scalars
+        # Avoid .tolist()+hcat by stacking once over axis 1, once over axis 0
+        matrix_symbols = casadi.vcat(
+            [casadi.hcat(matrix_symbols[i, :].tolist()) for i in range(n)]
+        )
     return matrix_symbols
 
 
