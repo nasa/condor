@@ -81,6 +81,27 @@ install with pip:
 
    $ pip install condor
 
+Contributing
+------------
+
+Please feel free to share any thoughts or opinions about the design and
+implementation of this software by `opening an issue on GitHub
+<https://github.com/nasa/condor/issues/new>`_. Constructive feedback is
+welcomed and appreciated.
+
+Bug fix pull requests are always welcome. For feature additions, breaking
+changes, etc. check if there is an open issue discussing the change and
+reference it in the pull request. If there isn't one, it is recommended to open
+one with your rationale for the change before spending significant time
+preparing the pull request.
+
+Ideally, new/changed functionality should come with tests and documentation. If
+you are new to contributing, it is perfectly fine to open a work-in-progress
+pull request and have it iteratively reviewed.
+
+For pull requests to be accepted, all contributors must have a contributor's
+agreement on file with NASA. We will provide contributors with additional
+information during the review process.
 
 License
 -------
