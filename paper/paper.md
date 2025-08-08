@@ -28,7 +28,7 @@ Numerical modeling is an important part of the engineering workflow, providing u
 
 # Statement of Need
 
-Condor was developed at NASA Ames Research Center's Systems Analysis Office to solve a variety of analysis and design problems in aeronautics [@Margolis2024gascon, @Listgarten2025, @Pham2025, @Park2025, @zelinski2025ttbw, @Margolis2026gascon], orbital trajectory design [@Koehler2024, @Margolis2024techniques, @Margolis2024coopt,], and subsystem design [@Margolis2026bwb, @Margolis2026npss]. Condor's modular framework makes it feasible to develop algorithms using exising models as test examples like gradient methods for solutions to ordinary differential equation with events [@Margolis2023sweeping] or uncertain differential equations [@Margolis2026sigma].
+Condor was developed at NASA Ames Research Center's Systems Analysis Office to solve a variety of analysis and design problems in aeronautics [@Margolis2024gascon; @Listgarten2025; @Pham2025; @Park2025; @zelinski2025ttbw; @Margolis2026gascon], orbital trajectory design [@Koehler2024; @Margolis2024techniques; @Margolis2024coopt], and subsystem design [@Margolis2026bwb; @Margolis2026npss]. Condor's modular framework makes it feasible to develop algorithms using exising models as test examples like gradient methods for solutions to ordinary differential equation with events [@Margolis2023sweeping] or uncertain differential equations [@Margolis2026sigma].
 
 A variety of existing libraries work towards unifying solvers and optimization tools under a single interface,however to the best of the author's knowledge, no library provides such a convenient modeling language with a modular framework to leverage existing solvers.
 
