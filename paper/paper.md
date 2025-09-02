@@ -31,7 +31,7 @@ Numerical modeling is an important part of the engineering workflow, providing u
 Condor was developed at NASA Ames Research Center's Systems Analysis Office to solve a variety of analysis and design problems in aeronautics [@Margolis2024gascon; @Listgarten2025; @Pham2025; @Park2025; @zelinski2025ttbw; @Margolis2026gascon], orbital trajectory design [@Koehler2024; @Margolis2024techniques; @Margolis2024coopt], and subsystem design [@Margolis2026bwb; @Margolis2026npss]. Condor's modular framework makes it feasible to develop algorithms using existing models as test examples like gradient methods for solutions to ordinary differential equation with events [@Margolis2023sweeping] or uncertain differential equations [@Margolis2026sigma].
 
 A variety of existing libraries work towards unifying solvers and optimization tools under a single interface.
-After assessing the available tools, we that no existing tool provided an interface that we felt improved the engineering workflow.
+After assessing the available tools, we found that no existing tool provided an interface that we felt improved the engineering workflow.
 Condor is unique, to the best of the author's knowledge, for providing a mathematically-focused DSL to facilitate rapid prototyping or such a modular architecture to rapidly deploy new or existing solvers for engineering problems. This improves the engineering workflow by providing a single interface to any existing solver supporting definition of new models as conceptual analysis demands arise.
 
 We built Condor to provide an interface for engineers that used computational tools from the AI/ML community as the "backend" of the framework in the Python programming language. 
