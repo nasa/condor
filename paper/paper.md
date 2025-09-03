@@ -23,7 +23,7 @@ bibliography: references.bib
 
 # Summary
 
-Numerical modeling is an important part of the engineering workflow, providing understanding of engineering systems without the often prohibitive cost of fabricating physical models and prototypes. Condor is a mathematical modeling framework in Python that enables the rapid deployment of models for analysis and design. Condor uses metaprogramming to provide a mathematical domain-specific language (DSL) that reduces the software development effort needed to develop models. It also features a modular model-solver-backend architecture, analogous to the model-view-controller (MVC) pattern in application development, making it easy to deploy off-the-shelf solvers.
+Numerical modeling is an important part of the engineering workflow, providing understanding of engineering systems without the often prohibitive cost of fabricating physical models and prototypes. Condor is a mathematical modeling framework in Python that enables the rapid deployment of models for analysis and design. Condor uses metaprogramming to provide a mathematical domain-specific language (DSL) that reduces the software development effort needed to deploy models for solving engineering analysis and design problems. It also features a modular model-solver-backend architecture, analogous to the model-view-controller (MVC) pattern in web-application development, facitilitating usage of off-the-shelf solvers.
 
 
 # Statement of Need
@@ -32,7 +32,7 @@ Condor was developed at NASA Ames Research Center's Systems Analysis Office to s
 
 A variety of existing libraries work towards unifying solvers and optimization tools under a single interface.
 After assessing the available tools, we found that no existing tool provided an interface that we felt improved the engineering workflow.
-Condor is unique, to the best of the author's knowledge, for providing a mathematically-focused DSL to facilitate rapid prototyping or such a modular architecture to rapidly deploy new or existing solvers for engineering problems. This improves the engineering workflow by providing a single interface to any existing solver supporting definition of new models as conceptual analysis demands arise.
+Condor is unique, to the best of the author's knowledge, for providing a mathematically-focused DSL to facilitate rapid prototyping of engineering models. Condor's modular architecture supports rapid deployment new or existing solvers for engineering problems. This improves the engineering workflow by providing a single interface to any existing solver supporting definition of new models as conceptual analysis demands arise.
 
 We built Condor to provide an interface for engineers that used computational tools from the AI/ML community as the "backend" of the framework in the Python programming language. 
 Using Python as the base language offers access to a huge community of practice, especially in scientific computing and numerical methods, where the majority of the AI/ML tools originated. This means that even with a small development team, we could provide features like parallel computing, file interfaces, and more by leveraging the open-source ecosystem.
