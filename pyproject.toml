@@ -11,6 +11,8 @@ authors = [
     { name="Benjamin W. L. Margolis", email="benjamin.margolis@nasa.gov" },
     { name="Kenneth R. Lyons", email="kenneth.r.lyons@nasa.gov" },
 ]
+license = "NASA-1.3"
+license-files = ["LICENSE"]
 requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
