@@ -107,6 +107,24 @@ For pull requests to be accepted, all contributors must have a contributor's
 agreement on file with NASA. We will provide contributors with additional
 information during the review process.
 
+Development
+^^^^^^^^^^^
+
+A `pre-commit <https://pre-commit.com/>`_ configuration is available to
+automatically format and fix linting issues when creating a commit. Install
+pre-commit either in the virtual environment created above or as a system-wide
+tool (e.g. pipx or uv tool), then install the hooks::
+
+    pre-commit install
+
+The first run of the hooks will take a few seconds as the isolated environments
+are created. Subsequent runs will generally be much faster.
+
+To run the tests, run::
+
+    pytest
+
+
 License
 -------
 
