@@ -37,7 +37,9 @@ docs = [
 ]
 
 [project.urls]
+Repository = "https://github.com/nasa/condor"
 Documentation = "https://nasa.github.io/condor"
+Issues = "https://github.com/nasa/condor/issues"
 
 [tool.setuptools_scm]
 write_to = "src/condor/_version.py"
