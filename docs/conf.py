@@ -45,13 +45,18 @@ import re
 
 sep = re.escape(os.sep)
 
+gallery_ignore_pattern = "^_"
+if os.name == "posix" and os.uname().sysname == "Darwin":
+    gallery_ignore_pattern += "|parallel_processing.py"
+
+
 sphinx_gallery_conf = {
     "examples_dirs": gallery_src_dirs,
     "gallery_dirs": gallery_out_dirs,
     # include any .py starting with a lowercase letter
     "filename_pattern": sep + r"[a-z].*\.py",
     # files with leading underscore ignored completely by sphinx-gallery
-    "ignore_pattern": "^_",
+    "ignore_pattern": gallery_ignore_pattern,
     "within_subsection_order": "FileNameSortKey",
     "download_all_examples": False,
     "copyfile_regex": r".*\.rst|.*_lti.py",
