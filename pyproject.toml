@@ -89,5 +89,14 @@ ignore = [
 profile = "black"
 
 [tool.pytest.ini_options]
+minversion = "7"
 testpaths = ["tests"]
-addopts = "--pdbcls=IPython.terminal.debugger:TerminalPdb"
+log_cli_level = "INFO"
+xfail_strict = true
+addopts = [
+    "-ra",
+    "--strict-config",
+    "--strict-markers",
+    # "--pdbcls=IPython.terminal.debugger:TerminalPdb",
+]
+# filterwarnings = ["error"]
