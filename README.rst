@@ -24,6 +24,8 @@ system of algebraic equations:
 
 .. code-block:: python
 
+  import condor as co
+
   class Coupling(co.AlgebraicSystem):
       x = parameter(shape=3)
       y1 = variable(initializer=1.)
@@ -49,12 +51,14 @@ optimization problem:
 
 .. code-block:: python
 
+  from condor.backend import operators as ops
+
   class Sellar(co.OptimizationProblem):
       x = variable(shape=3, lower_bound=0, upper_bound=10)
       coupling = Coupling(x)
       y1, y2 = coupling
 
-      objective = x[2]**2 + x[1] + y1 + exp(-y2)
+      objective = x[2]**2 + x[1] + y1 + ops.exp(-y2)
       constraint(y1 >= 3.16)
       constraint(24. >= y2)
 
