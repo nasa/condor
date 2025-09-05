@@ -46,4 +46,4 @@ jobs:
     - name: Run examples
       env:
         MPLBACKEND: "agg"
-      run: python run_examples.py
+      run: python docs/run_examples.py

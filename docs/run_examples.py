@@ -9,7 +9,7 @@ def printfl(*args, **kwargs):
     print(*args, **(kwargs | {"flush": True}))
 
 
-docdir = Path(__file__).parent / "docs"
+docdir = Path(__file__).parent
 fails = []
 for srcdir in sorted(docdir.glob("*_src")):
     printfl(80 * "=")
