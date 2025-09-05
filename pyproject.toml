@@ -26,6 +26,9 @@ dependencies = [
     "ndsplines>=0.2.0post0",
 ]
 
+[project.optional-dependencies]
+examples = ["matplotlib"]
+
 [dependency-groups]
 lint = ["ruff"]
 test = ["pytest", "pytest-cov"]

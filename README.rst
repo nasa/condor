@@ -85,6 +85,12 @@ install with pip:
 
    pip install condor
 
+Optionally, you can include the dependencies to run the examples:
+
+.. code:: bash
+
+   pip install condor[examples]
+
 Contributing
 ------------
 
