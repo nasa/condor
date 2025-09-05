@@ -110,6 +110,12 @@ information during the review process.
 Development
 ^^^^^^^^^^^
 
+Clone the repository and install it in editable mode along with the ``dev``
+dependency group in a virtual environment::
+
+    pip install --upgrade pip
+    pip install -e . --group dev
+
 A `pre-commit <https://pre-commit.com/>`_ configuration is available to
 automatically format and fix linting issues when creating a commit. Install
 pre-commit either in the virtual environment created above or as a system-wide

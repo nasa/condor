@@ -35,6 +35,12 @@ docs = [
     "matplotlib",
     "furo",
 ]
+dev = [
+    {include-group = "lint"},
+    {include-group = "test"},
+    {include-group = "docs"},
+]
+
 
 [project.urls]
 Repository = "https://github.com/nasa/condor"
