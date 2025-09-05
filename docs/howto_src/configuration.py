@@ -14,7 +14,7 @@ on what the user passes in for the state and input matrices.
 # --------------------
 #
 # One option for generating models is through a ``settings`` object in the top-level
-# ``condor`` namespace, where you register the module's default configuration with
+# ``condor`` name space, where you register the module's default configuration with
 # ``get_settings``. Then the module is imported via ``get_module``.
 #
 # Here is the configured model source with the name ``_lti.py``:

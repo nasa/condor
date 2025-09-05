@@ -45,7 +45,7 @@ class Accel(DblInt.Mode):
 
 
 # %%
-# An event to switch to deceleration, specified by a paramter :math:`t_1`. We'll also
+# An event to switch to deceleration, specified by a parameter :math:`t_1`. We'll also
 # create a state to capture the position at the switch event.
 
 

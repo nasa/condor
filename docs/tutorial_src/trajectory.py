@@ -75,7 +75,7 @@ class Glider(condor.ODESystem):
 # The :attr:`modal` field is used to define elements with deferred and possibly varying
 # behavior, so we use this for the angle-of-attack so we can simulate multiple
 # behaviors. To simulate this model, we create a
-# :class:`~condor.contrib.TrajectoryAnalysis`, a sub-model to an ODE Sysstem, which is
+# :class:`~condor.contrib.TrajectoryAnalysis`, a sub-model to an ODE System, which is
 # ultimately responsible for defining the specifics of integrating the ODE. In this
 # example, the :class:`TrajectoryAnalysis` model only specifies the final simulation
 # time of the model.  It is more mathematically consistent to have the initial values

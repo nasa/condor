@@ -9,7 +9,7 @@ Condor is a new mathematical modeling framework for Python, developed at
 NASA's Ames Research Center. Initial development began in April 2023 to
 address model implementation challenges for aircraft synthesis and
 robust orbital trajectory design.  Condor emphasizes modern approaches
-from the scientific python community, and leverages many open-source
+from the scientific Python community, and leverages many open-source
 software packages to expedite development and ensure robust and
 efficient run-time.
 
@@ -60,7 +60,7 @@ the :term:`model`,
     print(coupling.y1, coupling.y2) # individual elements are bound numerically
     print(coupling.variable) # fields are bound as a dataclass
 
-This pythonic data structure allows Condor to be integrated into larger analysis workflows
+This Pythonic data structure allows Condor to be integrated into larger analysis workflows
 with as little Condor-specific coding as possible. 
 
 Condor uses :term:`metaprogramming` to to turn the class *declaration* mechanism into a
@@ -76,7 +76,7 @@ mathematical models in engineering analysis,
 Architecture
 ============
 
-We followed modern pythonic best-practices and patterns to settle on a multi-layered
+We followed modern Pythonic best-practices and patterns to settle on a multi-layered
 architecture like the Model-View-Controller paradigm in web development. The
 three key components of the architecture are:
 
@@ -92,7 +92,7 @@ three key components of the architecture are:
   alternate backend in the future.
 - The implementation layer is the glue code that operates on the model data structure,
   using the backend to form the numerical functions needed to call the third-party
-  solvers which implement the nuemrical algorithms of interest. The implementation
+  solvers which implement the numerical algorithms of interest. The implementation
   layer then calls the solver and binds the results to the model instance.
 
 .. figure:: /images/architecture.png
@@ -305,7 +305,7 @@ Attributes without a leading underscore can be placed into a :attr:`dict` by
 :meth:`condor.implementations.utils.options_to_kwargs` to pass to the solver.
 The :attr:`__implementation__` is used to specify the class to use, otherwise inheriting from the template.
 
-Due to initial coupling with the casadi computational engine, the ``contrib`` model implementations follow a pattern of calling
+Due to initial coupling with the CasADi computational engine, the ``contrib`` model implementations follow a pattern of calling
 
 2. :meth:`construct` to create the callables from the model fields and setup the solver
 3. :meth:`__call__` to run the solver and bind the output fields

@@ -1,5 +1,5 @@
 """
-Creating Model Tempalates
+Creating Model Templates
 =========================
 """
 

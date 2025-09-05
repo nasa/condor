@@ -168,7 +168,7 @@ class OptimizationProblem(InitializerMixin):
     iter_callback : callable
        callback with signature , called at each iteration of the
        :class:`CasadiNlpsolImplementation` (only IPOPT) and :class:`SciPyBase`
-       subclass optimization implementaitons.
+       subclass optimization implementations.
     """
 
     # take an OptimizationProblem model with or without iteration spec and other Options

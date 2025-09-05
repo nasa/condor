@@ -40,7 +40,7 @@ class CasadiWarmstartWrapperBase:
 
     addiitonal notes:
 
-    I like having all the direct casadi stuff outside of implementaitons.iterative,
+    I like having all the direct casadi stuff outside of implementations.iterative,
     so not having casadi-speicifc constructions, but maybe it's OK for this case since
     the solver is casadi itself?
     basically because of the API requirements of casadi, either condor needs to better

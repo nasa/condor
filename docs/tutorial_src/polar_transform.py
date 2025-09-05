@@ -30,7 +30,7 @@ class PolarTransform(co.ExplicitSystem):
 
 
 # %%
-# In general, once you've defined any system in Condor, you can just evaulate it
+# In general, once you've defined any system in Condor, you can just evaluate it
 # numerically by passing in numbers:
 
 p = PolarTransform(x=3, y=4)
@@ -57,7 +57,7 @@ print(PolarTransform(x=1, y=0).output.asdict())
 
 
 # %%
-# While the *binding* of the results in a datastructure is nice, the real benefit of
+# While the *binding* of the results in a data structure is nice, the real benefit of
 # constructing condor models is in calling iterative solvers. For example, we could
 # perform symbolic manipulation to define  another ``ExplicitSystem`` with :math:`x =
 # r\cos\theta` and :math:`y = r\sin\theta`. Or we can we use Condor to
@@ -119,7 +119,7 @@ print(out.variable)
 
 # %%
 # An additional :attr:`warm_start` attribute determines whether the initializer is
-# over-wrriten. Since the default is true, we can inspect the initializer values,
+# over-written. Since the default is true, we can inspect the initializer values,
 
 print(CartesianTransform.x.initializer, CartesianTransform.y.initializer)
 
