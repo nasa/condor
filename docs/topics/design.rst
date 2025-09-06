@@ -88,7 +88,7 @@ three key components of the architecture are:
   *elements* and *operations* with awareness for basic differential calculus. The goal
   for the backend is provide a thin wrapper with a consistent interface so the
   computational engine implementation could be swapped out. Currently, we ship with
-  CasADi as the only engine, although we hope to demonstrate a backend module for an
+  `CasADi <https://web.casadi.org/>`__ as the only engine, although we hope to demonstrate a backend module for an
   alternate backend in the future.
 - The implementation layer is the glue code that operates on the model data structure,
   using the backend to form the numerical functions needed to call the third-party
