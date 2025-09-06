@@ -37,6 +37,7 @@ docs = [
     "sphinx-gallery",
     "matplotlib",
     "furo",
+    "sphinx-copybutton",
 ]
 dev = [
     {include-group = "lint"},

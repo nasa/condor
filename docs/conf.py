@@ -22,6 +22,7 @@ extensions = [
     "sphinx_gallery.gen_gallery",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
+    "sphinx_copybutton",
 ]
 
 # templates_path = ['_templates']
