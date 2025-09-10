@@ -32,10 +32,10 @@ Condor was developed at NASA Ames Research Center's Systems Analysis Office to s
 
 A variety of existing libraries work towards unifying solvers and optimization tools under a single interface.
 After assessing the available tools, we found that no existing tool provided an interface that we felt improved the engineering workflow.
-Condor is unique, to the best of the authors' knowledge, for providing a mathematically-focused DSL to facilitate rapid prototyping of engineering models. Condor's modular architecture supports rapid deployment new or existing solvers for engineering problems. This improves the engineering workflow by providing a single interface to any existing solver supporting definition of new models as conceptual analysis demands arise.
+Condor is unique, to the best of the authors' knowledge, for providing a mathematically-focused DSL to facilitate rapid prototyping of engineering models. Condor's modular architecture supports rapid deployment of new or existing solvers for engineering problems. These features improve the engineering workflow by providing a single engineering-focused interface to any existing solver, facilitating the creation of new models as conceptual analysis demands arise.
 
-We built Condor to provide an interface for engineers that used computational tools from the AI/ML community as the "backend" of the framework in the Python programming language. 
-Using Python as the base language offers access to a huge community of practice, especially in scientific computing and numerical methods, where the majority of the AI/ML tools originated. This means that even with a small development team, we could provide features like parallel computing, file interfaces, and more by leveraging the open-source ecosystem.
+We built Condor to provide an interface for engineers that used computational tools from the AI/ML community as the "backend" of the framework in the Python programming language.
+Using Python as the base language offers access to a huge community of practice, especially in scientific computing and numerical methods, where the majority of the AI/ML tools originated. This means that even with a small development team, we could provide features like parallel computing, file interfaces, and more, by leveraging the open-source ecosystem.
 
 
 # Description
