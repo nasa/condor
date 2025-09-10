@@ -4,7 +4,7 @@ Condor
 .. image:: https://github.com/nasa/simupy-flight/actions/workflows/docs.yml/badge.svg
    :target: https://nasa.github.io/condor
 .. image:: https://img.shields.io/badge/License-NOSA-green.svg
-   :target: https://github.com/nasa/condor/blob/master/license.pdf
+   :target: https://github.com/nasa/condor/blob/master/LICENSE
 .. image:: https://img.shields.io/github/release/nasa/condor.svg
    :target: https://github.com/nasa/condor/releases
 
