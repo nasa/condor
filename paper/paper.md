@@ -1,5 +1,5 @@
 ---
-title: 'Condor, a mathematical modeling framework for engineers with a deadline'
+title: 'Condor, a mathematical modeling framework for engineers with deadlines'
 tags:
   - Python
   - mathematical modeling
