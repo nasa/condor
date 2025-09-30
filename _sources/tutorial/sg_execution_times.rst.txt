@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:25.808** total execution time for 3 files **from tutorial**:
+**00:25.876** total execution time for 3 files **from tutorial**:
 
 .. container::
 
@@ -33,11 +33,11 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_tutorial_trajectory.py` (``trajectory.py``)
-     - 00:25.620
+     - 00:25.706
      - 0.0
    * - :ref:`sphx_glr_tutorial_sellar.py` (``sellar.py``)
-     - 00:00.164
+     - 00:00.144
      - 0.0
    * - :ref:`sphx_glr_tutorial_polar_transform.py` (``polar_transform.py``)
-     - 00:00.024
+     - 00:00.026
      - 0.0
