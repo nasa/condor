@@ -205,7 +205,7 @@ Compare with the solution from the continuous algebraic Riccati equation:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.450 seconds)
+   **Total running time of the script:** (0 minutes 2.451 seconds)
 
 
 .. _sphx_glr_download_examples_ct_lqr.py:
