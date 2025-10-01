@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**01:08.103** total execution time for 14 files **from all galleries**:
+**01:06.882** total execution time for 14 files **from all galleries**:
 
 .. container::
 
@@ -33,40 +33,40 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_tutorial_trajectory.py` (``tutorial_src/trajectory.py``)
-     - 00:25.624
+     - 00:25.227
      - 0.0
    * - :ref:`sphx_glr_examples_sp_lqr.py` (``examples_src/sp_lqr.py``)
-     - 00:23.743
+     - 00:23.281
      - 0.0
    * - :ref:`sphx_glr_examples_orbital_1.py` (``examples_src/orbital_1.py``)
-     - 00:13.425
+     - 00:13.230
      - 0.0
    * - :ref:`sphx_glr_examples_ct_lqr.py` (``examples_src/ct_lqr.py``)
-     - 00:02.451
-     - 0.0
-   * - :ref:`sphx_glr_examples_state_switched.py` (``examples_src/state_switched.py``)
-     - 00:00.734
+     - 00:02.389
      - 0.0
    * - :ref:`sphx_glr_examples_time_switch.py` (``examples_src/time_switch.py``)
-     - 00:00.730
+     - 00:00.726
+     - 0.0
+   * - :ref:`sphx_glr_examples_state_switched.py` (``examples_src/state_switched.py``)
+     - 00:00.714
      - 0.0
    * - :ref:`sphx_glr_howto_table_basics.py` (``howto_src/table_basics.py``)
-     - 00:00.469
+     - 00:00.454
      - 0.0
    * - :ref:`sphx_glr_howto_configuration.py` (``howto_src/configuration.py``)
-     - 00:00.395
+     - 00:00.387
      - 0.0
    * - :ref:`sphx_glr_examples_rosenbrock.py` (``examples_src/rosenbrock.py``)
-     - 00:00.207
+     - 00:00.202
      - 0.0
    * - :ref:`sphx_glr_tutorial_sellar.py` (``tutorial_src/sellar.py``)
      - 00:00.140
      - 0.0
    * - :ref:`sphx_glr_howto_parallel_processing.py` (``howto_src/parallel_processing.py``)
-     - 00:00.116
+     - 00:00.064
      - 0.0
    * - :ref:`sphx_glr_examples_templating.py` (``examples_src/templating.py``)
-     - 00:00.039
+     - 00:00.038
      - 0.0
    * - :ref:`sphx_glr_tutorial_polar_transform.py` (``tutorial_src/polar_transform.py``)
      - 00:00.026
