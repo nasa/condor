@@ -38,13 +38,13 @@ class SolverSciPyBase(SolverMixin):
         system,
         atol=1e-12,
         rtol=1e-6,
-        adaptive_max_step=0.0,
+        adaptive_min_steps=0,
         max_step_size=0.0,
         nsteps=10_000.0,
         **kwargs,
     ):
         self.system = system
-        self.adaptive_max_step = adaptive_max_step
+        self.adaptive_min_steps = adaptive_min_steps
         self.solver = scipy_ode(
             system.dots,
         )
@@ -183,9 +183,9 @@ class SolverSciPyBase(SolverMixin):
             # if next_t < 0:
             #    breakpoint()
 
-            if self.adaptive_max_step:
+            if self.adaptive_min_steps:
                 self.int_options.update(
-                    dict(max_step=np.abs(next_t - last_t) / self.adaptive_max_step)
+                    dict(max_step=np.abs(next_t - last_t) / self.adaptive_min_steps)
                 )
 
                 self.solver.set_integrator(**self.int_options)
@@ -284,11 +284,11 @@ class SolverCVODE(SolverMixin):
         system,
         atol=1e-12,
         rtol=1e-6,
-        adaptive_max_step=0.0,
+        adaptive_min_steps=0.0,
         max_step_size=0.0,
     ):
         self.system = system
-        self.adaptive_max_step = adaptive_max_step
+        self.adaptive_min_steps = adaptive_min_steps
         self.solver = CVODE(
             self.dots,
             jacfn=self.jac,
@@ -368,9 +368,9 @@ class SolverCVODE(SolverMixin):
                 # breakpoint()
                 pass
 
-            if self.adaptive_max_step:
+            if self.adaptive_min_steps:
                 solver.set_options(
-                    max_step_size=np.abs(next_t - last_t) / self.adaptive_max_step
+                    max_step_size=np.abs(next_t - last_t) / self.adaptive_min_steps
                 )
             solver.init_step(last_t, last_x)
             solver.set_options(tstop=next_t)
@@ -503,8 +503,8 @@ class System:
         **solver_options,
     ):
         """
-        if adaptive_max_step, treat max_step_size as the fraction of the next simulation
-        span. Otherwise, use as absolute value.
+        if adaptive_min_steps, treat max_step_size as the fraction of the next
+        simulation span. Otherwise, use as absolute value.
         """
 
         # simulation must be terminated with event so must provide everything

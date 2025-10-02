@@ -91,7 +91,7 @@ class Transfer(DblInt.TrajectoryAnalysis):
     if not with_time_state:
 
         class Options:
-            state_adaptive_max_step_size = 4
+            state_adaptive_min_steps = 4
 
 
 sim = Transfer(t1=1.0, t2=4.0)
@@ -154,7 +154,7 @@ class AccelerateTransfer(DblInt.TrajectoryAnalysis, exclude_events=[Switch1]):
     if not with_time_state:
 
         class Options:
-            state_adaptive_max_step_size = 4
+            state_adaptive_min_steps = 4
 
 
 # TODO?

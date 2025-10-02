@@ -46,22 +46,19 @@ class TrajectoryAnalysis:
 
     Options
     --------
-    state_atol : float
-        absolute tolerance for forward evalaution
-    state_rtol : float
-        relative tolerance for forward evalaution
-    state_adaptive_max_step_size : float
-        actually a minimum number of steps per time-defined segment for the forward
-        evaluation
-    state_max_step_size : float
-        maximum step size for the forward evaluation
-    state_solver : TrajectoryAnalysis.Solver
+    all options may be prefixed with state_ or adjoint_ to apply only to the forward or
+    reverse solvers, respectively. Without either prefix, the option will be passed
+    to both solvers. Options are generally a pass through to the underlying solver
+    (e.g., scipy.integrate.ode). Special options on the sweeping_gradient_method
+    implementation are:
+
+    adaptive_min_steps : int
+        minimum number of steps per time-defined segment
+    max_step_size : float
+        maximum step size for the forward evaluation, normalized name to scipy's
+        max_step
+    solver : TrajectoryAnalysis.Solver
         enum member for solver type
-
-    adjoint_*
-        same as above, for the adjoint solution
-
-
 
     """
 
@@ -80,8 +77,9 @@ class TrajectoryAnalysis:
     def construct(
         self,
         model,
-        state_solver=Solver.dopri5,
-        adjoint_solver=Solver.dopri5,
+        state_solver=None,
+        adjoint_solver=None,
+        solver=Solver.dopri5,
         **kwargs,
     ):
         state_options = {}
@@ -298,15 +296,17 @@ class TrajectoryAnalysis:
             self.h_exprs.append(h_expr)
 
         set_solvers = []
-        for solver in [state_solver, adjoint_solver]:
-            if solver is TrajectoryAnalysis.Solver.CVODE:
+        for solver_ref in [solver, state_solver, adjoint_solver]:
+            if solver_ref is TrajectoryAnalysis.Solver.CVODE:
                 solver_class = sgm.SolverCVODE
-            elif solver is TrajectoryAnalysis.Solver.dopri5:
+            elif solver_ref is TrajectoryAnalysis.Solver.dopri5:
                 solver_class = sgm.SolverSciPyDopri5
-            elif solver is TrajectoryAnalysis.Solver.dop853:
+            elif solver_ref is TrajectoryAnalysis.Solver.dop853:
                 solver_class = sgm.SolverSciPyDop853
+            else:
+                solver_class = set_solvers[0]
             set_solvers.append(solver_class)
-        state_solver_class, adjoint_solver_class = set_solvers
+        solver_class, state_solver_class, adjoint_solver_class = set_solvers
         state_options["solver_class"] = state_solver_class
         adjoint_options["solver_class"] = adjoint_solver_class
 

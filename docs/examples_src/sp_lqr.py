@@ -52,7 +52,7 @@ class DblIntSampledLQR(DblIntSampled.TrajectoryAnalysis):
     cost = trajectory_output(integrand=(x.T @ Q @ x + u.T @ R @ u) / 2)
 
     class Options:
-        adjoint_adaptive_max_step_size = False
+        adjoint_adaptive_min_steps = False
         state_max_step_size = 0.5 / 8
         adjoint_max_step_size = 0.5 / 8
 
