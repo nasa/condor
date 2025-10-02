@@ -80,21 +80,21 @@ class TrajectoryAnalysis:
     def construct(
         self,
         model,
-        state_atol=1e-12,
-        state_rtol=1e-6,
-        state_adaptive_max_step_size=0.0,
-        state_max_step_size=0,
-        # TODO add options for scipy solver name (dopri5 or dop853) and settings for the
-        # rootfinder, including choosing between brentq and newton
-        adjoint_atol=1e-12,
-        adjoint_rtol=1e-6,
-        adjoint_adaptive_max_step_size=4.0,
-        adjoint_max_step_size=0,
         state_solver=Solver.dopri5,
         adjoint_solver=Solver.dopri5,
-        # lmm_type=ADAMS or BDF, possibly also linsolver, etc? for CVODE?
-        # other options for scipy.ode + event rootfinder?
+        **kwargs,
     ):
+        state_options = {}
+        adjoint_options = {}
+        for k, v in kwargs.items():
+            if k.startswith("state_"):
+                state_options[k.replace("state_", "")] = v
+            elif k.startswith("adjoint_"):
+                adjoint_options[k.replace("adjoint_", "")] = v
+            else:
+                state_options[k] = v
+                adjoint_options[k] = v
+
         self.model = model
         self.ode_model = ode_model = model._meta.primary
 
@@ -307,6 +307,8 @@ class TrajectoryAnalysis:
                 solver_class = sgm.SolverSciPyDop853
             set_solvers.append(solver_class)
         state_solver_class, adjoint_solver_class = set_solvers
+        state_options["solver_class"] = state_solver_class
+        adjoint_options["solver_class"] = adjoint_solver_class
 
         if len(model.dynamic_output):
             self.y_expr = model.dynamic_output.flatten()
@@ -334,11 +336,7 @@ class TrajectoryAnalysis:
             num_events=num_events,
             terminating=terminating,
             dynamic_output=self.dynamic_output_func,
-            atol=state_atol,
-            rtol=state_rtol,
-            adaptive_max_step=state_adaptive_max_step_size,
-            max_step_size=state_max_step_size,
-            solver_class=state_solver_class,
+            **state_options,
         )
         self.state_system.model_instance = self.model_instance
         self.at_time_slices = at_time_slices
@@ -516,11 +514,6 @@ class TrajectoryAnalysis:
             dte_dxs=self.dte_dxs,
             dh_dxs=self.dh_dxs,
             state_jac=state_dot_jac_func,
-            adjoint_atol=adjoint_atol,
-            adjoint_rtol=adjoint_rtol,
-            adjoint_adaptive_max_step_size=adjoint_adaptive_max_step_size,
-            adjoint_max_step_size=adjoint_max_step_size,
-            adjoint_solver_class=adjoint_solver_class,
             p_x0_p_params=p_state0_p_p,
             p_dots_p_params=param_dot_jac_func,
             dh_dps=self.dh_dps,
@@ -529,6 +522,7 @@ class TrajectoryAnalysis:
             p_integrand_terms_p_params=param_integrand_jac_funcs,
             p_terminal_terms_p_state=self.lamdaF_funcs,
             p_integrand_terms_p_state=state_integrand_jac_funcs,
+            **adjoint_options,
         )
 
         wrapper_funcs = [

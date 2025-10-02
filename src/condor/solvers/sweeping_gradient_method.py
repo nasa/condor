@@ -41,6 +41,7 @@ class SolverSciPyBase(SolverMixin):
         adaptive_max_step=0.0,
         max_step_size=0.0,
         nsteps=10_000.0,
+        **kwargs,
     ):
         self.system = system
         self.adaptive_max_step = adaptive_max_step
@@ -52,7 +53,8 @@ class SolverSciPyBase(SolverMixin):
             atol=atol,
             rtol=rtol,
             max_step=max_step_size,
-            nsteps=500_000,
+            nsteps=nsteps,
+            **kwargs,
         )
         self.solver.set_integrator(**self.int_options)
         self.solver.set_solout(self.solout)
@@ -498,11 +500,7 @@ class System:
         num_events,
         terminating,
         dynamic_output=None,
-        atol=1e-12,
-        rtol=1e-6,
-        adaptive_max_step=0.0,
-        max_step_size=0.0,
-        solver_class=SolverSciPyDopri5,
+        **solver_options,
     ):
         """
         if adaptive_max_step, treat max_step_size as the fraction of the next simulation
@@ -548,20 +546,13 @@ class System:
         self.dim_state = dim_state
         self.num_events = len(updates)
         self.make_solver(
-            atol=atol,
-            rtol=rtol,
-            adaptive_max_step=adaptive_max_step,
-            max_step_size=max_step_size,
-            solver_class=solver_class,
+            **solver_options,
         )
 
-    def make_solver(self, atol, rtol, adaptive_max_step, max_step_size, solver_class):
+    def make_solver(self, solver_class, **solver_options):
         self.system_solver = solver_class(  # SolverSciPy( #SolverCVODE(
             system=self,
-            atol=atol,
-            rtol=rtol,
-            adaptive_max_step=adaptive_max_step,
-            max_step_size=max_step_size,
+            **solver_options,
         )
 
     def initial_state(self):
@@ -829,11 +820,7 @@ class AdjointSystem(System):
         state_jac,
         dte_dxs,
         dh_dxs,
-        solver_class=SolverSciPyDopri5,
-        atol=1e-12,
-        rtol=1e-6,
-        adaptive_max_step=False,
-        max_step_size=0.0,
+        **solver_options,
     ):
         """
         to support caching jacobians,
@@ -850,13 +837,7 @@ class AdjointSystem(System):
         self.dynamic_output = None
         # self.adjoint_updates = adjoint_updates
 
-        self.make_solver(
-            atol=atol,
-            rtol=rtol,
-            adaptive_max_step=adaptive_max_step,
-            max_step_size=max_step_size,
-            solver_class=solver_class,
-        )
+        self.make_solver(**solver_options)
 
     def events(self, t, lamda):
         return np.array(
@@ -1212,11 +1193,6 @@ class TrajectoryAnalysisSGM:
         state_jac=None,
         # for adjoint system, can provide here if state_system doesn't have
         # adjoint system solver options
-        adjoint_solver_class=SolverSciPyDopri5,
-        adjoint_atol=1e-12,
-        adjoint_rtol=1e-6,
-        adjoint_adaptive_max_step_size=False,
-        adjoint_max_step_size=0.0,
         cache_size=1,
         # to construct SweepingGradientMethod
         p_x0_p_params=None,
@@ -1227,6 +1203,7 @@ class TrajectoryAnalysisSGM:
         p_terminal_terms_p_params=None,
         p_integrand_terms_p_state=None,
         p_terminal_terms_p_state=None,
+        **adjoint_options,
     ):
         if cache_size > 1:
             raise NotImplementedError
@@ -1245,14 +1222,7 @@ class TrajectoryAnalysisSGM:
             state_jac = state_system._jac
 
         self.adjoint_system = AdjointSystem(
-            state_jac=state_jac,
-            dte_dxs=dte_dxs,
-            dh_dxs=dh_dxs,
-            atol=adjoint_atol,
-            rtol=adjoint_rtol,
-            adaptive_max_step=adjoint_adaptive_max_step_size,
-            max_step_size=adjoint_max_step_size,
-            solver_class=adjoint_solver_class,
+            state_jac=state_jac, dte_dxs=dte_dxs, dh_dxs=dh_dxs, **adjoint_options
         )
 
         self.sweeping_gradient_method = SweepingGradientMethod(
