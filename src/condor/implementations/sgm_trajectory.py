@@ -42,15 +42,17 @@ def isnan(x):
 
 
 class TrajectoryAnalysis:
-    """Implementation for :class:`TrajectoryAnalysis` model.
+    """Implementation for :class:`~condor.contrib.TrajectoryAnalysis` model.
+
+    All Options may be prefixed with ``state_`` or ``adjoint_`` to apply only to the
+    forward or reverse solvers, respectively. Without either prefix, the option will be
+    passed to both solvers. Options are generally a pass through to the underlying
+    integrator (e.g., :class:`scipy.integrate.ode`, ``dopri5`` or ``dop853`` currently).
+    Special options on the ``sweeping_gradient_method`` solver which are described
+    below.
 
     Options
     --------
-    all options may be prefixed with state_ or adjoint_ to apply only to the forward or
-    reverse solvers, respectively. Without either prefix, the option will be passed
-    to both solvers. Options are generally a pass through to the underlying solver
-    (e.g., scipy.integrate.ode). Special options on the sweeping_gradient_method
-    implementation are:
 
     adaptive_min_steps : int
         minimum number of steps per time-defined segment

@@ -25,7 +25,7 @@ class DeferredSystem:
 
 
 class ExplicitSystem:
-    """Implementation for :class:`ExplicitSystem` model.
+    """Implementation for :class:`~condor.contrib.ExplicitSystem` model.
 
     No :class:`Options` expected.
     """

@@ -885,7 +885,7 @@ class TableLookup(ExternalSolverWrapper):
     data."""
 
     def __init__(self, xx, yy, degrees=3, bcs=(-1, 0)):
-        """Construct a :class:`TableLookup` model from data
+        """Construct a :class:`~condor.contrib.TableLookup` model from data
 
         Parameters
         ----------

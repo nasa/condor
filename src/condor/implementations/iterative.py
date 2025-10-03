@@ -52,7 +52,7 @@ class InitializerMixin:
 
 
 class AlgebraicSystem(InitializerMixin):
-    """Implementation for :class:`AlgebraicSystem` model.
+    """Implementation for :class:`~condor.contrib.AlgebraicSystem` model.
 
     Options
     --------
@@ -160,7 +160,7 @@ class AlgebraicSystem(InitializerMixin):
 
 
 class OptimizationProblem(InitializerMixin):
-    """Implementation base class for :class:`OptimizationProblem` model.
+    """Implementation base class for :class:`~condor.contrib.OptimizationProblem` model.
 
     Options
     --------
@@ -250,7 +250,8 @@ class OptimizationProblem(InitializerMixin):
 
 
 class CasadiNlpsolImplementation(OptimizationProblem):
-    """Implementation layer for casadi nlpsol for :class:`OptimizationProblem` models.
+    """Implementation layer for casadi nlpsol for
+    :class:`~condor.contrib.OptimizationProblem` models.
 
     Options
     --------
@@ -429,8 +430,8 @@ class CasadiNlpsolImplementation(OptimizationProblem):
 
 
 class ScipyMinimizeBase(OptimizationProblem):
-    """Base implementation class for SciPy minimize for :class:`OptimizationProblem`
-    models.
+    """Base implementation class for SciPy minimize for
+    :class:`~condor.contrib.OptimizationProblem` models.
 
     Options
     --------
