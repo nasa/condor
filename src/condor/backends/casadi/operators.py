@@ -89,7 +89,13 @@ def concat(arrs, axis=0):
             msg = "Casadi only supports matrices"
             raise ValueError(msg)
     else:
-        return np.concat([np.atleast_2d(arr) for arr in arrs], axis=axis)
+        return np.concat(
+            [
+                arr if getattr(arr, "ndim", 0) == 2 else np.atleast_2d(arr).T
+                for arr in arrs
+            ],
+            axis=axis,
+        )
 
 
 def unstack(arr, axis=0):

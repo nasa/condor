@@ -49,6 +49,15 @@ def test_min_max():
     assert np.all(out.z.squeeze() == np.fmin(x, y))
 
 
+def test_concat():
+    ops.concat(
+        [
+            [0.0],
+            [1.0, 2.2, 3],
+        ]
+    )
+
+
 def test_sum():
     class TestSum(co.ExplicitSystem):
         x = input(shape=(10, 10))
