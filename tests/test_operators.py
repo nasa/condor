@@ -50,12 +50,14 @@ def test_min_max():
 
 
 def test_concat():
-    ops.concat(
+    y = ops.concat(
         [
             [0.0],
             [1.0, 2.2, 3],
         ]
     )
+    assert y.shape == (4, 1)
+    assert np.all(y == np.array([[0.0, 1.0, 2.2, 3.0]]).T)
 
 
 def test_sum():
