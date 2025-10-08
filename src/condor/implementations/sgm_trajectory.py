@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 import numpy as np
 
@@ -65,9 +65,9 @@ class TrajectoryAnalysis:
     """
 
     class Solver(Enum):
-        CVODE = auto()  #: currently unsupported
-        dopri5 = auto()
-        dop853 = auto()
+        CVODE = sgm.SolverCVODE  #: currently unsupported
+        dopri5 = sgm.SolverSciPyDopri5
+        dop853 = sgm.SolverSciPyDop853
 
     def __init__(self, model_instance):
         model = model_instance.__class__
@@ -297,20 +297,12 @@ class TrajectoryAnalysis:
             )
             self.h_exprs.append(h_expr)
 
-        set_solvers = []
-        for solver_ref in [solver, state_solver, adjoint_solver]:
-            if solver_ref is TrajectoryAnalysis.Solver.CVODE:
-                solver_class = sgm.SolverCVODE
-            elif solver_ref is TrajectoryAnalysis.Solver.dopri5:
-                solver_class = sgm.SolverSciPyDopri5
-            elif solver_ref is TrajectoryAnalysis.Solver.dop853:
-                solver_class = sgm.SolverSciPyDop853
-            else:
-                solver_class = set_solvers[0]
-            set_solvers.append(solver_class)
-        solver_class, state_solver_class, adjoint_solver_class = set_solvers
-        state_options["solver_class"] = state_solver_class
-        adjoint_options["solver_class"] = adjoint_solver_class
+        if state_solver is None:
+            state_solver = solver
+        if adjoint_solver is None:
+            adjoint_solver = solver
+        state_options["solver_class"] = state_solver.value
+        adjoint_options["solver_class"] = adjoint_solver.value
 
         if len(model.dynamic_output):
             self.y_expr = model.dynamic_output.flatten()
