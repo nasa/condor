@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Creating Model Templates" href="templating.html"><link rel="prev" title="Discrete Time LQR" href="sp_lqr.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Optimal Transfer With State Trigger - Condor 0.3.3.dev72+g55332c6b5 documentation</title>
+        <title>Optimal Transfer With State Trigger - Condor 0.3.3.dev73+g19f30e8e7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev72+g55332c6b5 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev73+g19f30e8e7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev72+g55332c6b5 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev73+g19f30e8e7 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -215,6 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../api/fields.html">Fields and Elements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/implementations.html">Implementations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api/backend.html">Backend Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/solvers.html">Solvers</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../topics/index.html">Topics</a><input aria-label="Toggle navigation of Topics" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -323,6 +324,9 @@ to download the full example code.</p>
     <span class="n">terminate</span> <span class="o">=</span> <span class="kc">True</span>
 
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.bisect.html#scipy.optimize.bisect" title="scipy.optimize.bisect" class="sphx-glr-backref-module-scipy-optimize sphx-glr-backref-type-py-function"><span class="n">bisect</span></a>
+
+
 <span class="k">class</span><span class="w"> </span><span class="nc">Transfer</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">TrajectoryAnalysis</span><span class="p">):</span>
     <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
     <span class="n">xd</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
@@ -331,13 +335,8 @@ to download the full example code.</p>
     <span class="n">tf</span> <span class="o">=</span> <span class="mf">20.0</span>
 
     <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-        <span class="n">state_max_step_size</span> <span class="o">=</span> <span class="mf">0.25</span>
-        <span class="n">state_atol</span> <span class="o">=</span> <span class="mf">1e-15</span>
-        <span class="n">state_rtol</span> <span class="o">=</span> <span class="mf">1e-12</span>
-        <span class="n">adjoint_atol</span> <span class="o">=</span> <span class="mf">1e-15</span>
-        <span class="n">adjoint_rtol</span> <span class="o">=</span> <span class="mf">1e-12</span>
-        <span class="c1"># state_solver = co.backend.implementations.TrajectoryAnalysis.Solver.CVODE</span>
-        <span class="c1"># adjoint_solver = co.backend.implementations.TrajectoryAnalysis.Solver.CVODE</span>
+        <span class="n">rootfinder</span> <span class="o">=</span> <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.bisect.html#scipy.optimize.bisect" title="scipy.optimize.bisect" class="sphx-glr-backref-module-scipy-optimize sphx-glr-backref-type-py-function"><span class="n">bisect</span></a>
+        <span class="n">rootfinder_xtol</span> <span class="o">=</span> <span class="mf">1e-15</span>
 
 
 <a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">p0</span></a> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span>
@@ -367,19 +366,19 @@ to download the full example code.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult" title="scipy.optimize.OptimizeResult" class="sphx-glr-backref-module-scipy-optimize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">_stats</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:483: RuntimeWarning: Method CG cannot handle bounds.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
   min_out = minimize(
-time to run: 0.4620477310000126
-[-3.00000028] [1.00000242]
+time to run: 0.2093194439999877
+[-3.00000001] [1.]
  message: Optimization terminated successfully.
  success: True
   status: 0
-     fun: 4.044697431832216e-12
+     fun: 1.5050883330650572e-17
        x: [-3.000e+00  1.000e+00]
-     nit: 15
-     jac: [-1.494e-06  3.167e-06]
-    nfev: 22
-    njev: 22
+     nit: 6
+     jac: [-3.168e-09  1.554e-14]
+    nfev: 14
+    njev: 14
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">LTI_plot</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">sim</span><span class="p">)</span>
@@ -392,7 +391,7 @@ time to run: 0.4620477310000126
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.723 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.467 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-state-switched-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/01e60acd6b04d3dbceb7929466596e9a/state_switched.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">state_switched.ipynb</span></code></a></p>
@@ -456,7 +455,7 @@ time to run: 0.4620477310000126
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=c1c186bc"></script>
+</div><script src="../_static/documentation_options.js?v=72f6bc6b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

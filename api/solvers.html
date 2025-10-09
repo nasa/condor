@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html">
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Topics" href="../topics/index.html"><link rel="prev" title="Backend Modules" href="backend.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Computation times - Condor 0.3.3.dev73+g19f30e8e7 documentation</title>
+        <title>Solvers - Condor 0.3.3.dev73+g19f30e8e7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -178,7 +178,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -197,7 +197,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../tutorial/index.html">Tutorials</a><input aria-label="Toggle navigation of Tutorials" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorial/sellar.html">Introduction to Condor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorial/polar_transform.html">Polar Transformation</a></li>
@@ -210,12 +210,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../howto/configuration.html">Configuring Models</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">Condor API</a><input aria-label="Toggle navigation of Condor API" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/contrib.html">Contrib Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/fields.html">Fields and Elements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/implementations.html">Implementations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/backend.html">Backend Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/solvers.html">Solvers</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">Condor API</a><input aria-label="Toggle navigation of Condor API" checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="contrib.html">Contrib Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fields.html">Fields and Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementations.html">Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backend.html">Backend Modules</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Solvers</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../topics/index.html">Topics</a><input aria-label="Toggle navigation of Topics" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -223,15 +223,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../topics/glossary.html">Glossary of Terms</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="index.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="ct_lqr.html">Continuous Time LQR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="custom_model_template_with_metaprogramming.html">Custom Model Template</a></li>
-<li class="toctree-l2"><a class="reference internal" href="orbital_1.html">Linear Covariance Analysis</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rosenbrock.html">Warm Starting in Iterative Solvers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sp_lqr.html">Discrete Time LQR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="state_switched.html">Optimal Transfer With State Trigger</a></li>
-<li class="toctree-l2"><a class="reference internal" href="templating.html">Creating Model Templates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="time_switch.html">Optimal Transfer With Time Trigger</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/ct_lqr.html">Continuous Time LQR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/custom_model_template_with_metaprogramming.html">Custom Model Template</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/orbital_1.html">Linear Covariance Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/rosenbrock.html">Warm Starting in Iterative Solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/sp_lqr.html">Discrete Time LQR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/state_switched.html">Optimal Transfer With State Trigger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/templating.html">Creating Model Templates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/time_switch.html">Optimal Transfer With Time Trigger</a></li>
 </ul>
 </li>
 </ul>
@@ -254,7 +254,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../_sources/examples/sg_execution_times.rst.txt" title="View this page">
+  <a class="muted-link" href="../_sources/api/solvers.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -267,71 +267,54 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="computation-times">
-<span id="sphx-glr-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Link to this heading">¶</a></h1>
-<p><strong>00:40.731</strong> total execution time for 8 files <strong>from examples</strong>:</p>
-<div class="docutils container">
-<style scoped>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
-</style>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script type="text/javascript" class="init">
-$(document).ready( function () {
-    $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
-} );
-</script><div class="table-wrapper table table-striped sg-datatable docutils container">
-<table class="table table-striped sg-datatable docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Example</p></th>
-<th class="head"><p>Time</p></th>
-<th class="head"><p>Mem (MB)</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="sp_lqr.html#sphx-glr-examples-sp-lqr-py"><span class="std std-ref">Discrete Time LQR</span></a> (<code class="docutils literal notranslate"><span class="pre">sp_lqr.py</span></code>)</p></td>
-<td><p>00:23.446</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="orbital_1.html#sphx-glr-examples-orbital-1-py"><span class="std std-ref">Linear Covariance Analysis</span></a> (<code class="docutils literal notranslate"><span class="pre">orbital_1.py</span></code>)</p></td>
-<td><p>00:12.745</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="ct_lqr.html#sphx-glr-examples-ct-lqr-py"><span class="std std-ref">Continuous Time LQR</span></a> (<code class="docutils literal notranslate"><span class="pre">ct_lqr.py</span></code>)</p></td>
-<td><p>00:03.103</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="time_switch.html#sphx-glr-examples-time-switch-py"><span class="std std-ref">Optimal Transfer With Time Trigger</span></a> (<code class="docutils literal notranslate"><span class="pre">time_switch.py</span></code>)</p></td>
-<td><p>00:00.724</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="state_switched.html#sphx-glr-examples-state-switched-py"><span class="std std-ref">Optimal Transfer With State Trigger</span></a> (<code class="docutils literal notranslate"><span class="pre">state_switched.py</span></code>)</p></td>
-<td><p>00:00.467</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="rosenbrock.html#sphx-glr-examples-rosenbrock-py"><span class="std std-ref">Warm Starting in Iterative Solvers</span></a> (<code class="docutils literal notranslate"><span class="pre">rosenbrock.py</span></code>)</p></td>
-<td><p>00:00.204</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="templating.html#sphx-glr-examples-templating-py"><span class="std std-ref">Creating Model Templates</span></a> (<code class="docutils literal notranslate"><span class="pre">templating.py</span></code>)</p></td>
-<td><p>00:00.039</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="custom_model_template_with_metaprogramming.html#sphx-glr-examples-custom-model-template-with-metaprogramming-py"><span class="std std-ref">Custom Model Template</span></a> (<code class="docutils literal notranslate"><span class="pre">custom_model_template_with_metaprogramming.py</span></code>)</p></td>
-<td><p>00:00.004</p></td>
-<td><p>0.0</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+          <section id="module-condor.solvers.sweeping_gradient_method">
+<span id="solvers"></span><h1>Solvers<a class="headerlink" href="#module-condor.solvers.sweeping_gradient_method" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="condor.solvers.sweeping_gradient_method.SolverSciPyBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.solvers.sweeping_gradient_method.</span></span><span class="sig-name descname"><span class="pre">SolverSciPyBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol=1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol=1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_min_steps=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootfinder=&lt;function</span> <span class="pre">brentq&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_step_size=0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsteps=10000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.solvers.sweeping_gradient_method.SolverSciPyBase" title="Link to this definition">¶</a></dt>
+<dd><p>Baseclass for using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.ode.html#scipy.integrate.ode" title="(in SciPy v1.16.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.integrate.ode</span></code></a> with advanced features.</p>
+<p>Wraps standard scipy integrator class with functionality for  event handling,
+multiple-segment time generators, and adaptive minumum number of steps.
+Options are generally a pass through to the underlying integrator (e.g.,
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.ode.html#scipy.integrate.ode" title="(in SciPy v1.16.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.integrate.ode</span></code></a>, <code class="docutils literal notranslate"><span class="pre">dopri5</span></code> or <code class="docutils literal notranslate"><span class="pre">dop853</span></code> currently). This
+implementation performs an event function zero-crossing check at each time-step;
+when an event function zero-crossing is detected, a rootfinding and event update
+operation is performed. Special options on the <code class="docutils literal notranslate"><span class="pre">sweeping_gradient_method</span></code>
+solver which are described below.</p>
+<dl class="field-list">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>adaptive_min_steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – minimum number of steps per time-defined segment</p></li>
+<li><p><strong>max_step_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – maximum step size for the forward evaluation, normalized name to scipy’s
+max_step</p></li>
+<li><p><strong>rootfinder</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">callable</span></code>) – Interval root-finder function. Defaults to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html#scipy.optimize.brentq" title="(in SciPy v1.16.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimize.brentq()</span></code></a>, and
+must take the equivalent positional arguments, <code class="docutils literal notranslate"><span class="pre">f</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span></code>, and <code class="docutils literal notranslate"><span class="pre">b</span></code>, and
+return <code class="docutils literal notranslate"><span class="pre">x0</span></code>, where <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">x0</span> <span class="pre">&lt;=</span> <span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">f(x0)</span></code> is the zero.</p>
+<p>Keyword arguments with a <code class="docutils literal notranslate"><span class="pre">rootfinder_</span></code> prefix are passed to the rootfinder
+method during the rootfinding step.</p>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="condor.solvers.sweeping_gradient_method.SolverSciPyDopri5">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.solvers.sweeping_gradient_method.</span></span><span class="sig-name descname"><span class="pre">SolverSciPyDopri5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol=1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol=1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_min_steps=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootfinder=&lt;function</span> <span class="pre">brentq&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_step_size=0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsteps=10000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.solvers.sweeping_gradient_method.SolverSciPyDopri5" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#condor.solvers.sweeping_gradient_method.SolverSciPyBase" title="condor.solvers.sweeping_gradient_method.SolverSciPyBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">SolverSciPyBase</span></code></a> for the <code class="docutils literal notranslate"><span class="pre">dopri5</span></code> method</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="condor.solvers.sweeping_gradient_method.SolverSciPyDop853">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.solvers.sweeping_gradient_method.</span></span><span class="sig-name descname"><span class="pre">SolverSciPyDop853</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol=1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol=1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_min_steps=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootfinder=&lt;function</span> <span class="pre">brentq&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_step_size=0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsteps=10000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.solvers.sweeping_gradient_method.SolverSciPyDop853" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#condor.solvers.sweeping_gradient_method.SolverSciPyBase" title="condor.solvers.sweeping_gradient_method.SolverSciPyBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">SolverSciPyBase</span></code></a> for the <code class="docutils literal notranslate"><span class="pre">dop853</span></code> method</p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -339,8 +322,26 @@ $(document).ready( function () {
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="../topics/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Topics</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="backend.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Backend Modules</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -359,8 +360,29 @@ $(document).ready( function () {
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Solvers</a><ul>
+<li><a class="reference internal" href="#condor.solvers.sweeping_gradient_method.SolverSciPyBase"><code class="docutils literal notranslate"><span class="pre">SolverSciPyBase</span></code></a></li>
+<li><a class="reference internal" href="#condor.solvers.sweeping_gradient_method.SolverSciPyDopri5"><code class="docutils literal notranslate"><span class="pre">SolverSciPyDopri5</span></code></a></li>
+<li><a class="reference internal" href="#condor.solvers.sweeping_gradient_method.SolverSciPyDop853"><code class="docutils literal notranslate"><span class="pre">SolverSciPyDop853</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

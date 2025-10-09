@@ -21,7 +21,7 @@
 Continuous Time LQR
 ===================
 
-.. GENERATED FROM PYTHON SOURCE LINES 5-44
+.. GENERATED FROM PYTHON SOURCE LINES 5-43
 
 .. code-block:: Python
 
@@ -56,8 +56,7 @@ Continuous Time LQR
         cost = trajectory_output(integrand=(x.T @ Q @ x + u.T @ R @ u) / 2)
 
         class Options:
-            state_rtol = 1e-8
-            adjoint_rtol = 1e-8
+            rtol = 1e-8
 
 
     ct_sim = DblIntLQR(K=[1.0, 0.1])
@@ -88,12 +87,12 @@ Continuous Time LQR
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-47
+.. GENERATED FROM PYTHON SOURCE LINES 44-46
 
 Determine the optimal gain by embedding the trajectory analysis in an optimization
 problem:
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-63
+.. GENERATED FROM PYTHON SOURCE LINES 46-62
 
 .. code-block:: Python
 
@@ -121,18 +120,18 @@ problem:
 
  .. code-block:: none
 
-    /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:483: RuntimeWarning: Method CG cannot handle bounds.
+    /opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
-    [[0.99997598 1.73199404]]
+    [[1.00000506 1.73205902]]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-65
+.. GENERATED FROM PYTHON SOURCE LINES 63-64
 
 Compare with the solution from the continuous algebraic Riccati equation:
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-73
+.. GENERATED FROM PYTHON SOURCE LINES 64-72
 
 .. code-block:: Python
 
@@ -157,7 +156,7 @@ Compare with the solution from the continuous algebraic Riccati equation:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-78
+.. GENERATED FROM PYTHON SOURCE LINES 73-77
 
 .. code-block:: Python
 
@@ -189,7 +188,7 @@ Compare with the solution from the continuous algebraic Riccati equation:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-81
+.. GENERATED FROM PYTHON SOURCE LINES 78-80
 
 .. code-block:: Python
 
@@ -205,7 +204,7 @@ Compare with the solution from the continuous algebraic Riccati equation:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.410 seconds)
+   **Total running time of the script:** (0 minutes 3.103 seconds)
 
 
 .. _sphx_glr_download_examples_ct_lqr.py:

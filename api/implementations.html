@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Backend Modules" href="backend.html"><link rel="prev" title="Fields and Elements" href="fields.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Implementations - Condor 0.3.3.dev72+g55332c6b5 documentation</title>
+        <title>Implementations - Condor 0.3.3.dev73+g19f30e8e7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev72+g55332c6b5 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev73+g19f30e8e7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev72+g55332c6b5 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev73+g19f30e8e7 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -215,6 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="fields.html">Fields and Elements</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Implementations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="backend.html">Backend Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">Solvers</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../topics/index.html">Topics</a><input aria-label="Toggle navigation of Topics" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -276,7 +277,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.implementations.simple.ExplicitSystem">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.implementations.simple.</span></span><span class="sig-name descname"><span class="pre">ExplicitSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.simple.ExplicitSystem" title="Link to this definition">¶</a></dt>
-<dd><p>Implementation for <a class="reference internal" href="#condor.implementations.simple.ExplicitSystem" title="condor.implementations.simple.ExplicitSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExplicitSystem</span></code></a> model.</p>
+<dd><p>Implementation for <a class="reference internal" href="contrib.html#condor.contrib.ExplicitSystem" title="condor.contrib.ExplicitSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExplicitSystem</span></code></a> model.</p>
 <p>No <code class="xref py py-class docutils literal notranslate"><span class="pre">Options</span></code> expected.</p>
 </dd></dl>
 
@@ -316,44 +317,35 @@ own copies of the matching fields</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.implementations.sgm_trajectory.TrajectoryAnalysis">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.implementations.sgm_trajectory.</span></span><span class="sig-name descname"><span class="pre">TrajectoryAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis" title="Link to this definition">¶</a></dt>
-<dd><p>Implementation for <a class="reference internal" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis" title="condor.implementations.sgm_trajectory.TrajectoryAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrajectoryAnalysis</span></code></a> model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Options<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>state_atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – absolute tolerance for forward evalaution</p></li>
-<li><p><strong>state_rtol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – relative tolerance for forward evalaution</p></li>
-<li><p><strong>state_adaptive_max_step_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – actually a minimum number of steps per time-defined segment for the forward
-evaluation</p></li>
-<li><p><strong>state_max_step_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – maximum step size for the forward evaluation</p></li>
-<li><p><strong>state_solver</strong> (<a class="reference internal" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver" title="condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrajectoryAnalysis.Solver</span></code></a>) – enum member for solver type</p></li>
-<li><p><strong>adjoint_*</strong> – same as above, for the adjoint solution</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Implementation for <a class="reference internal" href="contrib.html#condor.contrib.TrajectoryAnalysis" title="condor.contrib.TrajectoryAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrajectoryAnalysis</span></code></a> model.</p>
+<p>All Options may be prefixed with <code class="docutils literal notranslate"><span class="pre">state_</span></code> or <code class="docutils literal notranslate"><span class="pre">adjoint_</span></code> to apply only to the
+forward or reverse solvers, respectively. Without either prefix, the option will be
+passed to both solvers. For additional details on the Solver options, see the
+<a class="reference internal" href="solvers.html#module-condor.solvers.sweeping_gradient_method" title="condor.solvers.sweeping_gradient_method"><code class="xref py py-class docutils literal notranslate"><span class="pre">sweeping_gradient_method</span></code></a> solvers.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver" title="Link to this definition">¶</a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.CVODE">
-<span class="sig-name descname"><span class="pre">CVODE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.CVODE" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">CVODE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'condor.solvers.sweeping_gradient_method.SolverCVODE'&gt;</span></em><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.CVODE" title="Link to this definition">¶</a></dt>
 <dd><p>currently unsupported</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.dopri5">
-<span class="sig-name descname"><span class="pre">dopri5</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.dopri5" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dopri5</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'condor.solvers.sweeping_gradient_method.SolverSciPyDopri5'&gt;</span></em><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.dopri5" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.dop853">
-<span class="sig-name descname"><span class="pre">dop853</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.dop853" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dop853</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'condor.solvers.sweeping_gradient_method.SolverSciPyDop853'&gt;</span></em><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.Solver.dop853" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.implementations.sgm_trajectory.TrajectoryAnalysis.construct">
-<span class="sig-name descname"><span class="pre">construct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_adaptive_max_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_max_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_adaptive_max_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_max_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Solver.dopri5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Solver.dopri5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.construct" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">construct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjoint_solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Solver.dopri5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.sgm_trajectory.TrajectoryAnalysis.construct" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -363,16 +355,16 @@ evaluation</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.implementations.iterative.AlgebraicSystem">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.implementations.iterative.</span></span><span class="sig-name descname"><span class="pre">AlgebraicSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.iterative.AlgebraicSystem" title="Link to this definition">¶</a></dt>
-<dd><p>Implementation for <a class="reference internal" href="#condor.implementations.iterative.AlgebraicSystem" title="condor.implementations.iterative.AlgebraicSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlgebraicSystem</span></code></a> model.</p>
+<dd><p>Implementation for <a class="reference internal" href="contrib.html#condor.contrib.AlgebraicSystem" title="condor.contrib.AlgebraicSystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlgebraicSystem</span></code></a> model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Options<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – absolute tolerance (default 1e-12)</p></li>
-<li><p><strong>rtol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – relative tolerance (default 1e-12)</p></li>
-<li><p><strong>warm_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether subsequent calls should initialize the variable values to
+<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – absolute tolerance (default 1e-12)</p></li>
+<li><p><strong>rtol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – relative tolerance (default 1e-12)</p></li>
+<li><p><strong>warm_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether subsequent calls should initialize the variable values to
 the last-run solution (default True)</p></li>
-<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – maximum number of iterations before terminating solver (default 100)</p></li>
-<li><p><strong>error_on_fail</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether to raise an error if the solver fails to converge within
+<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – maximum number of iterations before terminating solver (default 100)</p></li>
+<li><p><strong>error_on_fail</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether to raise an error if the solver fails to converge within
 specified tolerance before reaching max_iter (default False)</p></li>
 </ul>
 </dd>
@@ -387,7 +379,7 @@ specified tolerance before reaching max_iter (default False)</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.implementations.iterative.OptimizationProblem">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.implementations.iterative.</span></span><span class="sig-name descname"><span class="pre">OptimizationProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.iterative.OptimizationProblem" title="Link to this definition">¶</a></dt>
-<dd><p>Implementation base class for <a class="reference internal" href="#condor.implementations.iterative.OptimizationProblem" title="condor.implementations.iterative.OptimizationProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizationProblem</span></code></a> model.</p>
+<dd><p>Implementation base class for <a class="reference internal" href="contrib.html#condor.contrib.OptimizationProblem" title="condor.contrib.OptimizationProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizationProblem</span></code></a> model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Options<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -424,14 +416,15 @@ subclass optimization implementations.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.implementations.iterative.CasadiNlpsolImplementation">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.implementations.iterative.</span></span><span class="sig-name descname"><span class="pre">CasadiNlpsolImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.iterative.CasadiNlpsolImplementation" title="Link to this definition">¶</a></dt>
-<dd><p>Implementation layer for casadi nlpsol for <a class="reference internal" href="#condor.implementations.iterative.OptimizationProblem" title="condor.implementations.iterative.OptimizationProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizationProblem</span></code></a> models.</p>
+<dd><p>Implementation layer for casadi nlpsol for
+<a class="reference internal" href="contrib.html#condor.contrib.OptimizationProblem" title="condor.contrib.OptimizationProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizationProblem</span></code></a> models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Options<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> (<a class="reference internal" href="#condor.implementations.iterative.CasadiNlpsolImplementation.Method" title="condor.implementations.iterative.CasadiNlpsolImplementation.Method"><code class="xref py py-class docutils literal notranslate"><span class="pre">CasadiNlpsolImplementation.Method</span></code></a>) – value from method enum to specify supported methods</p></li>
-<li><p><strong>exact_hessian</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to use second order gradient information; use limited Broyden update
+<li><p><strong>exact_hessian</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to use second order gradient information; use limited Broyden update
 otherwise</p></li>
-<li><p><strong>calc_lam_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to calculate the lagrange multipliers solution, used for IPOPT to perform a
+<li><p><strong>calc_lam_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to calculate the lagrange multipliers solution, used for IPOPT to perform a
 true warm start</p></li>
 <li><p><strong>**options</strong> – remaining keyword arguments are passed to casadi’s nlpsol’s constructor’s
 solver-specific options argument. See <a class="reference internal" href="#condor.implementations.iterative.CasadiNlpsolImplementation.method_default_options" title="condor.implementations.iterative.CasadiNlpsolImplementation.method_default_options"><code class="xref py py-attr docutils literal notranslate"><span class="pre">method_default_options</span></code></a> for the
@@ -497,8 +490,8 @@ dict</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.implementations.iterative.ScipyMinimizeBase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.implementations.iterative.</span></span><span class="sig-name descname"><span class="pre">ScipyMinimizeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.implementations.iterative.ScipyMinimizeBase" title="Link to this definition">¶</a></dt>
-<dd><p>Base implementation class for SciPy minimize for <a class="reference internal" href="#condor.implementations.iterative.OptimizationProblem" title="condor.implementations.iterative.OptimizationProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizationProblem</span></code></a>
-models.</p>
+<dd><p>Base implementation class for SciPy minimize for
+<a class="reference internal" href="contrib.html#condor.contrib.OptimizationProblem" title="condor.contrib.OptimizationProblem"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptimizationProblem</span></code></a> models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Options<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>**options</strong> – keyword options are passed directly to scipy.minimize’s options keyword argument</p>
@@ -710,7 +703,7 @@ models.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=c1c186bc"></script>
+</div><script src="../_static/documentation_options.js?v=72f6bc6b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

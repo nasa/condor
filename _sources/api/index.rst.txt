@@ -9,3 +9,4 @@ Condor API
    fields
    implementations
    backend
+   solvers

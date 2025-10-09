@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fields and Elements" href="fields.html"><link rel="prev" title="Condor API" href="index.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Contrib Models - Condor 0.3.3.dev72+g55332c6b5 documentation</title>
+        <title>Contrib Models - Condor 0.3.3.dev73+g19f30e8e7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev72+g55332c6b5 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev73+g19f30e8e7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev72+g55332c6b5 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev73+g19f30e8e7 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -215,6 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="fields.html">Fields and Elements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementations.html">Implementations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="backend.html">Backend Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="solvers.html">Solvers</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../topics/index.html">Topics</a><input aria-label="Toggle navigation of Topics" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -319,13 +320,13 @@ data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>xx</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are input element names and values are the grid
+<li><p><strong>xx</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are input element names and values are the grid
 points for data on that axis, so the collection of values can be passed to
 <code class="docutils literal notranslate"><span class="pre">np.meshgrid</span></code> to construct a rectilinear grid; input should be a single
 dimension.</p></li>
-<li><p><strong>yy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are output element names and values are the values
+<li><p><strong>yy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are output element names and values are the values
 on the input grid to be interpolated</p></li>
-<li><p><strong>degrees</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.3)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Degree of interpolant for each axis (or broadcastable). Default is 3.</p></li>
+<li><p><strong>degrees</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.3)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Degree of interpolant for each axis (or broadcastable). Default is 3.</p></li>
 <li><p><strong>bcs</strong> (<a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.3)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Array of boundary conditions broadcastable to <code class="docutils literal notranslate"><span class="pre">(xdim,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>. <code class="docutils literal notranslate"><span class="pre">bc[xdim,</span> <span class="pre">0</span>
 <span class="pre">for</span> <span class="pre">left</span> <span class="pre">|</span> <span class="pre">1</span> <span class="pre">for</span> <span class="pre">right,</span> <span class="pre">:]</span> <span class="pre">=</span> <span class="pre">(order,</span> <span class="pre">value)</span></code> for specifying derivative
 conditions. Use (-1, 0) to specify the not-a-knot boundary conditions
@@ -737,7 +738,7 @@ construction).</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=c1c186bc"></script>
+</div><script src="../_static/documentation_options.js?v=72f6bc6b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -33,8 +33,7 @@ class DblIntLQR(DblInt.TrajectoryAnalysis):
     cost = trajectory_output(integrand=(x.T @ Q @ x + u.T @ R @ u) / 2)
 
     class Options:
-        state_rtol = 1e-8
-        adjoint_rtol = 1e-8
+        rtol = 1e-8
 
 
 ct_sim = DblIntLQR(K=[1.0, 0.1])
