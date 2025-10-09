@@ -31,6 +31,34 @@ class SolverMixin:
 
 
 class SolverSciPyBase(SolverMixin):
+    """Baseclass for using :class:`scipy.integrate.ode` with advanced features.
+
+    Wraps standard scipy integrator class with functionality for  event handling,
+    multiple-segment time generators, and adaptive minumum number of steps.
+    Options are generally a pass through to the underlying integrator (e.g.,
+    :class:`scipy.integrate.ode`, ``dopri5`` or ``dop853`` currently). This
+    implementation performs an event function zero-crossing check at each time-step;
+    when an event function zero-crossing is detected, a rootfinding and event update
+    operation is performed. Special options on the ``sweeping_gradient_method``
+    solver which are described below.
+
+    Options
+    --------
+
+    adaptive_min_steps : int
+        minimum number of steps per time-defined segment
+    max_step_size : float
+        maximum step size for the forward evaluation, normalized name to scipy's
+        max_step
+    rootfinder : callable
+        Interval root-finder function. Defaults to ``scipy.optimize.brentq``, and
+        must take the equivalent positional arguments, ``f``, ``a``, and ``b``, and
+        return ``x0``, where ``a <= x0 <= b`` and ``f(x0)`` is the zero.
+
+        Keyword arguments with a ``rootfinder_`` prefix are passed to the rootfinder
+        method during the rootfinding step.
+    """
+
     SOLVER_NAME = None
 
     def __init__(
@@ -44,31 +72,6 @@ class SolverSciPyBase(SolverMixin):
         nsteps=10_000.0,
         **kwargs,
     ):
-        """
-        Options are generally a pass through to the underlying integrator (e.g.,
-        :class:`scipy.integrate.ode`, ``dopri5`` or ``dop853`` currently). This
-        implementation performs an event function zero-crossing check at each time-step;
-        when an event function zero crossing is detected, a rootfinding and event update
-        operation is performed. Special options on the ``sweeping_gradient_method``
-        solver which are described below.
-
-        Options
-        --------
-
-        adaptive_min_steps : int
-            minimum number of steps per time-defined segment
-        max_step_size : float
-            maximum step size for the forward evaluation, normalized name to scipy's
-            max_step
-        rootfinder : callable
-            Interval root-finder function. Defaults to ``scipy.optimize.brentq``, and
-            must take the equivalent positional arguments, ``f``, ``a``, and ``b``, and
-            return ``x0``, where ``a <= x0 <= b`` and ``f(x0)`` is the zero.
-
-            Keyword arguments with a ``rootfinder_`` prefix are passed to the rootfinder
-            method during the rootfinding step.
-
-        """
         self.system = system
         self.adaptive_min_steps = adaptive_min_steps
         self.solver = scipy_ode(
@@ -302,10 +305,14 @@ class SolverSciPyBase(SolverMixin):
 
 
 class SolverSciPyDopri5(SolverSciPyBase):
+    """:class:`SolverSciPyBase` for the ``dopri5`` method"""
+
     SOLVER_NAME = "dopri5"
 
 
 class SolverSciPyDop853(SolverSciPyBase):
+    """:class:`SolverSciPyBase` for the ``dop853`` method"""
+
     SOLVER_NAME = "dop853"
 
 
