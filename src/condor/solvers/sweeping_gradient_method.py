@@ -51,7 +51,7 @@ class SolverSciPyBase(SolverMixin):
         maximum step size for the forward evaluation, normalized name to scipy's
         max_step
     rootfinder : callable
-        Interval root-finder function. Defaults to ``scipy.optimize.brentq``, and
+        Interval root-finder function. Defaults to :func:`scipy.optimize.brentq`, and
         must take the equivalent positional arguments, ``f``, ``a``, and ``b``, and
         return ``x0``, where ``a <= x0 <= b`` and ``f(x0)`` is the zero.
 
