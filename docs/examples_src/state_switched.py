@@ -48,6 +48,9 @@ class Switch2(DblInt.Event):
     terminate = True
 
 
+from scipy.optimize import bisect
+
+
 class Transfer(DblInt.TrajectoryAnalysis):
     initial[x] = [-9.0, 0.0]
     xd = [1.0, 2.0]
@@ -56,13 +59,8 @@ class Transfer(DblInt.TrajectoryAnalysis):
     tf = 20.0
 
     class Options:
-        state_max_step_size = 0.25
-        state_atol = 1e-15
-        state_rtol = 1e-12
-        adjoint_atol = 1e-15
-        adjoint_rtol = 1e-12
-        # state_solver = co.backend.implementations.TrajectoryAnalysis.Solver.CVODE
-        # adjoint_solver = co.backend.implementations.TrajectoryAnalysis.Solver.CVODE
+        rootfinder = bisect
+        rootfinder_xtol = 1e-15
 
 
 p0 = -4.0, -1.0

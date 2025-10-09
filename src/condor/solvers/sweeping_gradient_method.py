@@ -39,10 +39,36 @@ class SolverSciPyBase(SolverMixin):
         atol=1e-12,
         rtol=1e-6,
         adaptive_min_steps=0,
+        rootfinder=brentq,
         max_step_size=0.0,
         nsteps=10_000.0,
         **kwargs,
     ):
+        """
+        Options are generally a pass through to the underlying integrator (e.g.,
+        :class:`scipy.integrate.ode`, ``dopri5`` or ``dop853`` currently). This
+        implementation performs an event function zero-crossing check at each time-step;
+        when an event function zero crossing is detected, a rootfinding and event update
+        operation is performed. Special options on the ``sweeping_gradient_method``
+        solver which are described below.
+
+        Options
+        --------
+
+        adaptive_min_steps : int
+            minimum number of steps per time-defined segment
+        max_step_size : float
+            maximum step size for the forward evaluation, normalized name to scipy's
+            max_step
+        rootfinder : callable
+            Interval root-finder function. Defaults to ``scipy.optimize.brentq``, and
+            must take the equivalent positional arguments, ``f``, ``a``, and ``b``, and
+            return ``x0``, where ``a <= x0 <= b`` and ``f(x0)`` is the zero.
+
+            Keyword arguments with a ``rootfinder_`` prefix are passed to the rootfinder
+            method during the rootfinding step.
+
+        """
         self.system = system
         self.adaptive_min_steps = adaptive_min_steps
         self.solver = scipy_ode(
@@ -54,8 +80,15 @@ class SolverSciPyBase(SolverMixin):
             rtol=rtol,
             max_step=max_step_size,
             nsteps=nsteps,
-            **kwargs,
         )
+        self.rootfinder = rootfinder
+        self.root_options = {}
+        for k, v in kwargs.items():
+            if k.startswith("rootfinder_"):
+                self.root_options[k.replace("rootfinder_", "")] = v
+            else:
+                self.int_options[k] = v
+
         self.solver.set_integrator(**self.int_options)
         self.solver.set_solout(self.solout)
 
@@ -133,10 +166,8 @@ class SolverSciPyBase(SolverMixin):
                     self.rootinfo[g_idx] = 0
                     return t, x
 
-                set_t = brentq(
-                    find_function,
-                    spline_ts[-2],
-                    spline_ts[-1],
+                set_t = self.rootfinder(
+                    find_function, spline_ts[-2], spline_ts[-1], **self.root_options
                 )
             else:
                 set_t = spline_ts[-1]
