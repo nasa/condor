@@ -8,4 +8,3 @@ def options_to_kwargs(new_cls, attr_name="Options"):
     else:
         backend_option = {}
     return backend_option
-
