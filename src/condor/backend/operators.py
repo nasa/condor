@@ -80,7 +80,7 @@ floor = wrap(backend_mod.operators.floor)
 ceil = wrap(backend_mod.operators.ceil)
 
 vector_norm = wrap(backend_mod.operators.vector_norm)
-jacobian = wrap(backend_mod.operators.jacobian) #: create dense jacobian expression
+jacobian = wrap(backend_mod.operators.jacobian)  #: create dense jacobian expression
 trace = wrap(backend_mod.operators.trace)
 cross = wrap(backend_mod.operators.cross)
 solve = wrap(backend_mod.operators.solve)
