@@ -29,7 +29,6 @@ inf = backend_mod.operators.inf  #: constant inf
 nan = backend_mod.operators.nan  #: constant nan
 
 # calculus & symbolic
-jacobian = backend_mod.operators.jacobian  #: create dense jacobian expression
 if_else = backend_mod.operators.if_else  #: function for creating
 substitute = backend_mod.operators.substitute
 
@@ -81,6 +80,7 @@ floor = wrap(backend_mod.operators.floor)
 ceil = wrap(backend_mod.operators.ceil)
 
 vector_norm = wrap(backend_mod.operators.vector_norm)
+jacobian = wrap(backend_mod.operators.jacobian) #: create dense jacobian expression
 trace = wrap(backend_mod.operators.trace)
 cross = wrap(backend_mod.operators.cross)
 solve = wrap(backend_mod.operators.solve)
