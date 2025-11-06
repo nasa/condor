@@ -425,18 +425,12 @@ class BaseElement(
     backend.BackendSymbolData,
 ):
     def __hash__(self):
-        # if self.field_type._model is None:
-        #    raise ValueError(
-        #        "Elements are not hashable until their field has been bound to a model"
-        #    )
         return hash(
             (
-                # self.name,
                 self.backend_repr,
                 self.shape,
                 self.field_type._name,
                 self.field_type._model_name,
-                self.field_type._model.__module__,
             )
         )
 
@@ -695,6 +689,9 @@ class InitializedElement(BoundedElement):
             self.initializer = np.ones(self.shape) * self.initializer
         else:
             self.initializer = np.broadcast_to(self.initializer, self.shape)
+
+    def __hash__(self):
+        return BaseElement.__hash__(self)
 
 
 class InitializedField(FreeField):

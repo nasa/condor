@@ -206,7 +206,7 @@ def substitute(expr, subs):
     return expr
 
 
-def if_else(*conditions_actions):
+def if_else(*conditions_actions, short_circuit=False):
     """
     symbolic representation of a if/else control flow
 
@@ -248,5 +248,5 @@ def if_else(*conditions_actions):
     if hasattr(condition, "shape") and np.prod(condition.shape) > 1:
         msg = "if_else conditions should be a scalar"
         raise ValueError(msg)
-    remainder = if_else(*conditions_actions[1:])
-    return casadi.if_else(condition, action, remainder)
+    remainder = if_else(*conditions_actions[1:], short_circuit=short_circuit)
+    return casadi.if_else(condition, action, remainder, short_circuit)

@@ -1457,7 +1457,7 @@ class Model(metaclass=ModelType):
         if not model._meta.bind_embedded_models:
             return
 
-        model_assignments = {}
+        model_assignments = backend.SymbolCompatibleDict()
 
         fields = [
             field
