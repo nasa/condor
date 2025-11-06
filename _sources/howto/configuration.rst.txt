@@ -123,7 +123,7 @@ And finally we can use this configured ODE system to simulate a trajectory.
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f80489740e0>]
+    [<matplotlib.lines.Line2D object at 0x7f67bc7dcce0>]
 
 
 
@@ -164,7 +164,7 @@ We can also re-use the module with a different configuration:
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f804878bc80>]
+    [<matplotlib.lines.Line2D object at 0x7f67bca7bf80>]
 
 
 
@@ -177,7 +177,7 @@ An alternative approach is to programmatically generate the model using the
 metaprogramming machinery Condor uses internally. See
 :ref:`metaprogramming-walkthrough` for a more thorough overview.
 
-.. GENERATED FROM PYTHON SOURCE LINES 85-118
+.. GENERATED FROM PYTHON SOURCE LINES 85-134
 
 .. code-block:: Python
 
@@ -213,6 +213,21 @@ metaprogramming machinery Condor uses internally. See
 
         return plant
 
+        # OR for primary models:
+        ode_attrs = condor.ODESystem.__prepare__(ode_name, (condor.ODESystem,))
+        ode_model = condor.ODESystem.__class__(ode_name, (condor.ODESystem,), ode_attrs)
+
+        # but submodels must be ~ the way shown above:
+        event_meta_args = (
+            event_name,
+            (ode_model.Event, condor.models.Submodel),
+        )
+        event_attrs = condor.contrib.Event.__prepare__(*event_meta_args)
+        condor.contrib.EventType.__new__(
+            condor.contrib.EventType,
+            *event_meta_args,
+            attrs=event_attrs,
+        )
 
 
 
@@ -221,11 +236,12 @@ metaprogramming machinery Condor uses internally. See
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-120
+
+.. GENERATED FROM PYTHON SOURCE LINES 135-136
 
 Use of the model factory function looks similar to using ``get_module``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-134
+.. GENERATED FROM PYTHON SOURCE LINES 136-150
 
 .. code-block:: Python
 
@@ -257,11 +273,11 @@ Use of the model factory function looks similar to using ``get_module``:
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f804897dd00>]
+    [<matplotlib.lines.Line2D object at 0x7f67bca2d2b0>]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-150
+.. GENERATED FROM PYTHON SOURCE LINES 151-166
 
 .. code-block:: Python
 
@@ -294,11 +310,11 @@ Use of the model factory function looks similar to using ``get_module``:
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f8049b982f0>]
+    [<matplotlib.lines.Line2D object at 0x7f67bcb2b3b0>]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 151-153
+.. GENERATED FROM PYTHON SOURCE LINES 167-169
 
 .. code-block:: Python
 
@@ -314,7 +330,7 @@ Use of the model factory function looks similar to using ``get_module``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.396 seconds)
+   **Total running time of the script:** (0 minutes 0.392 seconds)
 
 
 .. _sphx_glr_download_howto_configuration.py:

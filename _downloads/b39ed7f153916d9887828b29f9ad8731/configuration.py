@@ -114,6 +114,22 @@ def make_LTI(A, B=None, name="LTISystem"):
 
     return plant
 
+    # OR for primary models:
+    ode_attrs = condor.ODESystem.__prepare__(ode_name, (condor.ODESystem,))
+    ode_model = condor.ODESystem.__class__(ode_name, (condor.ODESystem,), ode_attrs)
+
+    # but submodels must be ~ the way shown above:
+    event_meta_args = (
+        event_name,
+        (ode_model.Event, condor.models.Submodel),
+    )
+    event_attrs = condor.contrib.Event.__prepare__(*event_meta_args)
+    condor.contrib.EventType.__new__(
+        condor.contrib.EventType,
+        *event_meta_args,
+        attrs=event_attrs,
+    )
+
 
 # %%
 # Use of the model factory function looks similar to using ``get_module``:
