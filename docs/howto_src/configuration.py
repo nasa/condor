@@ -96,8 +96,10 @@ plt.plot(sim.t, sim.x[0].squeeze())
 from condor.contrib import ModelTemplateType, ODESystem
 
 
-def make_LTI(A, B=None, name="LTI"):
-    attrs = ModelTemplateType.__prepare__(name, (ODESystem,))
+def make_LTI(A, B=None):
+    name = "LTI"
+    bases = (ODESystem,)
+    attrs = ModelTemplateType.__prepare__(name, bases)
 
     attrs["A"] = A
 
@@ -119,9 +121,9 @@ def make_LTI(A, B=None, name="LTI"):
 
     attrs["dot"][x] = xdot
 
-    plant = ModelTemplateType(name, (ODESystem,), attrs)
+    LTI = ModelTemplateType(name, bases, attrs)
 
-    return plant
+    return LTI
 
 
 # %%
@@ -148,24 +150,15 @@ from condor.backend import operators as ops
 
 
 def add_bounce_event(odesys_cls):
-    event_meta_args = (
-        "Bounce",  # name
-        (odesys_cls.Event, condor.models.Submodel),  # bases
-    )
-    event_attrs = condor.contrib.Event.__prepare__(*event_meta_args)
+    name = "Bounce"
+    bases = (odesys_cls.Event, condor.models.Submodel)
+    attrs = condor.contrib.Event.__prepare__(name, bases)
 
-    # extract elements to operate on
     x = odesys_cls.x.backend_repr
+    attrs["function"] = x[0]
+    attrs["update"][x] = ops.concat([x[0], -x[1]])
 
-    # define the event
-    event_attrs["function"] = x[0]
-    event_attrs["update"][x] = ops.concat([x[0], -x[1]])
-
-    condor.contrib.EventType.__new__(
-        condor.contrib.EventType,
-        *event_meta_args,
-        attrs=event_attrs,
-    )
+    condor.contrib.EventType.__new__(condor.contrib.EventType, name, bases, attrs=attrs)
 
 
 # %%
