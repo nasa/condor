@@ -659,6 +659,7 @@ def expression_to_operator(input_symbols, output_expressions, name="", **kwargs)
 
     assume "MISO" -- but slightly misleading since output can be arbitrary size
     """
+    output_expressions = getattr(output_expressions, "backend_repr", output_expressions)
     if not name:
         name = "function_from_expression"
     return casadi.Function(
