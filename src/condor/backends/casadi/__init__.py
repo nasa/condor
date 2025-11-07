@@ -205,9 +205,13 @@ class BackendSymbolData(BackendSymbolDataMixin):
         if not isinstance(value, (np.ndarray, symbol_class)):
             value = np.array(value)
 
-        if isinstance(value, symbol_class) and not self.symmetric:
-            if self.shape[0] > 1 and self.shape[1] > 1:
-                value = value.reshape(self.shape[::-1]).T
+        if (
+            isinstance(value, symbol_class)
+            and not self.symmetric
+            and self.shape[0] > 1
+            and self.shape[1] > 1
+        ):
+            value = value.reshape(self.shape[::-1]).T
         else:
             try:
                 value = value.reshape(self.shape)
