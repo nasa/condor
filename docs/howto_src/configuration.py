@@ -3,10 +3,15 @@
 Configuring Models
 ==================
 
-At times, model templates need to be parametrized in a more of a programming sense than
-a mathematical one. An example of this is a linear time invariant (LTI) ODE system,
-where the size of the state vector and whether there is feedback control are dependent
-on what the user passes in for the state and input matrices.
+Logic within a model declaration can sometimes be handled by inputs/parameters and
+:func:`~condor.backend.operators.if_else`, but sometimes they need to be parametrized
+in more of a programmatic sense than a mathematical one. Common examples are handling
+input arrays of arbitrary size and logic for whether or not certain models or submodels
+should be declared.
+
+This example walks through two different ways to handle these cases for a simple linear
+time invariant (LTI) :class:`~condor.contrib.ODESystem` with templated dynamics and an
+optional :class:`~condor.contrib.Event`.
 """
 
 # %%
@@ -61,15 +66,16 @@ plt.plot(sim.t, sim.x[0].squeeze())
 # %%
 # We can also re-use the module with a different configuration:
 
-LTI_exp = condor.settings.get_module("_lti", A=np.array([[0, 1], [-2, -3]])).LTI
+dlbint_mod = condor.settings.get_module("_lti", A=A, B=B, bounce=True)
+LTI_bounce = dblint_mod.LTI
 
 
-class Sim(LTI_exp.TrajectoryAnalysis):
+class Sim(LTI_bounce.TrajectoryAnalysis):
     tf = 10
     initial[x] = [1.0, 0.5]
 
 
-sim = Sim()
+sim = Sim(K=sim.K)
 
 plt.figure()
 plt.plot(sim.t, sim.x[0].squeeze())
@@ -80,8 +86,8 @@ plt.plot(sim.t, sim.x[0].squeeze())
 # -------------------------
 #
 # An alternative approach is to programmatically generate the model using the
-# metaprogramming machinery Condor uses internally. See
-# :ref:`metaprogramming-walkthrough` for a more thorough overview.
+# metaprogramming machinery that Condor uses internally. See
+# :ref:`metaprogramming-walkthrough` for an overview.
 
 
 from condor.contrib import ModelTemplateType, ODESystem
@@ -114,22 +120,6 @@ def make_LTI(A, B=None, name="LTISystem"):
 
     return plant
 
-    # OR for primary models:
-    ode_attrs = condor.ODESystem.__prepare__(ode_name, (condor.ODESystem,))
-    ode_model = condor.ODESystem.__class__(ode_name, (condor.ODESystem,), ode_attrs)
-
-    # but submodels must be ~ the way shown above:
-    event_meta_args = (
-        event_name,
-        (ode_model.Event, condor.models.Submodel),
-    )
-    event_attrs = condor.contrib.Event.__prepare__(*event_meta_args)
-    condor.contrib.EventType.__new__(
-        condor.contrib.EventType,
-        *event_meta_args,
-        attrs=event_attrs,
-    )
-
 
 # %%
 # Use of the model factory function looks similar to using ``get_module``:
@@ -148,16 +138,45 @@ plt.figure()
 plt.plot(sim.t, sim.x[0].squeeze())
 
 # %%
+# To define a submodel of a primary system, like an event, the construction looks like
+# this:
 
-LTI_exp = make_LTI(A=np.array([[0, 1], [-2, -3]]))
+from condor.backend import operators as ops
 
 
-class Sim(LTI_exp.TrajectoryAnalysis):
+def add_bounce_event(odesys_cls):
+    event_meta_args = (
+        "bounce",  # name
+        (odesys_cls.Event, condor.models.Submodel),  # bases
+    )
+    event_attrs = condor.contrib.Event.__prepare__(*event_meta_args)
+
+    # extract elements to operate on
+    x = odesys_cls.x.backend_repr
+
+    # define the event
+    event_attrs["function"] = x[0]
+    event_attrs["update"][x] = ops.concat((x[0], -x[1]))
+
+    condor.contrib.EventType.__new__(
+        condor.contrib.EventType,
+        *event_meta_args,
+        attrs=event_attrs,
+    )
+
+
+# %%
+# Add the event to our ODESystem and simulate again:
+
+add_bounce_event(LTI_dblint)
+
+
+class Sim(LTI_dblint.TrajectoryAnalysis):
     tf = 20
-    initial[x] = [1.0, 0.5]
+    initial[x] = [1.0, 0.1]
 
 
-sim = Sim()
+sim = Sim(K=[1.0, 0.1])
 
 plt.figure()
 plt.plot(sim.t, sim.x[0].squeeze())
