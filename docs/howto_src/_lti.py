@@ -1,10 +1,8 @@
-import numpy as np
-
 import condor
 
 # pass get_settings in a list of configurable variables with defaults
 # it returns a dictionary with the the configured values
-conf = condor.settings.get_settings(A=np.array([1.0]), B=None, bounce=False)
+conf = condor.settings.get_settings(A=None, B=None, bounce=False)
 A, B, bounce = conf.values()
 
 

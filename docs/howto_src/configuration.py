@@ -4,10 +4,9 @@ Configuring Models
 ==================
 
 Logic within a model declaration can sometimes be handled by inputs/parameters and
-:func:`~condor.backend.operators.if_else`, but sometimes they need to be parametrized
-in more of a programmatic sense than a mathematical one. Common examples are handling
-input arrays of arbitrary size and logic for whether or not certain models or submodels
-should be declared.
+:func:`~condor.backend.operators.if_else`, but sometimes models need to be templated
+in a deeper way. A couple common examples are handling input arrays of arbitrary size,
+and logic for whether or not certain models or submodels should be declared.
 
 This example walks through two different ways to handle these cases for a simple linear
 time invariant (LTI) :class:`~condor.contrib.ODESystem` with templated dynamics and an
@@ -64,7 +63,8 @@ plt.figure()
 plt.plot(sim.t, sim.x[0].squeeze())
 
 # %%
-# We can also re-use the module with a different configuration:
+# We can also "re-import" the module with a different configuration:
+
 
 dlbint_mod = condor.settings.get_module("_lti", A=A, B=B, bounce=True)
 LTI_bounce = dblint_mod.LTI
@@ -88,12 +88,15 @@ plt.plot(sim.t, sim.x[0].squeeze())
 # An alternative approach is to programmatically generate the model using the
 # metaprogramming machinery that Condor uses internally. See
 # :ref:`metaprogramming-walkthrough` for an overview.
-
+#
+# The :class:`~condor.contrib.ODESystem` factory function declared below is essentially
+# identical to the config-based example above except for the optional event, which we'll
+# see later as a separate factory function:
 
 from condor.contrib import ModelTemplateType, ODESystem
 
 
-def make_LTI(A, B=None, name="LTISystem"):
+def make_LTI(A, B=None, name="LTI"):
     attrs = ModelTemplateType.__prepare__(name, (ODESystem,))
 
     attrs["A"] = A
@@ -146,7 +149,7 @@ from condor.backend import operators as ops
 
 def add_bounce_event(odesys_cls):
     event_meta_args = (
-        "bounce",  # name
+        "Bounce",  # name
         (odesys_cls.Event, condor.models.Submodel),  # bases
     )
     event_attrs = condor.contrib.Event.__prepare__(*event_meta_args)
@@ -156,7 +159,7 @@ def add_bounce_event(odesys_cls):
 
     # define the event
     event_attrs["function"] = x[0]
-    event_attrs["update"][x] = ops.concat((x[0], -x[1]))
+    event_attrs["update"][x] = ops.concat([x[0], -x[1]])
 
     condor.contrib.EventType.__new__(
         condor.contrib.EventType,
@@ -176,7 +179,7 @@ class Sim(LTI_dblint.TrajectoryAnalysis):
     initial[x] = [1.0, 0.1]
 
 
-sim = Sim(K=[1.0, 0.1])
+sim = Sim(K=sim.K)
 
 plt.figure()
 plt.plot(sim.t, sim.x[0].squeeze())
