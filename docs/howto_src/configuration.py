@@ -63,7 +63,7 @@ plt.figure()
 plt.plot(sim.t, sim.x[0].squeeze())
 
 # %%
-# We can also "re-import" the module with a different configuration:
+# We can also re-import the module with a different configuration:
 
 
 dlbint_mod = condor.settings.get_module("_lti", A=A, B=B, bounce=True)
