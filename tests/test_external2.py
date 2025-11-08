@@ -1,12 +1,16 @@
 import numpy as np
 
 import condor
+from condor import backend
 from condor.backend import operators as ops
 
 
 def simple_rot(th, axis):
     non_axis = [i for i in range(3) if i != axis]
-    dcm = np.zeros((3, 3))
+    if isinstance(th, backend.symbol_class):
+        dcm = ops.zeros((3, 3))
+    else:
+        dcm = np.zeros((3, 3))
     dcm[axis, axis] = 1
     dcm[non_axis[0], non_axis[0]] = np.cos(th)
     dcm[non_axis[0], non_axis[1]] = -np.sin(th)
@@ -24,24 +28,32 @@ class Numeric(condor.ExternalSolverWrapper):
         self.output(name="DCM", shape=(3, 3))
 
     def function(self, inputs):
-        dcm = simple_rot()
+        dcm = simple_rot(inputs.y, 1) @ simple_rot(inputs.x, 0)
+        return (dcm,)
+        return dict(DCM=dcm)
 
-        if self.output_mode == 0:
-            return np.concat([x.squeeze(), np.atleast_1d(y)])
-            out = np.array((4, 1))
-            out[:3, 0] = x.squeeze()
-            out[3, 0] = y
-        elif self.output_mode == 1:
-            return dict(x=x, y=y)
-        elif self.output_mode == 2:
-            return x, y
+    def jacobian(self, inputs):
+        pass
 
 
 class Condoric(condor.ExplicitSystem):
-    a = input()
-    b = input(shape=3)
-    output.x = a**2 + 2 * b**2
-    output.y = ops.sin(a)
+    x = input()
+    y = input()
+    output.DCM = simple_rot(y, 1) @ simple_rot(x, 0)
 
 
 rng = np.random.default_rng(12345)
+
+
+def test_external_output(output_mode=0):
+    kwargs = dict(x=rng.random(1), y=rng.random(1))
+    nsys = Numeric(output_mode)
+    nout = nsys(**kwargs)
+    cout = Condoric(**kwargs)
+
+    for output in Condoric.output:
+        assert np.all(getattr(nout, output.name) == getattr(cout, output.name))
+
+
+if __name__ == "__main__":
+    test_external_output()

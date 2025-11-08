@@ -162,9 +162,9 @@ class BackendSymbolData(BackendSymbolDataMixin):
         # might potentially want to overwrite for casadi-specific validation, etc.
         super().__post_init__(self, *args, **kwargs)
 
-    def flatten_value(self, value):
+    def flatten_value(self, value, force_asymetric=False):
         """flatten a value to the appropriate representation for the backend"""
-        if self.symmetric:
+        if self.symmetric and not force_asymetric:
             unique_values = symmetric_to_unique(
                 value, symbolic=isinstance(value, symbol_class)
             )
