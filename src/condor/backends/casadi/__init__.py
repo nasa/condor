@@ -326,9 +326,9 @@ def get_symbol_data(symbol, symmetric=None):
             symmetric = symbol_is(symbol, symbol.T) and size > 1
         else:
             symmetric = (
-                np.isclose(symbol, symbol.T).all()
-                and len(shape) == 2
+                len(shape) == 2
                 and shape[0] == shape[1]
+                and np.isclose(symbol, symbol.T).all()
             )
 
     return BackendSymbolData(
