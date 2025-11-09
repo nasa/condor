@@ -607,7 +607,9 @@ class TrajectoryAnalysis(
         return self
 
     def resample(self, dt, do_output=True, include_events=True, max_deg=3):
-        """Re-sample the trajectory, attaching the"""
+        """Re-sample the trajectory, to a grid based on evenly-spaced points. With
+        include_events=True, two points will be inserted for each internal event to get
+        the state immediately before and after the event."""
         model = self.__class__
         if dt <= 0.0:
             self.t = np.array(self._res.t)

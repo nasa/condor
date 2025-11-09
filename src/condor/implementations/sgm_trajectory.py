@@ -525,7 +525,7 @@ class TrajectoryAnalysis:
 
         self.callback = callables_to_operator(
             wrapper_funcs,
-            self,
+            implementation=self,
             jacobian_of=None,
             input_symbol=self.p,
             output_symbol=self.traj_out_expr,
