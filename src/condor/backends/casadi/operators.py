@@ -1,31 +1,35 @@
 # -*- coding: utf-8 -*-
-"""Utility wrappers around CasADi primitives with explanatory comments."""
+"""Utility wrappers around CasADi primitives with clear documentation and optimized API consistency."""
 
+# ---------------------------------------------------------------------------
 # Standard library imports
-import contextlib  # Used to suppress evaluation errors when attempting to simplify expressions
+# ---------------------------------------------------------------------------
+import contextlib  # Used to suppress runtime evaluation errors during symbolic simplifications
 
+# ---------------------------------------------------------------------------
 # Third-party imports
-import numpy as np  # NumPy provides array helpers for non-symbolic inputs
+# ---------------------------------------------------------------------------
+import numpy as np  # Provides array utilities for non-symbolic or mixed inputs
+import casadi  # Symbolic math library for optimization and control applications
+import condor.backends.casadi as backend  # Backend-specific helpers (e.g., symbol class)
 
-import casadi  # CasADi supplies symbolic math primitives used throughout this module
-import condor.backends.casadi as backend  # Backend-specific helpers (symbol class, etc.)
+# ---------------------------------------------------------------------------
+# Mathematical constants and aliases (CasADi + NumPy)
+# ---------------------------------------------------------------------------
+pi = casadi.pi      # Symbolic π constant
+inf = casadi.inf    # Symbolic infinity (CasADi-compatible)
+nan = np.nan        # NaN (NumPy-defined, since CasADi doesn’t provide one)
 
-# useful but not sure if all backends would have:
-# symvar -- list all symbols present in expression
-# depends_on
-#
+# ---------------------------------------------------------------------------
+# Common operation aliases to mirror NumPy API naming
+# ---------------------------------------------------------------------------
+mod = casadi.fmod
+trace = casadi.trace
+cross = casadi.cross
 
-# Re-export common mathematical constants from CasADi/NumPy for convenience
-pi = casadi.pi  # π constant defined by CasADi for symbolic expressions
-inf = casadi.inf  # Positive infinity compatible with CasADi expressions
-nan = np.nan  # NaN is only available through NumPy, so we reuse it here
-
-# Aliases that mirror NumPy API naming for consistency across backends
-mod = casadi.fmod  # Symbolic modulus operator
-trace = casadi.trace  # Matrix trace
-cross = casadi.cross  # Vector cross product
-
-# Trigonometric and exponential helpers (CasADi implementations)
+# ---------------------------------------------------------------------------
+# Trigonometric and exponential functions (CasADi implementations)
+# ---------------------------------------------------------------------------
 atan = casadi.atan
 atan2 = casadi.atan2
 tan = casadi.tan
@@ -38,76 +42,98 @@ log = casadi.log
 log10 = casadi.log10
 sqrt = casadi.sqrt
 
-# Rounding helpers
+# ---------------------------------------------------------------------------
+# Rounding and scalar functions
+# ---------------------------------------------------------------------------
 floor = casadi.floor
 ceil = casadi.ceil
-
-# Matrix factory helpers
-eye = casadi.MX.eye
-ones = casadi.MX.ones
-
-# Scalar helpers
 fabs = casadi.fabs
 sign = casadi.sign
 
+# ---------------------------------------------------------------------------
+# Matrix constructors (symbolic)
+# ---------------------------------------------------------------------------
+eye = casadi.MX.eye
+ones = casadi.MX.ones
 
+# ---------------------------------------------------------------------------
+# Public exports for controlled namespace and faster imports
+# ---------------------------------------------------------------------------
+__all__ = [
+    "pi","inf","nan","mod","trace","cross","atan","atan2","tan","sin","cos","asin","acos",
+    "exp","log","log10","sqrt","floor","ceil","eye","ones","fabs","sign","diag",
+    "vector_norm","sum","clip","solve","concat","unstack","zeros","min","max",
+    "jacobian","jac_prod","substitute","if_else"
+]
+
+# ---------------------------------------------------------------------------
+# Matrix and vector helpers
+# ---------------------------------------------------------------------------
 def diag(v, k=0):
-    """Construct a diagonal matrix from ``v``; ``k`` other than zero unsupported."""
+    """Construct a diagonal matrix from `v`. Offsets (`k != 0`) are not supported for this backend."""
     if k != 0:
-        msg = "Not supported for this backend"
-        raise ValueError(msg)
+        raise ValueError("Not supported for this backend.")
     if not hasattr(v, "shape"):
-        # try to concat list/tuple of elements
         v = concat(v)
     return casadi.diag(v)
 
 
 def vector_norm(x, ord=2):
-    """Compute vector norms while delegating to CasADi implementations."""
+    """Compute vector norms using CasADi’s symbolic norm functions."""
     if ord == 2:
         return casadi.norm_2(x)
     if ord == 1:
         return casadi.norm_1(x)
     if ord == inf:
         return casadi.norm_inf(x)
+    raise NotImplementedError(f"Norm order {ord} not supported for this backend.")
 
 
 def sum(x, axis=None):
-    """Aggregate ``x`` along ``axis`` while matching NumPy's signature."""
-    if axis is None:
-        return casadi.sum(x)
-    return casadi.sum(x, axis)
+    """Aggregate `x` along `axis`, mimicking NumPy’s behavior with a CasADi fallback."""
+    try:
+        if axis is None:
+            return casadi.sum(x)
+        return casadi.sum(x, axis)
+    except TypeError:
+        # Some CasADi builds don’t support the `axis` argument
+        if axis is None:
+            return casadi.sum1(casadi.sum2(x))
+        raise NotImplementedError("Axis-specific sum not supported by this CasADi version.")
 
 
-def clip(val, amax, amin):
-    """Clip ``val`` between ``amin`` and ``amax`` using symbolic conditionals."""
-    val = casadi.if_else(val > amax, amax, val)
+def clip(val, amin, amax):
+    """Clip `val` between `amin` and `amax` using symbolic conditional expressions (NumPy-compatible order)."""
     val = casadi.if_else(val < amin, amin, val)
+    val = casadi.if_else(val > amax, amax, val)
     return val
 
 
-# Directly expose CasADi's linear solver helper
+# ---------------------------------------------------------------------------
+# Linear algebra helpers
+# ---------------------------------------------------------------------------
 solve = casadi.solve
 
 
+# ---------------------------------------------------------------------------
+# Concatenation and unstacking utilities
+# ---------------------------------------------------------------------------
 def concat(arrs, axis=0):
-    """Implement ``concat`` from the array API for CasADi/NumPy inputs."""
+    """Concatenate arrays or symbols along the given `axis`, supporting both CasADi and NumPy inputs."""
     if not arrs:
         return arrs
-    if np.any([isinstance(arr, backend.symbol_class) for arr in arrs]):
+    if any(isinstance(arr, backend.symbol_class) for arr in arrs):
         if axis == 0:
             return casadi.vcat(arrs)
         elif axis in (1, -1):
             return casadi.hcat(arrs)
         else:
-            msg = "Casadi only supports matrices"
-            raise ValueError(msg)
-    else:
-        return np.concatenate([np.atleast_2d(arr) for arr in arrs], axis=axis)
+            raise ValueError("CasADi only supports 2D matrices.")
+    return np.concatenate([np.atleast_2d(arr) for arr in arrs], axis=axis)
 
 
 def unstack(arr, axis=0):
-    """Split ``arr`` along ``axis`` following CasADi semantics."""
+    """Split `arr` along the specified `axis`, following CasADi’s semantics."""
     if axis == 0:
         return casadi.vertsplit(arr)
     elif axis in (1, -1):
@@ -115,82 +141,61 @@ def unstack(arr, axis=0):
 
 
 def zeros(shape=(1, 1)):
-    """Return a symbolic zero matrix matching the requested ``shape``."""
-    return backend.symbol_class(*shape)
+    """Return a literal symbolic zero matrix of the given shape."""
+    return casadi.MX.zeros(*shape)
 
 
+# ---------------------------------------------------------------------------
+# Reduction operations
+# ---------------------------------------------------------------------------
 def min(x, axis=None):
-    """Symbolic minimum supporting only the global reduction ``axis=None``."""
+    """Compute the symbolic minimum of `x`. Only global reduction (axis=None) is supported."""
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
     if axis is not None:
-        msg = "Only axis=None supported"
-        raise ValueError(msg)
+        raise ValueError("Only axis=None supported.")
     return casadi.mmin(x)
 
 
 def max(x, axis=None):
-    """Symbolic maximum supporting only the global reduction ``axis=None``."""
+    """Compute the symbolic maximum of `x`. Only global reduction (axis=None) is supported."""
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
     if axis is not None:
-        msg = "Only axis=None supported"
-        raise ValueError(msg)
+        raise ValueError("Only axis=None supported.")
     return casadi.mmax(x)
 
 
-# Friendly message for unsupported Jacobian computations
+# ---------------------------------------------------------------------------
+# Jacobian and directional derivatives
+# ---------------------------------------------------------------------------
 unsupported_jacobian_message = (
-    "jacobian of matrix expression wrt matrix variable not yet supported"
+    "Jacobian of matrix expression with respect to matrix variable is not yet supported."
 )
 
-
 def jacobian(of, wrt):
-    """Jacobian of expression ``of`` with respect to symbols ``wrt``."""
-    """
-    we can apply jacobian to ExternalSolverWrapper but it's a bit clunky because need
-    symbol_class expressions for IO, and to evalaute need to create a Function. Not sure
-    how to create a backend-generic interface for this. When do we want an expression vs
-    a callable? Maybe the overall process is right (e.g., within an optimization
-    problem, will have a variable flat input, and might just want the jac_expr)
-
-    Example to extend from docs/howto_src/table_basics.py
-
-       flat_inp = SinTable.input.flatten()
-       wrap_inp = SinTable.input.wrap(flat_inp)
-       instance = SinTable(**wrap_inp.asdict()) # needed so callback obj isn't destroyed
-       wrap_out = instance.output
-       flat_out = wrap_out.flatten()
-       jac_expr = ops.jacobian(flat_out, flat_inp)
-       from condor import backend
-       jac = backend.expression_to_operator(flat_inp, jac_expr, "my_jac")
-       #jac = casadi.Function("my_jac", [flat_inp], [jac_expr])
-       jac(0.)
-    """
+    """Compute the symbolic Jacobian of `of` with respect to `wrt`."""
     if of.size and wrt.size:
         transpose_in = False
         if isinstance(wrt, backend.symbol_class) and wrt.op() == casadi.OP_TRANSPOSE:
             transpose_in = True
             wrt = wrt.dep()
-
         if transpose_in and np.all(np.array(of.shape + wrt.shape) > 1):
             raise NotImplementedError(unsupported_jacobian_message)
-
-        jac = casadi.jacobian(of, wrt)
-
-        return jac
-
-    else:
-        return backend.symbol_class(0, np.prod(wrt.shape))
+        return casadi.jacobian(of, wrt)
+    return backend.symbol_class(0, np.prod(wrt.shape))
 
 
 def jac_prod(of, wrt, rev=True):
-    """Create directional derivative via CasADi's ``jtimes`` helper."""
+    """Compute a directional derivative via CasADi’s `jtimes` helper."""
     return casadi.jtimes(of, wrt, not rev)
 
 
+# ---------------------------------------------------------------------------
+# Symbolic substitution
+# ---------------------------------------------------------------------------
 def substitute(expr, subs):
-    """Apply substitution map ``subs`` onto expression ``expr`` safely."""
+    """Safely apply substitution map `subs` onto symbolic expression `expr`."""
     in_subs = subs
     subs = {}
     for k, v in in_subs.items():
@@ -203,15 +208,11 @@ def substitute(expr, subs):
             getattr(use_k, "shape", (1, 1)) != getattr(subs[use_k], "shape", (1, 1))
             and use_v.shape
         ):
-            msg = f"did not find compatible shape, currently have {use_k} --> {use_v}"
-            raise ValueError(msg)
-
+            raise ValueError(f"Incompatible shapes: {use_k} --> {use_v}")
     expr = casadi.graph_substitute(expr, subs.keys(), subs.values())
-
     if isinstance(expr, backend.symbol_class) and expr.is_constant():
         expr = expr.to_DM().toarray()
-
-    # if expr is the output of a single call, try to to eval it
+    # Try evaluating simple single-call expressions
     if isinstance(expr, backend.symbol_class) and (
         (
             expr.op() == casadi.OP_GETNONZEROS
@@ -222,52 +223,48 @@ def substitute(expr, subs):
     ):
         with contextlib.suppress(RuntimeError):
             expr = casadi.evalf(expr)
-
     return expr
 
 
+# ---------------------------------------------------------------------------
+# Symbolic conditional (if / elif / else) control flow
+# ---------------------------------------------------------------------------
 def if_else(*conditions_actions, short_circuit=False):
-    """Symbolic representation of an ``if``/``elif``/``else`` control flow."""
     """
-    symbolic representation of a if/else control flow
+    Symbolic representation of nested if/elif/else control flow.
 
     Parameters
-    ---------
-    *conditions_actions : list of (condition, value) pairs, ending with else_value
+    ----------
+    *conditions_actions : sequence
+        Pairs of (condition, value) followed by a final else value.
 
     Example
     --------
-
-    The expression::
-
-        value = if_else(
-            (condition0, value0),
-            (codnition1, value1),
-            ...
-            else_value
+    The expression:
+        result = if_else(
+            (cond0, val0),
+            (cond1, val1),
+            default_val
         )
 
-
-    is equivalent to the numerical code::
-
-        if condition0:
-            value = value0
-        elif condition1:
-            value = value1
-        ...
+    Is equivalent to:
+        if cond0:
+            result = val0
+        elif cond1:
+            result = val1
         else:
-            value = else_value
-
+            result = default_val
     """
     if len(conditions_actions) == 1:
         else_action = conditions_actions[0]
         if isinstance(else_action, tuple):
-            msg = "if_else requires an else_action to be provided"
-            raise ValueError(msg)
+            raise ValueError("if_else requires an explicit else action.")
         return else_action
-    condition, action = conditions_actions[0]
-    if hasattr(condition, "shape") and np.prod(condition.shape) > 1:
-        msg = "if_else conditions should be a scalar"
-        raise ValueError(msg)
-    remainder = if_else(*conditions_actions[1:], short_circuit=short_circuit)
-    return casadi.if_else(condition, action, remainder, short_circuit)
+
+    *pairs, else_value = conditions_actions
+    result = else_value
+    for condition, action in reversed(pairs):
+        if hasattr(condition, "shape") and np.prod(condition.shape) > 1:
+            raise ValueError("if_else conditions must be scalar.")
+        result = casadi.if_else(condition, action, result, short_circuit)
+    return result
