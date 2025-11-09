@@ -72,8 +72,8 @@ class TrajectoryAnalysis:
         solver=Solver.dopri5,
         **kwargs,
     ):
-        state_options = {}
-        adjoint_options = {}
+        self.state_options = state_options = {}
+        self.adjoint_options = adjoint_options = {}
         for k, v in kwargs.items():
             if k.startswith("state_"):
                 state_options[k.replace("state_", "")] = v
@@ -102,23 +102,15 @@ class TrajectoryAnalysis:
             self.traj_out_expr, symbol_class
         )
 
-        traj_out_names = model.trajectory_output.list_of("name")
-
-        integrand_terms = [
-            elem.flatten_value(elem.integrand) for elem in model.trajectory_output
-        ]
         self.traj_out_integrand = model.trajectory_output.flatten("integrand")
-        traj_out_integrand_func = expression_to_operator(
+        self.traj_out_integrand_func = expression_to_operator(
             self.simulation_signature,
             self.traj_out_integrand,
             f"{model.__name__}_trajectory_output_integrand",
         )
 
-        terminal_terms = [
-            elem.flatten_value(elem.terminal_term) for elem in model.trajectory_output
-        ]
         self.traj_out_terminal_term = model.trajectory_output.flatten("terminal_term")
-        traj_out_terminal_term_func = expression_to_operator(
+        self.traj_out_terminal_term_func = expression_to_operator(
             self.simulation_signature,
             self.traj_out_terminal_term,
             f"{model.__name__}_trajectory_output_terminal_term",
@@ -134,18 +126,18 @@ class TrajectoryAnalysis:
                 control_subs_pairs[act.match.backend_repr].insert(
                     -1, (mode.condition, act.backend_repr)
                 )
-        control_sub_expression = {}
+        self.control_sub_expression = control_sub_expression = {}
         for k, v in control_subs_pairs.items():
             control_sub_expression[k] = substitute(if_else(*v), control_sub_expression)
 
-        state_equation_func = get_state_setter(
+        self.state_equation_func = state_equation_func = get_state_setter(
             model.dot, self.simulation_signature, subs=control_sub_expression
         )
 
-        lamda_jac = jacobian(state_equation_func.expr, self.x).T
-        state_dot_jac_func = expression_to_operator(
+        self.state_jacobian_expr = jacobian(state_equation_func.expr, self.x)
+        self.state_dot_jac_func = expression_to_operator(
             self.simulation_signature,
-            lamda_jac.T,
+            self.state_jacobian_expr,
             f"{ode_model.__name__}_state_jacobian",
         )
 
@@ -172,7 +164,7 @@ class TrajectoryAnalysis:
 
         terminating = []
 
-        events = [e for e in model._meta.events]
+        self.events = events = [e for e in model._meta.events]
         if (
             not isinstance(model.tf, (np.ndarray, float))
             or not np.isinf(model.tf).any()
@@ -315,7 +307,7 @@ class TrajectoryAnalysis:
             dim_state=model.state._count,
             initial_state=self.state0,
             dot=state_equation_func,
-            jac=state_dot_jac_func,
+            jac=self.state_dot_jac_func,
             time_generator=sgm.TimeGeneratorFromSlices(at_time_slices),
             events=expression_to_operator(
                 self.simulation_signature,
@@ -331,8 +323,40 @@ class TrajectoryAnalysis:
         self.state_system.model_instance = self.model_instance
         self.at_time_slices = at_time_slices
 
-        self.p_state0_p_p_expr = jacobian(self.state0.expr, self.p)
+        self.generate_sgm_jacobian()
 
+        wrapper_funcs = [
+            self.trajectory_analysis_sgm.function,
+            self.trajectory_analysis_sgm.jacobian,
+        ]
+
+        self.callback = callables_to_operator(
+            wrapper_funcs,
+            implementation=self,
+            jacobian_of=None,
+            input_symbol=self.p,
+            output_symbol=self.traj_out_expr,
+        )
+        self.callback.construct()
+
+        if not self.can_sgm:
+            return
+
+    def generate_sgm_jacobian(self):
+        state_equation_func = self.state_equation_func
+        # lamda_jac = self.state_jacobian_expr.T
+        model = self.model
+        control_sub_expression = self.control_sub_expression
+
+        state_param_jac = jacobian(state_equation_func.expr, self.p)
+
+        param_dot_jac_func = expression_to_operator(
+            self.simulation_signature,
+            state_param_jac,
+            f"{model.__name__}_param_jacobian",
+        )
+
+        self.p_state0_p_p_expr = jacobian(self.state0.expr, self.p)
         p_state0_p_p = expression_to_operator(
             [self.p],
             self.p_state0_p_p_expr,
@@ -353,6 +377,14 @@ class TrajectoryAnalysis:
         self.lamdaF_funcs = []
         self.gradFs = []
         self.gradF_funcs = []
+
+        traj_out_names = model.trajectory_output.list_of("name")
+        terminal_terms = [
+            elem.flatten_value(elem.terminal_term) for elem in model.trajectory_output
+        ]
+        integrand_terms = [
+            elem.flatten_value(elem.integrand) for elem in model.trajectory_output
+        ]
 
         for terminal_term_stacked, out_name in zip(terminal_terms, traj_out_names):
             for idx, terminal_term in enumerate(unstack(terminal_term_stacked)):
@@ -397,14 +429,6 @@ class TrajectoryAnalysis:
                     )
                 )
 
-        grad_jac = jacobian(state_equation_func.expr, self.p)
-
-        param_dot_jac_func = expression_to_operator(
-            self.simulation_signature,
-            grad_jac,
-            f"{model.__name__}_param_jacobian",
-        )
-
         # TODO figure out how to combine (and possibly reverse direction) to reduce
         # number of calls, since this is potentially most expensive call with inner
         # loop solvers,
@@ -417,7 +441,7 @@ class TrajectoryAnalysis:
         self.dte_dps = []
         self.dh_dps = []
 
-        for event, e_expr, h_expr in zip(events, self.e_exprs, self.h_exprs):
+        for event, e_expr, h_expr in zip(self.events, self.e_exprs, self.h_exprs):
             dg_dx = jacobian(e_expr, self.x)
             dg_dt = jacobian(e_expr, model.t)
             dg_dp = jacobian(e_expr, self.p)
@@ -502,11 +526,11 @@ class TrajectoryAnalysis:
 
         self.trajectory_analysis_sgm = sgm.TrajectoryAnalysisSGM(
             state_system=self.state_system,
-            integrand_terms=traj_out_integrand_func,
-            terminal_terms=traj_out_terminal_term_func,
+            integrand_terms=self.traj_out_integrand_func,
+            terminal_terms=self.traj_out_terminal_term_func,
             dte_dxs=self.dte_dxs,
             dh_dxs=self.dh_dxs,
-            state_jac=state_dot_jac_func,
+            state_jac=self.state_dot_jac_func,
             p_x0_p_params=p_state0_p_p,
             p_dots_p_params=param_dot_jac_func,
             dh_dps=self.dh_dps,
@@ -515,25 +539,8 @@ class TrajectoryAnalysis:
             p_integrand_terms_p_params=param_integrand_jac_funcs,
             p_terminal_terms_p_state=self.lamdaF_funcs,
             p_integrand_terms_p_state=state_integrand_jac_funcs,
-            **adjoint_options,
+            **self.adjoint_options,
         )
-
-        wrapper_funcs = [
-            self.trajectory_analysis_sgm.function,
-            self.trajectory_analysis_sgm.jacobian,
-        ]
-
-        self.callback = callables_to_operator(
-            wrapper_funcs,
-            implementation=self,
-            jacobian_of=None,
-            input_symbol=self.p,
-            output_symbol=self.traj_out_expr,
-        )
-        self.callback.construct()
-
-        if not self.can_sgm:
-            return
 
     def __call__(self, model_instance):
         self.callback.from_implementation = True
