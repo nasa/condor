@@ -1068,10 +1068,23 @@ class AdjointSystem(System):
 
 @dataclass
 class TrajectoryAnalysis:
-    integrand_terms: callable
-    terminal_terms: callable
+    state_system: System
 
-    def __call__(self, result):
+    # for constructing the output of the trajectory analysis
+    integrand_terms: callable = None
+    terminal_terms: callable = None
+
+    cache_size: int = 1
+
+    def __post_init__(self):
+        self.cached_p = None
+
+    def __call__(self, p):
+        if self.cached_p is not None and np.all(self.cached_p == p):
+            return self.cached_output
+        self.cached_p = p
+        result = self.res = self.state_system(p)
+
         # evaluate the trajectory analysis of this result
         # should this return a dataclass? Or just the vector of results?
         integral = 0.0
@@ -1083,7 +1096,10 @@ class TrajectoryAnalysis:
             integral += integrand_antideriv(segment.t1) - integrand_antideriv(
                 segment.t0
             )
-        return self.terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
+        self.cached_output = (
+            self.terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
+        )
+        return self.cached_output
 
 
 @dataclass
@@ -1251,11 +1267,7 @@ class SweepingGradientMethod:
 class TrajectoryAnalysisSGM:
     def __init__(
         self,
-        state_system,
-        # to construct a trajectoryanlysis
-        # need at least one of integrand and terminal terms
-        integrand_terms=None,
-        terminal_terms=None,
+        trajectory_analysis,  # TrajectoryAnalysis
         # args for adjoint system
         dte_dxs=None,
         dh_dxs=None,
@@ -1268,6 +1280,7 @@ class TrajectoryAnalysisSGM:
         p_dots_p_params=None,
         dh_dps=None,
         dte_dps=None,
+        # for constructing the output of the gradient
         p_integrand_terms_p_params=None,
         p_terminal_terms_p_params=None,
         p_integrand_terms_p_state=None,
@@ -1281,11 +1294,11 @@ class TrajectoryAnalysisSGM:
         self.cached_p = None
         self.cached_output = None
 
-        self.state_system = state_system
-        self.trajectory_analysis = TrajectoryAnalysis(integrand_terms, terminal_terms)
+        self.state_system = trajectory_analysis.state_system
+        self.trajectory_analysis = trajectory_analysis
 
         if state_jac is None:
-            if state_system._jac is None:
+            if self.trajectory_analysis.state_system._jac is None:
                 msg = "must provide state jacobian via state_system.jac or state_jac"
                 raise ValueError(msg)
             state_jac = state_system._jac
@@ -1306,14 +1319,6 @@ class TrajectoryAnalysisSGM:
             p_integrand_terms_p_state=p_integrand_terms_p_state,
         )
 
-    def function(self, p):
-        if self.cached_p is None or not np.all(self.cached_p == p):
-            self.cached_p = p
-            self.res = self.state_system(p)
-            self.cached_output = self.trajectory_analysis(self.res)
-        return self.cached_output
-
-    def jacobian(self, p):
-        if self.cached_p is None or not np.all(self.cached_p == p):
-            _ = self.function(p)
-        return self.sweeping_gradient_method(self.res)
+    def __call__(self, p):
+        _ = self.trajectory_analysis(p)
+        return self.sweeping_gradient_method(self.trajectory_analysis.res)

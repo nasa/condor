@@ -323,11 +323,17 @@ class TrajectoryAnalysis:
         self.state_system.model_instance = self.model_instance
         self.at_time_slices = at_time_slices
 
+        self.trajectory_analysis_nom = sgm.TrajectoryAnalysis(
+            state_system=self.state_system,
+            integrand_terms=self.traj_out_integrand_func,
+            terminal_terms=self.traj_out_terminal_term_func,
+        )
+
         self.generate_sgm_jacobian()
 
         wrapper_funcs = [
-            self.trajectory_analysis_sgm.function,
-            self.trajectory_analysis_sgm.jacobian,
+            self.trajectory_analysis_nom,
+            self.trajectory_analysis_sgm,
         ]
 
         self.callback = callables_to_operator(
@@ -525,9 +531,7 @@ class TrajectoryAnalysis:
             self.dh_dps[-1].expr = dh_dp
 
         self.trajectory_analysis_sgm = sgm.TrajectoryAnalysisSGM(
-            state_system=self.state_system,
-            integrand_terms=self.traj_out_integrand_func,
-            terminal_terms=self.traj_out_terminal_term_func,
+            trajectory_analysis=self.trajectory_analysis_nom,
             dte_dxs=self.dte_dxs,
             dh_dxs=self.dh_dxs,
             state_jac=self.state_dot_jac_func,
@@ -548,8 +552,8 @@ class TrajectoryAnalysis:
         self.out = self.callback(self.args)
         self.callback.from_implementation = False
 
-        if hasattr(self.trajectory_analysis_sgm, "res"):
-            res = self.trajectory_analysis_sgm.res
+        if hasattr(self.trajectory_analysis_nom, "res"):
+            res = self.trajectory_analysis_nom.res
             model_instance._res = res
             model_instance.t = np.array(res.t)
             if self.model.state._count == 1:
