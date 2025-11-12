@@ -33,10 +33,10 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_tutorial_trajectory.py` (``trajectory.py``)
-     - 00:25.760
+     - 00:25.762
      - 0.0
    * - :ref:`sphx_glr_tutorial_sellar.py` (``sellar.py``)
-     - 00:00.141
+     - 00:00.140
      - 0.0
    * - :ref:`sphx_glr_tutorial_polar_transform.py` (``polar_transform.py``)
      - 00:00.026
