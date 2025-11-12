@@ -162,9 +162,9 @@ class BackendSymbolData(BackendSymbolDataMixin):
         # might potentially want to overwrite for casadi-specific validation, etc.
         super().__post_init__(self, *args, **kwargs)
 
-    def flatten_value(self, value):
+    def flatten_value(self, value, force_asymetric=False):
         """flatten a value to the appropriate representation for the backend"""
-        if self.symmetric:
+        if self.symmetric and not force_asymetric:
             unique_values = symmetric_to_unique(
                 value, symbolic=isinstance(value, symbol_class)
             )
@@ -326,9 +326,9 @@ def get_symbol_data(symbol, symmetric=None):
             symmetric = symbol_is(symbol, symbol.T) and size > 1
         else:
             symmetric = (
-                np.isclose(symbol, symbol.T).all()
-                and len(shape) == 2
+                len(shape) == 2
                 and shape[0] == shape[1]
+                and np.isclose(symbol, symbol.T).all()
             )
 
     return BackendSymbolData(
