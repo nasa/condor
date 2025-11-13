@@ -50,6 +50,10 @@ class SolverSciPyBase(SolverMixin):
     max_step_size : float
         maximum step size for the forward evaluation, normalized name to scipy's
         max_step
+    separate_events : bool
+        Coincident events get stored separately in the ODE result object
+    reset_step_after_event : bool
+        After an event occurs, reset the step size to the first_step
     rootfinder : callable
         Interval root-finder function. Defaults to :func:`scipy.optimize.brentq`, and
         must take the equivalent positional arguments, ``f``, ``a``, and ``b``, and
@@ -67,13 +71,17 @@ class SolverSciPyBase(SolverMixin):
         atol=1e-12,
         rtol=1e-6,
         adaptive_min_steps=0,
+        reset_step_after_event=True,
         rootfinder=brentq,
         max_step_size=0.0,
+        separate_events=False,
         nsteps=10_000.0,
         **kwargs,
     ):
         self.system = system
         self.adaptive_min_steps = adaptive_min_steps
+        self.separate_events = separate_events
+        self.reset_step_after_event = reset_step_after_event
         self.solver = scipy_ode(
             system.dots,
         )
@@ -222,8 +230,10 @@ class SolverSciPyBase(SolverMixin):
                     dict(max_step=np.abs(next_t - last_t) / self.adaptive_min_steps)
                 )
 
+            if self.adaptive_min_steps or not self.reset_step_after_event:
                 self.solver.set_integrator(**self.int_options)
                 self.solver.set_solout(self.solout)
+
             solver.set_initial_value(
                 last_x,
                 last_t,
@@ -261,12 +271,33 @@ class SolverSciPyBase(SolverMixin):
                     rootsfound = (gs == min_e).astype(int)
 
                 idx = len(results.t)
-                results.e.append(Root(idx, rootsfound))
-                next_x = system.update(
-                    results.t[-1],
-                    results.x[-1],
-                    rootsfound,
-                )
+
+                if not self.reset_step_after_event:
+                    self.int_options["first_step"] = float(
+                        np.abs(results.t[-1] - results.t[-2])
+                    )
+
+                if self.separate_events:
+                    for num_processed_events, g_idx in enumerate(
+                        np.where(rootsfound)[0]
+                    ):
+                        send_rootsfound = np.zeros_like(rootsfound)
+                        send_rootsfound[g_idx] = rootsfound[g_idx]
+                        next_x = system.update(
+                            results.t[-1], results.x[-1], send_rootsfound
+                        )
+                        if num_processed_events:
+                            self.store_result(results.t[-1], next_x)
+
+                    results.e.append(Root(len(results.t), rootsfound))
+                else:
+                    results.e.append(Root(idx, rootsfound))
+                    next_x = system.update(
+                        results.t[-1],
+                        results.x[-1],
+                        rootsfound,
+                    )
+
                 terminate = np.any(rootsfound[system.terminating] != 0)
 
                 last_t = results.t[-1]
@@ -624,6 +655,11 @@ class System:
         self.result = Result(p=p, system=self)
         self.system_solver.simulate()
         result = self.result
+        result.t = np.array(result.t)
+        if self.dim_state == 1:
+            result.x = [np.atleast_1d(x) for x in result.x]
+        result.x = np.array(result.x)
+        result.y = np.array(result.y)
         self.result = None
         return result
 
@@ -1037,10 +1073,23 @@ class AdjointSystem(System):
 
 @dataclass
 class TrajectoryAnalysis:
-    integrand_terms: callable
-    terminal_terms: callable
+    state_system: System
 
-    def __call__(self, result):
+    # for constructing the output of the trajectory analysis
+    integrand_terms: callable = None
+    terminal_terms: callable = None
+
+    cache_size: int = 1
+
+    def __post_init__(self):
+        self.cached_p = None
+
+    def __call__(self, p):
+        if self.cached_p is not None and np.all(self.cached_p == p):
+            return self.cached_output
+        self.cached_p = p
+        result = self.res = self.state_system(p)
+
         # evaluate the trajectory analysis of this result
         # should this return a dataclass? Or just the vector of results?
         integral = 0.0
@@ -1052,7 +1101,10 @@ class TrajectoryAnalysis:
             integral += integrand_antideriv(segment.t1) - integrand_antideriv(
                 segment.t0
             )
-        return self.terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
+        self.cached_output = (
+            self.terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
+        )
+        return self.cached_output
 
 
 @dataclass
@@ -1220,11 +1272,7 @@ class SweepingGradientMethod:
 class TrajectoryAnalysisSGM:
     def __init__(
         self,
-        state_system,
-        # to construct a trajectoryanlysis
-        # need at least one of integrand and terminal terms
-        integrand_terms=None,
-        terminal_terms=None,
+        trajectory_analysis,  # TrajectoryAnalysis
         # args for adjoint system
         dte_dxs=None,
         dh_dxs=None,
@@ -1237,6 +1285,7 @@ class TrajectoryAnalysisSGM:
         p_dots_p_params=None,
         dh_dps=None,
         dte_dps=None,
+        # for constructing the output of the gradient
         p_integrand_terms_p_params=None,
         p_terminal_terms_p_params=None,
         p_integrand_terms_p_state=None,
@@ -1250,11 +1299,11 @@ class TrajectoryAnalysisSGM:
         self.cached_p = None
         self.cached_output = None
 
-        self.state_system = state_system
-        self.trajectory_analysis = TrajectoryAnalysis(integrand_terms, terminal_terms)
+        self.state_system = trajectory_analysis.state_system
+        self.trajectory_analysis = trajectory_analysis
 
         if state_jac is None:
-            if state_system._jac is None:
+            if self.trajectory_analysis.state_system._jac is None:
                 msg = "must provide state jacobian via state_system.jac or state_jac"
                 raise ValueError(msg)
             state_jac = state_system._jac
@@ -1275,14 +1324,6 @@ class TrajectoryAnalysisSGM:
             p_integrand_terms_p_state=p_integrand_terms_p_state,
         )
 
-    def function(self, p):
-        if self.cached_p is None or not np.all(self.cached_p == p):
-            self.cached_p = p
-            self.res = self.state_system(p)
-            self.cached_output = self.trajectory_analysis(self.res)
-        return self.cached_output
-
-    def jacobian(self, p):
-        if self.cached_p is None or not np.all(self.cached_p == p):
-            _ = self.function(p)
-        return self.sweeping_gradient_method(self.res)
+    def __call__(self, p):
+        _ = self.trajectory_analysis(p)
+        return self.sweeping_gradient_method(self.trajectory_analysis.res)

@@ -34,6 +34,7 @@ from condor.models import (
     SubmodelType,
     check_attr_name,
 )
+from condor.solvers.sweeping_gradient_method import Result, ResultInterpolant, Root
 
 log = logging.getLogger(__name__)
 
@@ -604,6 +605,105 @@ class TrajectoryAnalysis(
         x0 = cls._meta.initial_condition_function(p)
         self.bind_field(cls.state.wrap(x0))
         return self
+
+    def resample(self, dt, include_output=True, include_events=True, max_deg=3):
+        """Re-sample the trajectory, to a grid based on evenly-spaced points. With
+        include_events=True, two points will be inserted for each internal event to get
+        the state immediately before and after the event."""
+        original_instance = getattr(self, "_original_instance", self)
+
+        if original_instance is not self:
+            return original_instance.resample(
+                dt=dt,
+                include_output=include_output,
+                include_events=include_events,
+                max_deg=max_deg,
+            )
+
+        model = self.__class__
+
+        if dt <= 0.0:
+            return self
+
+        new_self = model.__new__(model)
+        new_self.implementation = self.implementation
+        new_self._original_instance = original_instance
+        new_self.bind_field(self.parameter)
+
+        t_grid = np.arange(self._res.t[0], self._res.t[-1], dt)
+        t_size = t_grid.size
+        if include_events:
+            t_size += 2 * len(self._res.e) - 1
+            es = []
+        elif t_grid[-1] + dt == self._res.t[-1]:
+            t_size += 1
+
+        if not include_events:
+            es = None
+        # self.t = np.empty((t_size,))
+        new_self.t = np.ones((t_size,)) * -1  # all self.t should go to new_self.t
+        new_self.t[: t_grid.size] = t_grid
+        if t_grid[-1] + dt == self._res.t[-1]:
+            new_self.t[t_grid.size] = t_grid[-1] + dt
+
+        state_interp = ResultInterpolant(self._res, max_deg=max_deg)
+        xs = np.empty((t_size, model.state._count))
+        include_output = include_output and model.dynamic_output._count
+        if include_output:
+            dynamic_output = self.implementation.StateSystem.dynamic_output
+            p = self._res.p
+            ys = np.empty((t_size, model.dynamic_output._count))
+        else:
+            ys = None
+
+        idx0 = 0
+
+        for x_interp_segment in state_interp:
+            t_select = np.where(
+                (new_self.t >= x_interp_segment.t0)
+                & (new_self.t <= x_interp_segment.t1)
+            )
+            idx0 = t_select[0][0]
+            idx1 = t_select[0][-1] + 1
+
+            if include_events:
+                new_self.t[idx0 + 1 :] = new_self.t[idx0:-1]
+                xs[idx0, :] = self._res.x[x_interp_segment.idx0]
+                if include_output:
+                    ys[idx0, :] = self._res.y[x_interp_segment.idx0]
+                es.append(Root(idx0, None))
+                idx0 += 1
+                idx1 += 1
+                # TODO figure out how to get root info
+
+            ts_to_call = new_self.t[idx0:idx1]
+            xs[idx0:idx1] = x_interp_segment(ts_to_call)
+            if include_output:
+                for idx, t, x in zip(range(idx0, idx1), ts_to_call, xs[idx0:idx1]):
+                    ys[idx, None] = dynamic_output(p, t, x).T
+
+            if include_events:
+                new_self.t[idx1 + 1 :] = new_self.t[idx1:-1]
+                new_self.t[idx1 : idx1 + 2] = self._res.t[x_interp_segment.idx1]
+                xs[idx1, :] = self._res.x[x_interp_segment.idx1]
+                if include_output:
+                    ys[idx1, :] = self._res.y[x_interp_segment.idx1]
+
+        if include_events:
+            xs[idx1 + 1, :] = self._res.x[x_interp_segment.idx1]
+            if include_output:
+                ys[idx1 + 1, :] = self._res.y[x_interp_segment.idx1]
+            es.append(Root(idx1, None))
+
+        new_self.bind_field(model.state.wrap(xs.T))
+
+        if include_output:
+            new_self.bind_field(model.dynamic_output.wrap(ys.T))
+
+        new_self._res = Result(
+            t=new_self.t, x=xs, y=ys, e=es, p=self._res.p, system=self._res.system
+        )
+        return new_self
 
     @classmethod
     def point_analysis(cls, t, *args, **kwargs):

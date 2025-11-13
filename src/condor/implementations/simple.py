@@ -198,7 +198,12 @@ class MultiMatchedField(MatchedField, element_class=MatchedElement):
 
 
 class ExternalSolverModel:
-    """Implementation for External Solver models.
+    """Implementation for External Solver models. Generally used directly when the
+    following two conditions hold:
+      - modeled only with one input and one output field (if anything else is used, it
+        in the domain of the external tool)
+      - a fixed number of derivatives are defined. Eventually support for defining
+        jacobian, hessian, and first and second order forard and reverse.
 
     No :class:`Options` expected.
     """
@@ -223,7 +228,7 @@ class ExternalSolverModel:
 
         self.callback = callables_to_operator(
             wrapper_funcs,
-            self,
+            implementation=self,
             jacobian_of=None,
             input_symbol=self.input,
             output_symbol=self.output,

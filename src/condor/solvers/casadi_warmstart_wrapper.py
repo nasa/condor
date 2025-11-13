@@ -111,8 +111,8 @@ class CasadiWarmstartWrapperBase:
 
         # stuff attributes expected by CasadiFunctionCallback, including jacobian
         # relationship
-        self.wrapper_func = self.function
         self.jacobian_of = None
+        self.jacobian_callback = None
         self.opts = {}
 
         if self.placeholder_jacobian is not None:
@@ -125,14 +125,19 @@ class CasadiWarmstartWrapperBase:
             if self.placeholder_hessian is not None:
                 wrap_funcs += [self.eval_hessian]
 
-            self.jacobian = callables_to_operator(
-                wrapper_funcs=wrap_funcs,
-                model_name=self.model_name,
-                jacobian_of=self,
-                opts=self.opts,
-            )
+            def _get_jacobian_func(jacobian_of):
+                jac_callback = callables_to_operator(
+                    wrapper_funcs=wrap_funcs,
+                    model_name=self.model_name,
+                    jacobian_of=jacobian_of,
+                    opts=self.opts,
+                )
+                return jac_callback
+
+            self.get_jacobian_func = _get_jacobian_func
+
         else:
-            self.jacobian = None
+            self.get_jacobian_func = None
 
         casadi.Callback.__init__(self)
         self.construct()
