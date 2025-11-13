@@ -459,8 +459,9 @@ class CasadiFunctionCallback(casadi.Callback):
         opts=None,
     ):
         """
-        wrapper_funcs -- list of callables to wrap, in order of ascending derivatives
-        func_gneerators -- list off callables that can generate a derivative function
+        function -- callable to evaluate out_symbol = function(input_symbol)
+        get_jacobian_func -- callable that returns callable to
+              evaluate df/dy (input_symbol)
 
         jacobian_of -- used internally to recursively create references of related
         callbacks, as needed.
@@ -646,7 +647,6 @@ def callables_to_operator(wrapper_funcs, *args, jacobian_of=None, **kwargs):
 
     """
     if isinstance(wrapper_funcs[0], casadi.Function):
-        breakpoint()
         return wrapper_funcs[0]
     if len(wrapper_funcs) > 1:
         return CasadiFunctionCallback(

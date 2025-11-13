@@ -655,6 +655,11 @@ class System:
         self.result = Result(p=p, system=self)
         self.system_solver.simulate()
         result = self.result
+        result.t = np.array(result.t)
+        if self.dim_state == 1:
+            result.x = [np.atleast_1d(x) for x in result.x]
+        result.x = np.array(result.x)
+        result.y = np.array(result.y)
         self.result = None
         return result
 

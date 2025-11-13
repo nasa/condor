@@ -610,7 +610,7 @@ class TrajectoryAnalysis(
         """Re-sample the trajectory, to a grid based on evenly-spaced points. With
         include_events=True, two points will be inserted for each internal event to get
         the state immediately before and after the event."""
-        original_instance = getattr(self, "original_instance", self)
+        original_instance = getattr(self, "_original_instance", self)
 
         if original_instance is not self:
             return original_instance.resample(
@@ -626,9 +626,9 @@ class TrajectoryAnalysis(
             return self
 
         new_self = model.__new__(model)
-        new_self.parameter = self.parameter
         new_self.implementation = self.implementation
-        new_self.original_instance = original_instance
+        new_self._original_instance = original_instance
+        new_self.bind_field(self.parameter)
 
         t_grid = np.arange(self._res.t[0], self._res.t[-1], dt)
         t_size = t_grid.size
@@ -696,11 +696,9 @@ class TrajectoryAnalysis(
             es.append(Root(idx1, None))
 
         new_self.bind_field(model.state.wrap(xs.T))
-        new_self.state._values = xs
 
         if include_output:
             new_self.bind_field(model.dynamic_output.wrap(ys.T))
-            new_self.dynamic_output._values = ys
 
         new_self._res = Result(
             t=new_self.t, x=xs, y=ys, e=es, p=self._res.p, system=self._res.system
