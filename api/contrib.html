@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fields and Elements" href="fields.html"><link rel="prev" title="Condor API" href="index.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Contrib Models - Condor 0.3.3.dev86+gef8e1742f documentation</title>
+        <title>Contrib Models - Condor 0.3.3.dev87+gd83d3d10e documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev86+gef8e1742f documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev87+gd83d3d10e documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev86+gef8e1742f documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev87+gd83d3d10e documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -605,6 +605,14 @@ but maybe still time?</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.resample">
+<span class="sig-name descname"><span class="pre">resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.resample" title="Link to this definition">¶</a></dt>
+<dd><p>Re-sample the trajectory, to a grid based on evenly-spaced points. With
+include_events=True, two points will be inserted for each internal event to get
+the state immediately before and after the event.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.point_analysis">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">point_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.point_analysis" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the state rates for the ODESystems that were bound (at the time of
@@ -724,6 +732,7 @@ construction).</p>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.tf"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.tf</span></code></a></li>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.t0"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.t0</span></code></a></li>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.initial_condition"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.initial_condition()</span></code></a></li>
+<li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.resample"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.resample()</span></code></a></li>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.point_analysis"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.point_analysis()</span></code></a></li>
 </ul>
 </li>
@@ -738,7 +747,7 @@ construction).</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=dcfffdc9"></script>
+</div><script src="../_static/documentation_options.js?v=02051500"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

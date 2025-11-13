@@ -134,7 +134,7 @@ Optimal Transfer With State Trigger
 
     /opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
-    time to run: 0.2091876180000014
+    time to run: 0.21067355499999962
     [-3.00000001] [1.]
      message: Optimization terminated successfully.
      success: True
@@ -149,12 +149,16 @@ Optimal Transfer With State Trigger
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-98
+.. GENERATED FROM PYTHON SOURCE LINES 95-96
+
+Original result:
+
+.. GENERATED FROM PYTHON SOURCE LINES 96-99
 
 .. code-block:: Python
 
 
-    LTI_plot(opt.sim)
+    axes = LTI_plot(opt.sim)
 
 
 
@@ -180,14 +184,106 @@ Optimal Transfer With State Trigger
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-101
+.. GENERATED FROM PYTHON SOURCE LINES 100-101
+
+Comparing resampling results
+
+.. GENERATED FROM PYTHON SOURCE LINES 101-109
 
 .. code-block:: Python
 
 
+    sim_1 = opt.sim.resample(0.125)
+    sim_2 = opt.sim.resample(0.125, include_events=False)
+    sim_3 = sim_1.resample(0.125, include_events=False)
+
+    # resample always calls the original simulation result to have full fidelity
+    assert np.all(sim_2._res.x == sim_3._res.x)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 110-111
+
+plotting utilities
+
+.. GENERATED FROM PYTHON SOURCE LINES 111-130
+
+.. code-block:: Python
+
+
+
+    def plot_x(axes, sim, label):
+        for ax, x in zip(axes, sim.x):
+            ax.plot(sim.t, x.squeeze(), "o-", label=label)
+
+
+    def make_figure():
+        fig, axes = plt.subplots(2, constrained_layout=True, sharex=True)
+        for ax in axes:
+            ax.grid(True)
+
+        plot_x(axes, opt.sim, "original")
+        plot_x(axes, sim_1, "resample with events")
+        plot_x(axes, sim_2, "resample without events")
+        plt.legend()
+        return axes
+
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 131-132
+
+In this case, we actually up-sampled
+
+.. GENERATED FROM PYTHON SOURCE LINES 132-134
+
+.. code-block:: Python
+
+    axes = make_figure()
+
+
+
+
+.. image-sg:: /examples/images/sphx_glr_state_switched_003.png
+   :alt: state switched
+   :srcset: /examples/images/sphx_glr_state_switched_003.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 135-136
+
+looking near the first event trigger, we see the impact of re-sampling without events
+
+.. GENERATED FROM PYTHON SOURCE LINES 136-142
+
+.. code-block:: Python
+
+
+    axes = make_figure()
+    plt.xlim(3.1, 3.8)
+    axes[0].set_ylim(-4, -2)
+    axes[1].set_ylim(3.15, 3.525)
     plt.show()
 
 
+
+.. image-sg:: /examples/images/sphx_glr_state_switched_004.png
+   :alt: state switched
+   :srcset: /examples/images/sphx_glr_state_switched_004.png
+   :class: sphx-glr-single-img
 
 
 
@@ -196,7 +292,7 @@ Optimal Transfer With State Trigger
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.468 seconds)
+   **Total running time of the script:** (0 minutes 0.792 seconds)
 
 
 .. _sphx_glr_download_examples_state_switched.py:
