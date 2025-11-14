@@ -6,7 +6,7 @@ import condor as co
 import condor.solvers.sweeping_gradient_method as sgm
 from condor import backend
 from condor.backend import (
-    callables_to_operator,
+    FunctionOperator,
     expression_to_operator,
     symbol_class,
 )
@@ -329,26 +329,16 @@ class TrajectoryAnalysis:
             terminal_terms=self.traj_out_terminal_term_func,
         )
 
-        self.generate_sgm_jacobian()
-
-        wrapper_funcs = [
-            self.trajectory_analysis_nom,
-            self.trajectory_analysis_sgm,
-        ]
-
-        self.callback = callables_to_operator(
-            wrapper_funcs,
-            implementation=self,
-            jacobian_of=None,
+        self.callback = FunctionOperator(
+            function=self.trajectory_analysis_nom,
+            get_jacobian_func=self.generate_sgm_jacobian if self.can_sgm else None,
             input_symbol=self.p,
             output_symbol=self.traj_out_expr,
+            implementation=self,
+            jacobian_of=None,
         )
-        self.callback.construct()
 
-        if not self.can_sgm:
-            return
-
-    def generate_sgm_jacobian(self):
+    def generate_sgm_jacobian(self, jacobian_of):
         state_equation_func = self.state_equation_func
         # lamda_jac = self.state_jacobian_expr.T
         model = self.model
@@ -544,6 +534,16 @@ class TrajectoryAnalysis:
             p_terminal_terms_p_state=self.lamdaF_funcs,
             p_integrand_terms_p_state=state_integrand_jac_funcs,
             **self.adjoint_options,
+        )
+
+        return FunctionOperator(
+            function=self.trajectory_analysis_sgm,
+            get_jacobian_func=None,
+            # model_name=model.__name__+"Jacobian",
+            implementation=self,
+            input_symbol=self.p,
+            output_symbol=self.traj_out_expr,
+            jacobian_of=jacobian_of,  # same as self.callback, currently
         )
 
     def __call__(self, model_instance):

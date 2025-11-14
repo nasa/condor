@@ -512,6 +512,8 @@ class CasadiFunctionCallback(casadi.Callback):
         self.implementation = implementation
         self.opts = opts
 
+        self.construct()
+
     def construct(self):
         super().construct(self.placeholder_func.name(), self.opts)
 
@@ -602,8 +604,11 @@ class CasadiFunctionCallback(casadi.Callback):
         if self.has_jacobian():
             if self.jacobian_callback is None:
                 self.jacobian_callback = self.get_jacobian_func(self)
-                self.jacobian_callback.construct()
             return self.jacobian_callback
+
+
+# generic name for shim
+FunctionOperator = CasadiFunctionCallback
 
 
 def callables_to_operator(wrapper_funcs, *args, jacobian_of=None, **kwargs):

@@ -233,7 +233,6 @@ class ExternalSolverModel:
             input_symbol=self.input,
             output_symbol=self.output,
         )
-        self.callback.construct()
 
     def __call__(self, model_instance):
         use_args = model_instance.input.flatten()
