@@ -123,7 +123,7 @@ And finally we can use this configured ODE system to simulate a trajectory.
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7fd448a9bef0>]
+    [<matplotlib.lines.Line2D object at 0x7f6f67b7a2a0>]
 
 
 
@@ -164,7 +164,7 @@ We can also re-use the module with a different configuration:
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7fd448a61d60>]
+    [<matplotlib.lines.Line2D object at 0x7f6f6c0acc20>]
 
 
 
@@ -273,7 +273,7 @@ Use of the model factory function looks similar to using ``get_module``:
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7fd448dceba0>]
+    [<matplotlib.lines.Line2D object at 0x7f6f64b33980>]
 
 
 
@@ -310,7 +310,7 @@ Use of the model factory function looks similar to using ``get_module``:
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7fd448d63680>]
+    [<matplotlib.lines.Line2D object at 0x7f6f67fd2c30>]
 
 
 
@@ -330,7 +330,7 @@ Use of the model factory function looks similar to using ``get_module``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.410 seconds)
+   **Total running time of the script:** (0 minutes 0.411 seconds)
 
 
 .. _sphx_glr_download_howto_configuration.py:
