@@ -665,8 +665,12 @@ class BoundedElement(FreeElement):
     def __post_init__(self):
         super().__post_init__()
         # since bounds generally must be numeric, broadcasting should just work
-        self.upper_bound = np.broadcast_to(self.upper_bound, self.shape)
-        self.lower_bound = np.broadcast_to(self.lower_bound, self.shape)
+        self.upper_bound = np.broadcast_to(
+            np.atleast_2d(self.upper_bound).reshape((-1, 1)), self.shape
+        )
+        self.lower_bound = np.broadcast_to(
+            np.atleast_2d(self.lower_bound).reshape((-1, 1)), self.shape
+        )
 
 
 @dc.dataclass(repr=False)
