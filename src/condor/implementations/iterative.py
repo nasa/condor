@@ -152,7 +152,7 @@ class AlgebraicSystem(InitializerMixin):
         for k, v in model_instance.variable.asdict().items():
             model_var = getattr(self.model, k)
             if (
-                model_var.warm_start
+                np.array(model_var.warm_start).any()
                 and not isinstance(model_var.initializer, symbol_class)
                 and not isinstance(v, symbol_class)
             ):
