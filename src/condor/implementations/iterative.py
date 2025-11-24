@@ -507,62 +507,103 @@ class ScipyCG(ScipyMinimizeBase):
     method_string = "CG"
 
 
+class ObjectiveConstraintData:
+    def __init__(self, x, p, obj_expr):
+        self.x = x
+        self.p = p
+        self.obj_expr = obj_expr
+        self.constr_exprs = []
+        self.constr_dicts = []
+        self._output_cache = (None, None)
+        self._output_jac_cache = (None, None)
+
+    @property
+    def constraints(self):
+        yield from self.constr_dicts
+
+    def add_constraint(self, expr, type):
+        self.constr_exprs.append(expr)
+        self.constr_dicts.append({"type": type})
+
+    def construct(self):
+        obj_constr_expr = concat([self.obj_expr, *self.constr_exprs])
+        self.obj_constr_func = expression_to_operator(
+            [self.x, self.p],
+            obj_constr_expr,
+            "obj_constr",
+        )
+        self.obj_constr_jac = expression_to_operator(
+            [self.x, self.p],
+            jacobian(obj_constr_expr, self.x),
+            "obj_constr_jac",
+        )
+        for i, d in enumerate(self.constr_dicts):
+            d["fun"] = self.constraint_func(i)
+            d["jac"] = self.constraint_jac(i)
+
+    def _get_output(self, x, p):
+        cx, cout = self._output_cache
+        if all(x == cx):
+            return cout
+        else:
+            out = self.obj_constr_func(x, p)
+            out_arr = out.toarray().squeeze()
+            self._output_cache = (x, out_arr)
+            return out_arr
+
+    def _get_output_jac(self, x, p):
+        cx, cout = self._output_jac_cache
+        if all(x == cx):
+            return cout
+        else:
+            out = self.obj_constr_jac(x, p)
+            out_arr = out.toarray().squeeze()
+            self._output_jac_cache = (x, out_arr)
+            return out_arr
+
+    def objective_func(self):
+        def obj(x, p):
+            return self._get_output(x, p)[0]
+
+        return obj
+
+    def constraint_func(self, i):
+        def constr(x, p):
+            return self._get_output(x, p)[i + 1]
+
+        return constr
+
+    def objective_jac(self):
+        def obj(x, p):
+            return self._get_output_jac(x, p)[0]
+
+        return obj
+
+    def constraint_jac(self, i):
+        def constr(x, p):
+            return self._get_output_jac(x, p)[i + 1]
+
+        return constr
+
+
 class ScipySLSQP(ScipyMinimizeBase):
     method_string = "SLSQP"
 
     def construct(self, model, *args, **kwargs):
         super().construct(model, *args, **kwargs)
-        self.equality_con_exprs = []
-        self.inequality_con_exprs = []
-        self.con = []
+
+        obj_constr_data = ObjectiveConstraintData(self.x, self.p, self.f)
         for g, lbg, ubg in zip(self.g_split, self.lbg, self.ubg):
             if lbg == ubg:
-                self.equality_con_exprs.append(g - lbg)
+                obj_constr_data.add_constraint(g - lbg, "eq")
             else:
                 if lbg > -np.inf:
-                    self.inequality_con_exprs.append(g - lbg)
+                    obj_constr_data.add_constraint(g - lbg, "ineq")
                 if ubg < np.inf:
-                    self.inequality_con_exprs.append(ubg - g)
+                    obj_constr_data.add_constraint(ubg - g, "ineq")
 
-        if self.equality_con_exprs:
-            self.equality_con_expr = concat(self.equality_con_exprs)
-            self.eq_g_func = expression_to_operator(
-                [self.x, self.p],
-                self.equality_con_expr,
-                f"{model.__name__}_equality_constraint",
-            )
-            self.eq_g_jac_func = expression_to_operator(
-                [self.x, self.p],
-                jacobian(self.equality_con_expr, self.x),
-                f"{model.__name__}_equality_constraint_jac",
-            )
-            self.con.append(
-                dict(
-                    type="eq",
-                    fun=lambda x, p: self.eq_g_func(x, p).toarray().squeeze().T,
-                    jac=self.eq_g_jac_func,
-                )
-            )
-
-        if self.inequality_con_exprs:
-            self.inequality_con_expr = concat(self.inequality_con_exprs)
-            self.ineq_g_func = expression_to_operator(
-                [self.x, self.p],
-                self.inequality_con_expr,
-                f"{model.__name__}_inequality_constraint",
-            )
-            self.ineq_g_jac_func = expression_to_operator(
-                [self.x, self.p],
-                jacobian(self.inequality_con_expr, self.x),
-                f"{model.__name__}_inequality_constraint_jac",
-            )
-            self.con.append(
-                dict(
-                    type="ineq",
-                    fun=lambda x, p: self.ineq_g_func(x, p).toarray().squeeze().T,
-                    jac=self.ineq_g_jac_func,
-                )
-            )
+        obj_constr_data.construct()
+        self.con = list(obj_constr_data.constraints)
 
     def prepare_constraints(self, extra_args):
         scipy_constraints = self.con
