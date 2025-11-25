@@ -548,7 +548,7 @@ class ObjectiveConstraintData:
         else:
             out = self.obj_constr_func(x, p)
             out_arr = out.toarray().squeeze()
-            self._output_cache = (x, out_arr)
+            self._output_cache = (x.copy(), out_arr.copy())
             return out_arr
 
     def _get_output_jac(self, x, p):
@@ -558,7 +558,7 @@ class ObjectiveConstraintData:
         else:
             out = self.obj_constr_jac(x, p)
             out_arr = out.toarray().squeeze()
-            self._output_jac_cache = (x, out_arr)
+            self._output_jac_cache = (x.copy(), out_arr.copy())
             return out_arr
 
     def objective_func(self):
@@ -575,13 +575,13 @@ class ObjectiveConstraintData:
 
     def objective_jac(self):
         def obj(x, p):
-            return self._get_output_jac(x, p)[0]
+            return self._get_output_jac(x, p)[0].T
 
         return obj
 
     def constraint_jac(self, i):
-        def constr(x, p):
-            return self._get_output_jac(x, p)[i + 1]
+        def constr(*x):
+            return self._get_output_jac(*x)[i + 1].T
 
         return constr
 
@@ -604,12 +604,46 @@ class ScipySLSQP(ScipyMinimizeBase):
 
         obj_constr_data.construct()
         self.con = list(obj_constr_data.constraints)
+        self.obj = obj_constr_data.objective_func()
+        self.obj_jac = obj_constr_data.objective_jac()
 
     def prepare_constraints(self, extra_args):
         scipy_constraints = self.con
         for con in scipy_constraints:
             con["args"] = extra_args
         return scipy_constraints
+
+    def run_optimizer(self, model_instance):
+        extra_args = (self.eval_p,) if self.has_p else ([],)
+
+        scipy_constraints = self.prepare_constraints(extra_args)
+
+        if self.init_callback is not None:
+            self.init_callback(
+                model_instance.parameter,
+                {**self.options, "lbx": self.lbx, "ubx": self.ubx},
+            )
+
+        min_out = minimize(
+            self.obj,
+            self.x0,
+            jac=self.obj_jac,
+            method=self.method_string,
+            args=extra_args,
+            constraints=scipy_constraints,
+            bounds=np.vstack([self.lbx, self.ubx]).T,
+            # tol = 1E-9,
+            # options=dict(disp=True),
+            options=self.options,
+            callback=SciPyIterCallbackWrapper.create_or_none(
+                self.model, model_instance.parameter, self.iter_callback
+            ),
+        )
+
+        model_instance.bind_field(self.model.variable.wrap(min_out.x))
+        model_instance.objective = min_out.fun
+        self.x0 = min_out.x
+        self.stats = model_instance._stats = min_out
 
 
 class ScipyTrustConstr(ScipyMinimizeBase):
