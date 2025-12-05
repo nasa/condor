@@ -912,6 +912,7 @@ class ExternalSolverWrapperType(ModelTemplateType):
         # don't have access to instance yet.
         # print(cls, "__call__")
         wrapper_object = super().__call__(*args, **kwargs)
+        wrapper_object.condor_model.wrapper = wrapper_object
         return wrapper_object.condor_model
 
 
