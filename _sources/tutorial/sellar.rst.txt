@@ -257,7 +257,7 @@ problem by providing an initial value for the variables and instantiating the mo
     Number of equality constraint Jacobian evaluations   = 0
     Number of inequality constraint Jacobian evaluations = 16
     Number of Lagrangian Hessian evaluations             = 15
-    Total seconds in IPOPT                               = 0.050
+    Total seconds in IPOPT                               = 0.049
 
     EXIT: Optimal Solution Found.
 

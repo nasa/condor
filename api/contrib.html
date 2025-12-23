@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fields and Elements" href="fields.html"><link rel="prev" title="Condor API" href="index.html">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
-        <title>Contrib Models - Condor 0.3.3.dev88+g0ff77a351 documentation</title>
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Contrib Models - Condor 0.3.3.dev90+g83fa34e06 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev88+g0ff77a351 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev90+g83fa34e06 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev88+g0ff77a351 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev90+g83fa34e06 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -277,7 +277,7 @@
 <p>Built-in model templates</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.ExplicitSystem">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">ExplicitSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.ExplicitSystem" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">ExplicitSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.ExplicitSystem" title="Link to this definition">¶</a></dt>
 <dd><p>Representation of a system of explicit equations</p>
 <p>Outputs are functions solely of inputs:</p>
 <div class="math-wrapper docutils container">
@@ -296,13 +296,13 @@ calculate the derivatives <span class="math notranslate nohighlight">\(\frac{dy_
 etc.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ExplicitSystem.input">
-<span class="sig-name descname"><span class="pre">input</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">ExplicitSystem.input&gt;</span></em><a class="headerlink" href="#condor.contrib.ExplicitSystem.input" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">input</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">ExplicitSystem.input&gt;</span></span><a class="headerlink" href="#condor.contrib.ExplicitSystem.input" title="Link to this definition">¶</a></dt>
 <dd><p>the inputs of the model (e.g., <span class="math notranslate nohighlight">\(x_i\)</span>)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ExplicitSystem.output">
-<span class="sig-name descname"><span class="pre">output</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;AssignedField:</span> <span class="pre">ExplicitSystem.output&gt;</span></em><a class="headerlink" href="#condor.contrib.ExplicitSystem.output" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">output</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;AssignedField:</span> <span class="pre">ExplicitSystem.output&gt;</span></span><a class="headerlink" href="#condor.contrib.ExplicitSystem.output" title="Link to this definition">¶</a></dt>
 <dd><p>the outputs of the model (e.g., <span class="math notranslate nohighlight">\(y_i = f_i(x)\)</span>)</p>
 </dd></dl>
 
@@ -310,7 +310,7 @@ etc.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.TableLookup">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">TableLookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TableLookup" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">TableLookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TableLookup" title="Link to this definition">¶</a></dt>
 <dd><p>Spline interpolation for gridded data. Currently for structured, rectilinear
 data.</p>
 <dl class="py method">
@@ -326,8 +326,8 @@ points for data on that axis, so the collection of values can be passed to
 dimension.</p></li>
 <li><p><strong>yy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are output element names and values are the values
 on the input grid to be interpolated</p></li>
-<li><p><strong>degrees</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.3)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Degree of interpolant for each axis (or broadcastable). Default is 3.</p></li>
-<li><p><strong>bcs</strong> (<a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.3)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Array of boundary conditions broadcastable to <code class="docutils literal notranslate"><span class="pre">(xdim,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>. <code class="docutils literal notranslate"><span class="pre">bc[xdim,</span> <span class="pre">0</span>
+<li><p><strong>degrees</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.4)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Degree of interpolant for each axis (or broadcastable). Default is 3.</p></li>
+<li><p><strong>bcs</strong> (<a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.4)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Array of boundary conditions broadcastable to <code class="docutils literal notranslate"><span class="pre">(xdim,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>. <code class="docutils literal notranslate"><span class="pre">bc[xdim,</span> <span class="pre">0</span>
 <span class="pre">for</span> <span class="pre">left</span> <span class="pre">|</span> <span class="pre">1</span> <span class="pre">for</span> <span class="pre">right,</span> <span class="pre">:]</span> <span class="pre">=</span> <span class="pre">(order,</span> <span class="pre">value)</span></code> for specifying derivative
 conditions. Use (-1, 0) to specify the not-a-knot boundary conditions
 (default), where the boundary polynomial is the same as it neighbor.</p></li>
@@ -340,7 +340,7 @@ conditions. Use (-1, 0) to specify the not-a-knot boundary conditions
 
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.AlgebraicSystem">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">AlgebraicSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.AlgebraicSystem" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">AlgebraicSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.AlgebraicSystem" title="Link to this definition">¶</a></dt>
 <dd><p>Representation of a system of algebraic equations</p>
 <p>An algebraic system with parameters <span class="math notranslate nohighlight">\(u\)</span> and implicit variables <span class="math notranslate nohighlight">\(x\)</span>,
 is driven to a solution at <span class="math notranslate nohighlight">\(x^*\)</span>:</p>
@@ -365,31 +365,31 @@ y_l &amp;=&amp; f_m(x_1, \dots, u_m, x_1^*, \dots, x_n^*)
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.AlgebraicSystem.parameter">
-<span class="sig-name descname"><span class="pre">parameter</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">AlgebraicSystem.parameter&gt;</span></em><a class="headerlink" href="#condor.contrib.AlgebraicSystem.parameter" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parameter</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">AlgebraicSystem.parameter&gt;</span></span><a class="headerlink" href="#condor.contrib.AlgebraicSystem.parameter" title="Link to this definition">¶</a></dt>
 <dd><p>parameters held constant during solution of the system, <span class="math notranslate nohighlight">\(u\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.AlgebraicSystem.variable">
-<span class="sig-name descname"><span class="pre">variable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;InitializedField:</span> <span class="pre">AlgebraicSystem.variable&gt;</span></em><a class="headerlink" href="#condor.contrib.AlgebraicSystem.variable" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">variable</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;InitializedField:</span> <span class="pre">AlgebraicSystem.variable&gt;</span></span><a class="headerlink" href="#condor.contrib.AlgebraicSystem.variable" title="Link to this definition">¶</a></dt>
 <dd><p>variables used to drive residuals to 0, <span class="math notranslate nohighlight">\(x\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.AlgebraicSystem.residual">
-<span class="sig-name descname"><span class="pre">residual</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeAssignedField:</span> <span class="pre">AlgebraicSystem.residual&gt;</span></em><a class="headerlink" href="#condor.contrib.AlgebraicSystem.residual" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">residual</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeAssignedField:</span> <span class="pre">AlgebraicSystem.residual&gt;</span></span><a class="headerlink" href="#condor.contrib.AlgebraicSystem.residual" title="Link to this definition">¶</a></dt>
 <dd><p>residuals to satisfy, <span class="math notranslate nohighlight">\(R\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.AlgebraicSystem.output">
-<span class="sig-name descname"><span class="pre">output</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;AssignedField:</span> <span class="pre">AlgebraicSystem.output&gt;</span></em><a class="headerlink" href="#condor.contrib.AlgebraicSystem.output" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">output</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;AssignedField:</span> <span class="pre">AlgebraicSystem.output&gt;</span></span><a class="headerlink" href="#condor.contrib.AlgebraicSystem.output" title="Link to this definition">¶</a></dt>
 <dd><p>additional explicit outputs, <span class="math notranslate nohighlight">\(y\)</span></p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.AlgebraicSystem.set_initial">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.AlgebraicSystem.set_initial" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.AlgebraicSystem.set_initial" title="Link to this definition">¶</a></dt>
 <dd><p>Set initial values for the <code class="docutils literal notranslate"><span class="pre">variable</span></code>s of the model</p>
 </dd></dl>
 
@@ -397,7 +397,7 @@ y_l &amp;=&amp; f_m(x_1, \dots, u_m, x_1^*, \dots, x_n^*)
 
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.OptimizationProblem">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">OptimizationProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.OptimizationProblem" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">OptimizationProblem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.OptimizationProblem" title="Link to this definition">¶</a></dt>
 <dd><p>Representation of a general optimization problem</p>
 <p>The problem is of the form:</p>
 <div class="math-wrapper docutils container">
@@ -416,31 +416,31 @@ constraint functions <span class="math notranslate nohighlight">\(g_j\)</span>.<
 problem).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.OptimizationProblem.variable">
-<span class="sig-name descname"><span class="pre">variable</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;InitializedField:</span> <span class="pre">OptimizationProblem.variable&gt;</span></em><a class="headerlink" href="#condor.contrib.OptimizationProblem.variable" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">variable</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;InitializedField:</span> <span class="pre">OptimizationProblem.variable&gt;</span></span><a class="headerlink" href="#condor.contrib.OptimizationProblem.variable" title="Link to this definition">¶</a></dt>
 <dd><p>variables driven to solve the problem, <span class="math notranslate nohighlight">\(x\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.OptimizationProblem.parameter">
-<span class="sig-name descname"><span class="pre">parameter</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">OptimizationProblem.parameter&gt;</span></em><a class="headerlink" href="#condor.contrib.OptimizationProblem.parameter" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parameter</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">OptimizationProblem.parameter&gt;</span></span><a class="headerlink" href="#condor.contrib.OptimizationProblem.parameter" title="Link to this definition">¶</a></dt>
 <dd><p>parameters held constant during solution of the system, <span class="math notranslate nohighlight">\(p\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.OptimizationProblem.constraint">
-<span class="sig-name descname"><span class="pre">constraint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;BoundedAssignmentField:</span> <span class="pre">OptimizationProblem.constraint&gt;</span></em><a class="headerlink" href="#condor.contrib.OptimizationProblem.constraint" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">constraint</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;BoundedAssignmentField:</span> <span class="pre">OptimizationProblem.constraint&gt;</span></span><a class="headerlink" href="#condor.contrib.OptimizationProblem.constraint" title="Link to this definition">¶</a></dt>
 <dd><p>constraints <span class="math notranslate nohighlight">\(g\)</span> expressed as relationals</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.OptimizationProblem.objective">
-<span class="sig-name descname"><span class="pre">objective</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;OptimizationProblem.placeholder:</span> <span class="pre">objective&gt;</span></em><a class="headerlink" href="#condor.contrib.OptimizationProblem.objective" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">objective</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;OptimizationProblem.placeholder:</span> <span class="pre">objective&gt;</span></span><a class="headerlink" href="#condor.contrib.OptimizationProblem.objective" title="Link to this definition">¶</a></dt>
 <dd><p>scalar objective to minimize, <span class="math notranslate nohighlight">\(f\)</span></p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.OptimizationProblem.set_initial">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.OptimizationProblem.set_initial" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">set_initial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.OptimizationProblem.set_initial" title="Link to this definition">¶</a></dt>
 <dd><p>Set initial values for the <code class="docutils literal notranslate"><span class="pre">variable</span></code>s of the model</p>
 <p>Overrides initial values provided to the <code class="docutils literal notranslate"><span class="pre">variable</span></code> field in the model
 declaration.</p>
@@ -448,7 +448,7 @@ declaration.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.OptimizationProblem.from_values">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.OptimizationProblem.from_values" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.OptimizationProblem.from_values" title="Link to this definition">¶</a></dt>
 <dd><p>Construct an instance of a solved model from variable and parameter values</p>
 </dd></dl>
 
@@ -456,7 +456,7 @@ declaration.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">ODESystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.ODESystem" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">ODESystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.ODESystem" title="Link to this definition">¶</a></dt>
 <dd><p>Representation of a dynamical system</p>
 <p>The system is defined by a set of ordinary differential equations (ODEs) and
 optionally additional outputs <span class="math notranslate nohighlight">\(y\)</span>:</p>
@@ -474,44 +474,44 @@ constant parameters.</p>
 submodels. <a class="reference internal" href="#condor.contrib.Mode" title="condor.contrib.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a> and <a class="reference internal" href="#condor.contrib.Event" title="condor.contrib.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a> submodels may also be added.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem.t">
-<span class="sig-name descname"><span class="pre">t</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;ODESystem.placeholder:</span> <span class="pre">t&gt;</span></em><a class="headerlink" href="#condor.contrib.ODESystem.t" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">t</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;ODESystem.placeholder:</span> <span class="pre">t&gt;</span></span><a class="headerlink" href="#condor.contrib.ODESystem.t" title="Link to this definition">¶</a></dt>
 <dd><p>independent variable <span class="math notranslate nohighlight">\(t\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem.state">
-<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">ODESystem.state&gt;</span></em><a class="headerlink" href="#condor.contrib.ODESystem.state" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">state</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">ODESystem.state&gt;</span></span><a class="headerlink" href="#condor.contrib.ODESystem.state" title="Link to this definition">¶</a></dt>
 <dd><p>state variables <span class="math notranslate nohighlight">\(x\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem.initial">
-<span class="sig-name descname"><span class="pre">initial</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">ODESystem.initial&gt;</span></em><a class="headerlink" href="#condor.contrib.ODESystem.initial" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">initial</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">ODESystem.initial&gt;</span></span><a class="headerlink" href="#condor.contrib.ODESystem.initial" title="Link to this definition">¶</a></dt>
 <dd><p>initial values for the states; may also/instead be specified at the
 <a class="reference internal" href="#condor.contrib.TrajectoryAnalysis" title="condor.contrib.TrajectoryAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrajectoryAnalysis</span></code></a> level</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem.parameter">
-<span class="sig-name descname"><span class="pre">parameter</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">ODESystem.parameter&gt;</span></em><a class="headerlink" href="#condor.contrib.ODESystem.parameter" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">parameter</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;FreeField:</span> <span class="pre">ODESystem.parameter&gt;</span></span><a class="headerlink" href="#condor.contrib.ODESystem.parameter" title="Link to this definition">¶</a></dt>
 <dd><p>constant (in time) parameters <span class="math notranslate nohighlight">\(p\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem.dot">
-<span class="sig-name descname"><span class="pre">dot</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">ODESystem.dot&gt;</span></em><a class="headerlink" href="#condor.contrib.ODESystem.dot" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">ODESystem.dot&gt;</span></span><a class="headerlink" href="#condor.contrib.ODESystem.dot" title="Link to this definition">¶</a></dt>
 <dd><p>derivatives of the state variables with respect to <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(\dot{x}\)</span></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem.modal">
-<span class="sig-name descname"><span class="pre">modal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;WithDefaultField:</span> <span class="pre">ODESystem.modal&gt;</span></em><a class="headerlink" href="#condor.contrib.ODESystem.modal" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">modal</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;WithDefaultField:</span> <span class="pre">ODESystem.modal&gt;</span></span><a class="headerlink" href="#condor.contrib.ODESystem.modal" title="Link to this definition">¶</a></dt>
 <dd><p>elements with deferred behavior, for implementing things such as control inputs</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.ODESystem.dynamic_output">
-<span class="sig-name descname"><span class="pre">dynamic_output</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;AssignedField:</span> <span class="pre">ODESystem.dynamic_output&gt;</span></em><a class="headerlink" href="#condor.contrib.ODESystem.dynamic_output" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dynamic_output</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;AssignedField:</span> <span class="pre">ODESystem.dynamic_output&gt;</span></span><a class="headerlink" href="#condor.contrib.ODESystem.dynamic_output" title="Link to this definition">¶</a></dt>
 <dd><p>additional time-varying outputs <span class="math notranslate nohighlight">\(y\)</span></p>
 </dd></dl>
 
@@ -519,32 +519,32 @@ submodels. <a class="reference internal" href="#condor.contrib.Mode" title="cond
 
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.Event">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.Event" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.Event" title="Link to this definition">¶</a></dt>
 <dd><p>Instantaneous event for <a class="reference internal" href="#condor.contrib.ODESystem" title="condor.contrib.ODESystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ODESystem</span></code></a> models.</p>
 <p>Events may be declared at a specific time (<code class="docutils literal notranslate"><span class="pre">at_time</span></code>) or as a function with
 zero-crossings dictating the event time (<code class="docutils literal notranslate"><span class="pre">function</span></code>).</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.Event.update">
-<span class="sig-name descname"><span class="pre">update</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">Event.update&gt;</span></em><a class="headerlink" href="#condor.contrib.Event.update" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">Event.update&gt;</span></span><a class="headerlink" href="#condor.contrib.Event.update" title="Link to this definition">¶</a></dt>
 <dd><p>instantaneous updates for any states in the ODE system</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.Event.terminate">
-<span class="sig-name descname"><span class="pre">terminate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Event.placeholder:</span> <span class="pre">terminate&gt;</span></em><a class="headerlink" href="#condor.contrib.Event.terminate" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">terminate</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Event.placeholder:</span> <span class="pre">terminate&gt;</span></span><a class="headerlink" href="#condor.contrib.Event.terminate" title="Link to this definition">¶</a></dt>
 <dd><p>flag to specify whether the event should terminate the simulation (overriding
 <code class="docutils literal notranslate"><span class="pre">tf</span></code> on the <a class="reference internal" href="#condor.contrib.TrajectoryAnalysis" title="condor.contrib.TrajectoryAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrajectoryAnalysis</span></code></a>)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.Event.function">
-<span class="sig-name descname"><span class="pre">function</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Event.placeholder:</span> <span class="pre">function&gt;</span></em><a class="headerlink" href="#condor.contrib.Event.function" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">function</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Event.placeholder:</span> <span class="pre">function&gt;</span></span><a class="headerlink" href="#condor.contrib.Event.function" title="Link to this definition">¶</a></dt>
 <dd><p>expression where zero-crossings indicate event times</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.Event.at_time">
-<span class="sig-name descname"><span class="pre">at_time</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Event.placeholder:</span> <span class="pre">at_time&gt;</span></em><a class="headerlink" href="#condor.contrib.Event.at_time" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">at_time</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Event.placeholder:</span> <span class="pre">at_time&gt;</span></span><a class="headerlink" href="#condor.contrib.Event.at_time" title="Link to this definition">¶</a></dt>
 <dd><p>time at which the event occurs; periodic events may be specified with a slice
 object (stop=None for infinite) with both start and stop inclusive</p>
 </dd></dl>
@@ -553,17 +553,17 @@ object (stop=None for infinite) with both start and stop inclusive</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.Mode">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.Mode" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.Mode" title="Link to this definition">¶</a></dt>
 <dd><p>Conditional behavior of dynamics and/or controls for <a class="reference internal" href="#condor.contrib.ODESystem" title="condor.contrib.ODESystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ODESystem</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.Mode.condition">
-<span class="sig-name descname"><span class="pre">condition</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Mode.placeholder:</span> <span class="pre">condition&gt;</span></em><a class="headerlink" href="#condor.contrib.Mode.condition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">condition</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Mode.placeholder:</span> <span class="pre">condition&gt;</span></span><a class="headerlink" href="#condor.contrib.Mode.condition" title="Link to this definition">¶</a></dt>
 <dd><p>expression for triggering the mode</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.Mode.action">
-<span class="sig-name descname"><span class="pre">action</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">Mode.action&gt;</span></em><a class="headerlink" href="#condor.contrib.Mode.action" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">action</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;MatchedField:</span> <span class="pre">Mode.action&gt;</span></span><a class="headerlink" href="#condor.contrib.Mode.action" title="Link to this definition">¶</a></dt>
 <dd><p>behaviors of the declared <code class="docutils literal notranslate"><span class="pre">modal</span></code>s in this mode</p>
 </dd></dl>
 
@@ -571,7 +571,7 @@ object (stop=None for infinite) with both start and stop inclusive</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">TrajectoryAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.contrib.</span></span><span class="sig-name descname"><span class="pre">TrajectoryAnalysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis" title="Link to this definition">¶</a></dt>
 <dd><p>Simulation of an <a class="reference internal" href="#condor.contrib.ODESystem" title="condor.contrib.ODESystem"><code class="xref py py-class docutils literal notranslate"><span class="pre">ODESystem</span></code></a></p>
 <p>The trajectory analysis specifies the parameters for numerical integration of the
 ODE system.</p>
@@ -579,26 +579,26 @@ ODE system.</p>
 all available for use in expressions for <code class="docutils literal notranslate"><span class="pre">trajectory_output</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.trajectory_output">
-<span class="sig-name descname"><span class="pre">trajectory_output</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TrajectoryOutputField:</span> <span class="pre">TrajectoryAnalysis.trajectory_output&gt;</span></em><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.trajectory_output" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">trajectory_output</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TrajectoryOutputField:</span> <span class="pre">TrajectoryAnalysis.trajectory_output&gt;</span></span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.trajectory_output" title="Link to this definition">¶</a></dt>
 <dd><p>additional output calculated from the terminal state and/or integrand terms</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.tf">
-<span class="sig-name descname"><span class="pre">tf</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TrajectoryAnalysis.placeholder:</span> <span class="pre">tf&gt;</span></em><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.tf" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">tf</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TrajectoryAnalysis.placeholder:</span> <span class="pre">tf&gt;</span></span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.tf" title="Link to this definition">¶</a></dt>
 <dd><p>final time; may not be reached if the system has a terminating <a class="reference internal" href="#condor.contrib.Event" title="condor.contrib.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">Event</span></code></a>
 occuring before <code class="docutils literal notranslate"><span class="pre">tf</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.t0">
-<span class="sig-name descname"><span class="pre">t0</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TrajectoryAnalysis.placeholder:</span> <span class="pre">t0&gt;</span></em><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.t0" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">t0</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TrajectoryAnalysis.placeholder:</span> <span class="pre">t0&gt;</span></span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.t0" title="Link to this definition">¶</a></dt>
 <dd><p>initial time (default 0)</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.initial_condition">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">initial_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.initial_condition" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initial_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.initial_condition" title="Link to this definition">¶</a></dt>
 <dd><p>should initial condition be x0(t, p) not just p?
 bind dynamic output, time, modal? or do point analysis there?
 but maybe still time?</p>
@@ -614,7 +614,7 @@ the state immediately before and after the event.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.point_analysis">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">point_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.point_analysis" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">point_analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.point_analysis" title="Link to this definition">¶</a></dt>
 <dd><p>Compute the state rates for the ODESystems that were bound (at the time of
 construction).</p>
 </dd></dl>
@@ -747,12 +747,12 @@ construction).</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=0e707a80"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+</div><script src="../_static/documentation_options.js?v=426c49c6"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     </body>
 </html>
