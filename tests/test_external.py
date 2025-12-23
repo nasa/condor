@@ -71,6 +71,7 @@ def simple_rot(th, axis):
         dcm = ops.zeros((3, 3))
     else:
         dcm = np.zeros((3, 3))
+        th = th.squeeze()
     dcm[axis, axis] = 1
     dcm[non_axis[0], non_axis[0]] = np.cos(th)
     dcm[non_axis[0], non_axis[1]] = -np.sin(th)
@@ -85,6 +86,7 @@ def rot_der(th, axis):
         dcm = ops.zeros((3, 3))
     else:
         dcm = np.zeros((3, 3))
+        th = th.squeeze()
     dcm[non_axis[0], non_axis[0]] = -np.sin(th)
     dcm[non_axis[0], non_axis[1]] = -np.cos(th)
     dcm[non_axis[1], non_axis[1]] = -np.sin(th)
@@ -233,4 +235,4 @@ def test_external_jacobian(output_mode, models):
 
 
 if __name__ == "__main__":
-    test_external_jacobian(2)
+    test_external_jacobian(2, (NumericRotation, CondoricRotation))
