@@ -340,9 +340,12 @@ def get_symbol_data(symbol, symmetric=None):
 
 def symbol_is(a, b):
     """evaluate whether two symbols are the same with idiosyncrasies for symbol class"""
-    return (a.shape == b.shape) and (
-        (a == b).is_one() or casadi.is_equal(a, b, int(1e10))
-    )
+    if a.shape != b.shape:
+        return False
+    equality_expr = a == b
+    if isinstance(equality_expr, bool):
+        return equality_expr
+    return equality_expr.is_one() or casadi.is_equal(a, b, int(1e10))
 
 
 class WrappedSymbol:
