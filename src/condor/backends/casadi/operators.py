@@ -101,6 +101,10 @@ def any(x, axis=None):
     return sum(x != 0.0, axis=axis) > 0
 
 
+def all(x, axis=None):
+    return prod(x != 0.0, axis=axis) == 1
+
+
 def clip(val, amax, amin):
     val = casadi.if_else(val > amax, amax, val)
     val = casadi.if_else(val < amin, amin, val)

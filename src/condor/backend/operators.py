@@ -94,3 +94,4 @@ isinf = wrap(backend_mod.operators.isinf)
 isfinite = wrap(backend_mod.operators.isfinite)
 
 any = wrap(backend_mod.operators.any)
+all = wrap(backend_mod.operators.all)

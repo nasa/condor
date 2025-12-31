@@ -141,16 +141,59 @@ def test_ischeck():
         output.any0 = ops.any(cc, axis=0)
         output.any1 = ops.any(cc, axis=1)
 
+        output.all = ops.all(cc)
+        output.all0 = ops.all(cc, axis=0)
+        output.all1 = ops.all(cc, axis=1)
+
     check4 = Check4([1.0, 0, np.inf, np.nan])
     assert np.all(check4.x.squeeze() == np.array([1.0, 1.0, 0.0, 0.0]))
     assert np.all(check4.y.squeeze() == np.array([0.0, 0.0, 0.0, 1.0]))
     assert np.all(check4.z.squeeze() == np.array([0.0, 0.0, 1.0, 0.0]))
     assert check4.any
+    assert 1 - check4.all
 
     check4_any = Check4([0.0, 0.0, 0.0, 0.0])
     assert check4_any.any
     assert np.all(check4_any.any0.squeeze() == np.array([1, 0, 0]))
     assert np.all(check4_any.any1.squeeze())
+
+    assert 1 - check4_any.all
+    assert np.all(check4_any.all0.squeeze() == np.array([1, 0, 0]))
+
+    class Check4a(co.ExplicitSystem):
+        u = input(shape=4)
+        output.any = ops.any(u)
+        output.any0 = ops.any(u, axis=0)
+        output.any1 = ops.any(u, axis=1)
+        output.all = ops.all(u)
+        output.all0 = ops.all(u, axis=0)
+        output.all1 = ops.all(u, axis=1)
+
+    check4a_1 = Check4a([1.0, 0, np.inf, np.nan])
+    assert check4a_1.any
+    assert check4a_1.any0
+    assert np.all(check4a_1.any1.squeeze() == [1, 0, 1, 1])
+
+    assert 1 - check4a_1.all
+    assert 1 - check4a_1.all0
+    assert np.all(check4a_1.all1.squeeze() == [1, 0, 1, 1])
+
+    check4a_2 = Check4a(
+        [
+            0.0,
+            0,
+            0.0,
+            0.0,
+        ]
+    )
+    assert 1 - check4a_2.any
+    assert 1 - check4a_2.any0
+    assert np.all(1 - check4a_2.any1)
+
+    check4a_3 = Check4a([1.0, -10, np.inf, np.nan])
+    assert check4a_3.all
+    assert check4a_3.all0
+    assert np.all(check4a_3.all1)
 
 
 def test_floor_ceil():
