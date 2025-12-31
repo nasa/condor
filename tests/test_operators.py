@@ -83,6 +83,27 @@ def test_fabs_sign():
     assert tfs.signx == 0
 
 
+def test_ischeck():
+    class Check1(co.ExplicitSystem):
+        u = input()
+        output.y = ops.isnan(u)
+
+    assert Check1(np.nan).y == 1
+    assert Check1(np.inf).y == 0
+    assert Check1(-np.inf).y == 0
+    assert Check1(0.0).y == 0.0
+    assert Check1(1.0).y == 0.0
+    assert Check1(ops.pi).y == 0.0
+
+    class Check4(co.ExplicitSystem):
+        u = input(shape=4)
+        output.y = ops.isnan(u)
+
+    assert np.all(
+        Check4([1.0, 0, np.inf, np.nan]).y.squeeze() == np.array([0.0, 0.0, 0.0, 1.0])
+    )
+
+
 def test_floor_ceil():
     class TestFloorCeil(co.ExplicitSystem):
         x = input()

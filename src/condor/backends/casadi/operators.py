@@ -67,6 +67,10 @@ def sum(x, axis=None):
     return casadi.sum(x, axis)
 
 
+def isnan(x):
+    return 1 - (x >= -inf) * (x <= inf)
+
+
 def clip(val, amax, amin):
     val = casadi.if_else(val > amax, amax, val)
     val = casadi.if_else(val < amin, amin, val)
