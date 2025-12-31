@@ -86,6 +86,7 @@ cross = wrap(backend_mod.operators.cross)
 solve = wrap(backend_mod.operators.solve)
 
 sum = wrap(backend_mod.operators.sum)
+prod = wrap(backend_mod.operators.prod)
 clip = wrap(backend_mod.operators.clip)
 
 isnan = wrap(backend_mod.operators.isnan)

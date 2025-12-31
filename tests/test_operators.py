@@ -49,6 +49,24 @@ def test_min_max():
     assert np.all(out.z.squeeze() == np.fmin(x, y))
 
 
+def test_prod():
+    class TestProd(co.ExplicitSystem):
+        x = input(shape=(10, 10))
+        output.u = ops.prod(x, axis=0)
+        output.v = ops.prod(x, axis=1)
+        output.w = ops.prod(x, axis=None)
+        output.y = ops.prod(x)
+
+    x = rng.random(100).reshape(10, 10)
+    x = np.mean(x) / x
+    s = TestProd(x)
+    assert np.all(np.isclose(s.u.squeeze(), np.prod(x, axis=0)))
+    assert np.all(np.isclose(s.v.squeeze(), np.prod(x, axis=1)))
+    assert np.isclose(s.w.squeeze(), np.prod(x, axis=None))
+    assert np.isclose(s.y, np.prod(x))
+    assert s.w == s.y
+
+
 def test_sum():
     class TestSum(co.ExplicitSystem):
         x = input(shape=(10, 10))
@@ -58,6 +76,7 @@ def test_sum():
         output.y = ops.sum(x)
 
     x = rng.random(100).reshape(10, 10)
+    x = np.mean(x) / x
     s = TestSum(x)
     assert np.all(np.isclose(s.u.squeeze(), np.sum(x, axis=0)))
     assert np.all(np.isclose(s.v.squeeze(), np.sum(x, axis=1)))

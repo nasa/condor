@@ -67,6 +67,24 @@ def sum(x, axis=None):
     return casadi.sum(x, axis)
 
 
+def prod(x, axis=None):
+    if axis is None:
+        out = 1
+        for i in range(x.shape[0]):
+            for j in range(x.shape[1]):
+                out *= x[i, j]
+    elif axis == 0:
+        out = ones((1, x.shape[1]))
+        for i in range(x.shape[0]):
+            out *= x[i, :]
+    elif axis == 1:
+        out = ones((x.shape[0], 1))
+        for j in range(x.shape[1]):
+            out *= x[:, j]
+
+    return out
+
+
 def isnan(x):
     return 1 - (x >= -inf) * (x <= inf)
 
