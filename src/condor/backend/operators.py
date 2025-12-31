@@ -89,3 +89,4 @@ sum = wrap(backend_mod.operators.sum)
 clip = wrap(backend_mod.operators.clip)
 
 isnan = wrap(backend_mod.operators.isnan)
+isinf = wrap(backend_mod.operators.isinf)

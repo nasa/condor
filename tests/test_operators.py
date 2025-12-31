@@ -87,6 +87,7 @@ def test_ischeck():
     class Check1(co.ExplicitSystem):
         u = input()
         output.y = ops.isnan(u)
+        output.z = ops.isinf(u)
 
     assert Check1(np.nan).y == 1
     assert Check1(np.inf).y == 0
@@ -95,12 +96,23 @@ def test_ischeck():
     assert Check1(1.0).y == 0.0
     assert Check1(ops.pi).y == 0.0
 
+    assert Check1(np.nan).z == 0
+    assert Check1(np.inf).z == 1
+    assert Check1(-np.inf).z == 1
+    assert Check1(0.0).z == 0.0
+    assert Check1(1.0).z == 0.0
+    assert Check1(ops.pi).z == 0.0
+
     class Check4(co.ExplicitSystem):
         u = input(shape=4)
         output.y = ops.isnan(u)
+        output.z = ops.isinf(u)
 
     assert np.all(
         Check4([1.0, 0, np.inf, np.nan]).y.squeeze() == np.array([0.0, 0.0, 0.0, 1.0])
+    )
+    assert np.all(
+        Check4([1.0, 0, np.inf, np.nan]).z.squeeze() == np.array([0.0, 0.0, 1.0, 0.0])
     )
 
 
