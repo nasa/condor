@@ -75,6 +75,10 @@ def isinf(x):
     return fabs(x) == inf
 
 
+def isfinite(x):
+    return (1 - isinf(x)) * (1 - isnan(x))
+
+
 def clip(val, amax, amin):
     val = casadi.if_else(val > amax, amax, val)
     val = casadi.if_else(val < amin, amin, val)
