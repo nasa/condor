@@ -91,3 +91,5 @@ clip = wrap(backend_mod.operators.clip)
 isnan = wrap(backend_mod.operators.isnan)
 isinf = wrap(backend_mod.operators.isinf)
 isfinite = wrap(backend_mod.operators.isfinite)
+
+any = wrap(backend_mod.operators.any)

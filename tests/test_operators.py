@@ -116,11 +116,22 @@ def test_ischeck():
         output.x = ops.isfinite(u)
         output.y = ops.isnan(u)
         output.z = ops.isinf(u)
+        cc = ops.concat([x, y, z], axis=1)
+
+        output.any = ops.any(cc)
+        output.any0 = ops.any(cc, axis=0)
+        output.any1 = ops.any(cc, axis=1)
 
     check4 = Check4([1.0, 0, np.inf, np.nan])
     assert np.all(check4.x.squeeze() == np.array([1.0, 1.0, 0.0, 0.0]))
     assert np.all(check4.y.squeeze() == np.array([0.0, 0.0, 0.0, 1.0]))
     assert np.all(check4.z.squeeze() == np.array([0.0, 0.0, 1.0, 0.0]))
+    assert check4.any
+
+    check4_any = Check4([0.0, 0.0, 0.0, 0.0])
+    assert check4_any.any
+    assert np.all(check4_any.any0.squeeze() == np.array([1, 0, 0]))
+    assert np.all(check4_any.any1.squeeze())
 
 
 def test_floor_ceil():

@@ -79,6 +79,10 @@ def isfinite(x):
     return (1 - isinf(x)) * (1 - isnan(x))
 
 
+def any(x, axis=None):
+    return sum(x != 0.0, axis=axis) > 0
+
+
 def clip(val, amax, amin):
     val = casadi.if_else(val > amax, amax, val)
     val = casadi.if_else(val < amin, amin, val)
