@@ -83,7 +83,9 @@ vector_norm = wrap(backend_mod.operators.vector_norm)
 jacobian = wrap(backend_mod.operators.jacobian)  #: create dense jacobian expression
 trace = wrap(backend_mod.operators.trace)
 cross = wrap(backend_mod.operators.cross)
+
 solve = wrap(backend_mod.operators.solve)
+pinv = wrap(backend_mod.operators.pinv)
 
 sum = wrap(backend_mod.operators.sum)
 prod = wrap(backend_mod.operators.prod)

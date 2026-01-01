@@ -112,6 +112,7 @@ def clip(val, amax, amin):
 
 
 solve = casadi.solve
+pinv = casadi.pinv
 
 
 def concat(arrs, axis=0):
