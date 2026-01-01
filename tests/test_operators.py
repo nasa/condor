@@ -49,6 +49,20 @@ def test_min_max():
     assert np.all(out.z.squeeze() == np.fmin(x, y))
 
 
+def test_diff():
+    class TestDiff(co.ExplicitSystem):
+        x = input(shape=(5, 7))
+        output.y = ops.diff(x, axis=-1)
+        output.z = ops.diff(x, axis=1)
+        output.w = ops.diff(x, axis=0)
+
+    x = rng.random((5, 7))
+    test_diff = TestDiff(x)
+    assert test_diff.y == pytest.approx(np.diff(x, axis=-1))
+    assert test_diff.z == pytest.approx(np.diff(x, axis=1))
+    assert test_diff.w == pytest.approx(np.diff(x, axis=0))
+
+
 def test_prod():
     class TestProd(co.ExplicitSystem):
         x = input(shape=(10, 10))

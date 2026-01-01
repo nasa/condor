@@ -67,6 +67,11 @@ def sum(x, axis=None):
     return casadi.sum(x, axis)
 
 
+def diff(x, axis=-1, n=1):
+    axis %= 2
+    return casadi.diff(x, n, axis)
+
+
 def prod(x, axis=None):
     if axis is None:
         out = 1
