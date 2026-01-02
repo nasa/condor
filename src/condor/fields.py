@@ -471,6 +471,7 @@ class BaseElement(
     __lt__ = _generic_op(operator.lt)
     __ge__ = _generic_op(operator.ge)
     __gt__ = _generic_op(operator.gt)
+    __eq__ = _generic_op(operator.eq)
 
     __add__ = _generic_op(operator.add)
     __sub__ = _generic_op(operator.sub)
