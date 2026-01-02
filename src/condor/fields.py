@@ -429,7 +429,9 @@ class BaseElement(
     def __hash__(self):
         return hash(
             (
-                self.backend_repr,
+                self.backend_repr
+                if isinstance(self.backend_repr, backend.symbol_class)
+                else tuple(self.backend_repr.flatten().tolist()),
                 self.shape,
                 self.field_type._name,
                 self.field_type._model_name,
