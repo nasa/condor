@@ -398,8 +398,10 @@ class FrontendElementData:
     backend_repr: backend.symbol_class
     name: str = ""
 
-    def flat_index(self):
-        return self.field_type.flat_index(self)
+    def flat_index(self, on_field=None):
+        if on_field is None:
+            on_field = self.field_type
+        return on_field.flat_index(self)
 
 
 def _generic_op(op, is_r=False):
