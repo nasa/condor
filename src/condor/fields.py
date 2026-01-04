@@ -429,9 +429,11 @@ class BaseElement(
     def __hash__(self):
         return hash(
             (
+                # TODO: how to DRY this up? also in MatchedElement.__hash__
+                # (adding match to hash)
                 self.backend_repr
                 if isinstance(self.backend_repr, backend.symbol_class)
-                else tuple(self.backend_repr.flatten().tolist()),
+                else tuple(np.array(self.backend_repr).flatten().tolist()),
                 self.shape,
                 self.field_type._name,
                 self.field_type._model_name,
@@ -851,7 +853,20 @@ class MatchedElementMixin:
 class MatchedElement(BaseElement, MatchedElementMixin):
     """Element matched with another element of another field"""
 
-    pass
+    def __hash__(self):
+        return hash(
+            (
+                # TODO: how to DRY this up? also in BaseElement.__hash__
+                # (adding match to hash)
+                self.backend_repr
+                if isinstance(self.backend_repr, backend.symbol_class)
+                else tuple(np.array(self.backend_repr).flatten().tolist()),
+                self.match,
+                self.shape,
+                self.field_type._name,
+                self.field_type._model_name,
+            )
+        )
 
 
 def zero_like(match):
