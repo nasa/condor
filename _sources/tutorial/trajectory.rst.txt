@@ -305,7 +305,7 @@ event).
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f4d20a076e0>
+    <matplotlib.legend.Legend object at 0x7fbfe0d95a00>
 
 
 
@@ -399,7 +399,7 @@ The glider now travels a little further with this control behavior.
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f4d234d18e0>
+    <matplotlib.legend.Legend object at 0x7fbfe0daf770>
 
 
 
@@ -539,7 +539,7 @@ Then we can compare areas with different hold angles of attack:
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f4d2095c770>
+    <matplotlib.legend.Legend object at 0x7fbfe0c99700>
 
 
 
@@ -666,7 +666,7 @@ of the analysis with the simulation outputs bound to the ``sim`` attribute.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 25.186 seconds)
+   **Total running time of the script:** (0 minutes 25.773 seconds)
 
 
 .. _sphx_glr_download_tutorial_trajectory.py:
