@@ -135,9 +135,9 @@ def process_relational_element(elem):
         relational_op = True
         elem.backend_repr = rhs - lhs
         if hasattr(elem, "upper_bound"):
-            elem.upper_bound = 0.0
+            elem.upper_bound = np.zeros(elem.backend_repr.shape)
         if hasattr(elem, "lower_bound"):
-            elem.lower_bound = 0.0
+            elem.lower_bound = np.zeros(elem.backend_repr.shape)
 
     if relational_op and (real_lower_bound or real_upper_bound):
         msg = f"Do not use relational constraints with bounds for {elem}"

@@ -218,6 +218,8 @@ class CasadiNlpsolWarmstart(CasadiWarmstartWrapperBase, CasadiFunctionCallback):
         )
         if not self.init_var.jacobian()(self.p, []).nnz():
             sym_x0 = self.init_var(np.zeros(self.p.shape))
+        else:
+            sym_x0 = self.init_var(self.p)
 
         # create a symbolic representation of optimization result that assumes init_var
         # is actually independent of parameters (is a constant)
@@ -336,6 +338,8 @@ class CasadiRootfinderWarmstart(CasadiWarmstartWrapperBase, CasadiFunctionCallba
 
         if not self.init_var.jacobian()(self.p, []).nnz():
             sym_x0 = self.init_var(np.zeros(self.p.shape))
+        else:
+            sym_x0 = self.init_var(self.p)
 
         self.sym_solved_const_x0 = [casadi.vertcat(*self.rootfinder(sym_x0, self.p))]
         # self.sym_solved_const_x0 = self.rootfinder(sym_x0, self.p)
