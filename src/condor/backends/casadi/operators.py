@@ -67,6 +67,49 @@ def sum(x, axis=None):
     return casadi.sum(x, axis)
 
 
+def diff(x, axis=-1, n=1):
+    axis %= 2
+    return casadi.diff(x, n, axis)
+
+
+def prod(x, axis=None):
+    if axis is None:
+        out = 1
+        for i in range(x.shape[0]):
+            for j in range(x.shape[1]):
+                out *= x[i, j]
+    elif axis == 0:
+        out = ones((1, x.shape[1]))
+        for i in range(x.shape[0]):
+            out *= x[i, :]
+    elif axis == 1:
+        out = ones((x.shape[0], 1))
+        for j in range(x.shape[1]):
+            out *= x[:, j]
+
+    return out
+
+
+def isnan(x):
+    return 1 - (x >= -inf) * (x <= inf)
+
+
+def isinf(x):
+    return fabs(x) == inf
+
+
+def isfinite(x):
+    return (1 - isinf(x)) * (1 - isnan(x))
+
+
+def any(x, axis=None):
+    return sum(x != 0.0, axis=axis) > 0
+
+
+def all(x, axis=None):
+    return prod(x != 0.0, axis=axis) == 1
+
+
 def clip(val, amax, amin):
     val = casadi.if_else(val > amax, amax, val)
     val = casadi.if_else(val < amin, amin, val)
@@ -74,6 +117,7 @@ def clip(val, amax, amin):
 
 
 solve = casadi.solve
+pinv = casadi.pinv
 
 
 def concat(arrs, axis=0):

@@ -83,7 +83,18 @@ vector_norm = wrap(backend_mod.operators.vector_norm)
 jacobian = wrap(backend_mod.operators.jacobian)  #: create dense jacobian expression
 trace = wrap(backend_mod.operators.trace)
 cross = wrap(backend_mod.operators.cross)
+
 solve = wrap(backend_mod.operators.solve)
+pinv = wrap(backend_mod.operators.pinv)
 
 sum = wrap(backend_mod.operators.sum)
+prod = wrap(backend_mod.operators.prod)
+diff = wrap(backend_mod.operators.diff)
 clip = wrap(backend_mod.operators.clip)
+
+isnan = wrap(backend_mod.operators.isnan)
+isinf = wrap(backend_mod.operators.isinf)
+isfinite = wrap(backend_mod.operators.isfinite)
+
+any = wrap(backend_mod.operators.any)
+all = wrap(backend_mod.operators.all)
