@@ -75,7 +75,7 @@ class SolverSciPyBase(SolverMixin):
         rootfinder=brentq,
         max_step_size=0.0,
         separate_events=False,
-        nsteps=10_000.0,
+        nsteps=10_000,
         **kwargs,
     ):
         self.system = system
