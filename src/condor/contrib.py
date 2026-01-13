@@ -650,7 +650,7 @@ class TrajectoryAnalysis(
         xs = np.empty((t_size, model.state._count))
         include_output = include_output and model.dynamic_output._count
         if include_output:
-            dynamic_output = self.implementation.StateSystem.dynamic_output
+            dynamic_output = self.implementation.state_system.dynamic_output
             p = self._res.p
             ys = np.empty((t_size, model.dynamic_output._count))
         else:
