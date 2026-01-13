@@ -345,7 +345,10 @@ def symbol_is(a, b):
     equality_expr = a == b
     if isinstance(equality_expr, bool):
         return equality_expr
-    return equality_expr.is_one() or casadi.is_equal(a, b, int(1e10))
+    if isinstance(equality_expr, (symbol_class, casadi.DM)):
+        return equality_expr.is_one() or casadi.is_equal(a, b, int(1e10))
+    if isinstance(equality_expr, np.ndarray):
+        return equality_expr.all()
 
 
 class WrappedSymbol:
