@@ -122,7 +122,7 @@ class SolverSciPyBase(SolverMixin):
             results.e and results.e[-1].index >= len(results.t) - 1
         )
         if not immediately_after_event and np.any(
-            np.abs(gs_sign) > 0
+            np.abs(gs_sign) > 1
             # & (np.abs(new_gs) > self.int_options["atol"]/1E3)
         ):
             self.rootinfo = gs_sign
