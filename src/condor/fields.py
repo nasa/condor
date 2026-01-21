@@ -474,6 +474,9 @@ class BaseElement(
         return self.backend_repr.T
 
     def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            # short circuit using is if it's the same type of element
+            return self is other
         if isinstance(other, backend.symbol_class):
             return _generic_op(operator.eq)
         return super().__eq__(other)
