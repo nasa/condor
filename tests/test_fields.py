@@ -53,3 +53,13 @@ def test_dict_unpack():
     sys = Sys(a=1, b=-2)
     assert dict(**sys.input) == {"a": 1, "b": -2}
     assert dict(**sys.output) == {"c": -1}
+
+
+def test_output_annotation():
+    class Sys(condor.ExplicitSystem):
+        a = input()
+        b: output = a**2
+
+    sys = Sys(a=1.2)
+    assert hasattr(sys, "b")
+    assert hasattr(sys.output, "b")
