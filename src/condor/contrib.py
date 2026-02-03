@@ -626,8 +626,6 @@ class TrajectoryAnalysis(
 
         return new_self
 
-
-
     def resample(self, dt, include_output=True, include_events=True, max_deg=3):
         """Re-sample the trajectory, to a grid based on evenly-spaced points. With
         include_events=True, two points will be inserted for each internal event to get
