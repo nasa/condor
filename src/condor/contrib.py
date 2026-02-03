@@ -606,6 +606,28 @@ class TrajectoryAnalysis(
         self.bind_field(cls.state.wrap(x0))
         return self
 
+    def index(self, idx):
+        original_instance = getattr(self, "_original_instance", self)
+        if original_instance is not self:
+            return original_instance.index(idx)
+
+        model = self.__class__
+        new_self = model.__new__(model)
+        new_self._original_instance = original_instance
+        new_self.bind_field(self.parameter)
+        new_self.input_kwargs = self.input_kwargs
+
+        xs = self._res.x[[idx], :]
+        ys = self._res.y[[idx], :]
+
+        new_self.t = self._res.t[idx]
+        new_self.bind_field(model.state.wrap(xs.T))
+        new_self.bind_field(model.dynamic_output.wrap(ys.T))
+
+        return new_self
+
+
+
     def resample(self, dt, include_output=True, include_events=True, max_deg=3):
         """Re-sample the trajectory, to a grid based on evenly-spaced points. With
         include_events=True, two points will be inserted for each internal event to get
@@ -629,6 +651,7 @@ class TrajectoryAnalysis(
         new_self.implementation = self.implementation
         new_self._original_instance = original_instance
         new_self.bind_field(self.parameter)
+        new_self.input_kwargs = self.input_kwargs
 
         t_grid = np.arange(self._res.t[0], self._res.t[-1], dt)
         t_size = t_grid.size
