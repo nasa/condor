@@ -1546,15 +1546,11 @@ class Model(metaclass=ModelType):
             sym_bound_field = getattr(self, field._name)
             ran_bound_field = getattr(bound_embedded_model, field._name)
 
-            if isinstance(sym_bound_field, FieldValues):
-                sym_bound_field_dict = dc.asdict(sym_bound_field)
-
-            if isinstance(ran_bound_field, FieldValues):
-                ran_bound_field_dict = dc.asdict(ran_bound_field)
-
             if isinstance(sym_bound_field, FieldValues) and isinstance(
                 ran_bound_field, FieldValues
             ):
+                sym_bound_field_dict = dc.asdict(sym_bound_field)
+                ran_bound_field_dict = dc.asdict(ran_bound_field)
                 assignment_updates.update(
                     {
                         sym_val: ran_val
