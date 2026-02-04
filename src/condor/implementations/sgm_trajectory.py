@@ -576,6 +576,8 @@ class TrajectoryAnalysis:
                 # move this processing there, but it makes sense to only do the
                 # calculation if it's at the user level
                 res.y = yy
+        else:
+            model_instance._res = None
 
         model_instance.bind_field(
             self.model.trajectory_output.wrap(
