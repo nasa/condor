@@ -30,9 +30,9 @@ Creating Model Templates
 
  .. code-block:: none
 
-    creating wrapper with func <function Class.test at 0x7f61b8560040> on <__main__.instancemethod object at 0x7f61c7aeaff0>
-    returning self <__main__.instancemethod object at 0x7f61c7aeaff0>  with <function Class.test at 0x7f61b8560040> <__main__.Class object at 0x7f61c7aeba10> <class '__main__.Class'>
-    calling self <__main__.instancemethod object at 0x7f61c7aeaff0>  with <function Class.test at 0x7f61b8560040> <__main__.Class object at 0x7f61c7aeba10> 3.0
+    creating wrapper with func <function Class.test at 0x7f0a018e04a0> on <__main__.instancemethod object at 0x7f0a017af6e0>
+    returning self <__main__.instancemethod object at 0x7f0a017af6e0>  with <function Class.test at 0x7f0a018e04a0> <__main__.Class object at 0x7f0a017af3b0> <class '__main__.Class'>
+    calling self <__main__.instancemethod object at 0x7f0a017af6e0>  with <function Class.test at 0x7f0a018e04a0> <__main__.Class object at 0x7f0a017af3b0> 3.0
     5.0
     <Sys: x=1.2, y=3.4> SysOutput(w=array([13.]), z=array([4.84]))
     This is Ipopt version 3.14.11, running with linear solver MUMPS 5.4.1.
@@ -81,7 +81,7 @@ Creating Model Templates
     Number of equality constraint Jacobian evaluations   = 0
     Number of inequality constraint Jacobian evaluations = 0
     Number of Lagrangian Hessian evaluations             = 9
-    Total seconds in IPOPT                               = 0.004
+    Total seconds in IPOPT                               = 0.003
 
     EXIT: Optimal Solution Found.
 
@@ -253,7 +253,7 @@ Creating Model Templates
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.040 seconds)
+   **Total running time of the script:** (0 minutes 0.039 seconds)
 
 
 .. _sphx_glr_download_examples_templating.py:

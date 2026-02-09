@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fields and Elements" href="fields.html"><link rel="prev" title="Condor API" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Contrib Models - Condor 0.3.3.dev94+gb4a8198e5 documentation</title>
+        <title>Contrib Models - Condor 0.3.3.dev95+g2009c282c documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev94+gb4a8198e5 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev95+g2009c282c documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev94+gb4a8198e5 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev95+g2009c282c documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -599,9 +599,7 @@ occuring before <code class="docutils literal notranslate"><span class="pre">tf<
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.initial_condition">
 <span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">initial_condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.initial_condition" title="Link to this definition">¶</a></dt>
-<dd><p>should initial condition be x0(t, p) not just p?
-bind dynamic output, time, modal? or do point analysis there?
-but maybe still time?</p>
+<dd><p>Evaluate the initial condition x0(p)</p>
 </dd></dl>
 
 <dl class="py method">
@@ -610,6 +608,20 @@ but maybe still time?</p>
 <dd><p>Re-sample the trajectory, to a grid based on evenly-spaced points. With
 include_events=True, two points will be inserted for each internal event to get
 the state immediately before and after the event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.from_file">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.from_file" title="Link to this definition">¶</a></dt>
+<dd><p>Read TrajctoryAnalysis object to file using implementation’s <cite>load</cite> method.
+Data written using <cite>to_file</cite> can be loaded using this method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.to_file">
+<span class="sig-name descname"><span class="pre">to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.to_file" title="Link to this definition">¶</a></dt>
+<dd><p>Write TrajctoryAnalysis object to file using implementation’s <cite>save</cite> method
+Data written using this method can be loaded using <cite>from_file</cite>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -733,6 +745,8 @@ construction).</p>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.t0"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.t0</span></code></a></li>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.initial_condition"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.initial_condition()</span></code></a></li>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.resample"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.resample()</span></code></a></li>
+<li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.from_file"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.from_file()</span></code></a></li>
+<li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.to_file"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.to_file()</span></code></a></li>
 <li><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis.point_analysis"><code class="docutils literal notranslate"><span class="pre">TrajectoryAnalysis.point_analysis()</span></code></a></li>
 </ul>
 </li>
@@ -747,7 +761,7 @@ construction).</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=e2f9ba53"></script>
+</div><script src="../_static/documentation_options.js?v=204aad35"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -22,21 +22,19 @@
 Polar Transformation
 =========================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-18
+.. GENERATED FROM PYTHON SOURCE LINES 7-16
 
 As another example, if we were interested in transforming Cartesian coordinates to
 polar form:
 
 .. math::
-   \begin{align}
    p_r &= \sqrt{x^2 + y^2} \\
    p_{\theta} &= \tan^{-1}\left(\frac{y}{x}\right)
-   \end{align}
 
 We can implement this with an ``ExplicitSystem`` by declaring the inputs and outputs
 of this system as follows:
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-32
+.. GENERATED FROM PYTHON SOURCE LINES 16-30
 
 .. code-block:: Python
 
@@ -61,12 +59,12 @@ of this system as follows:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-35
+.. GENERATED FROM PYTHON SOURCE LINES 31-33
 
 In general, once you've defined any system in Condor, you can just evaluate it
 numerically by passing in numbers:
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-39
+.. GENERATED FROM PYTHON SOURCE LINES 33-37
 
 .. code-block:: Python
 
@@ -87,7 +85,7 @@ numerically by passing in numbers:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-45
+.. GENERATED FROM PYTHON SOURCE LINES 38-43
 
 The output returned by such a call is designed for inspection to the extent that we
 recommend working in an interactive session or debugger, especially when getting
@@ -95,7 +93,7 @@ accustomed to Condor features.
 
 For example, the outputs of an explicit system are accessible directly:
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-48
+.. GENERATED FROM PYTHON SOURCE LINES 43-46
 
 .. code-block:: Python
 
@@ -115,11 +113,11 @@ For example, the outputs of an explicit system are accessible directly:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-50
+.. GENERATED FROM PYTHON SOURCE LINES 47-48
 
 They can also be retrieved collectively:
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-53
+.. GENERATED FROM PYTHON SOURCE LINES 48-51
 
 .. code-block:: Python
 
@@ -139,11 +137,11 @@ They can also be retrieved collectively:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-55
+.. GENERATED FROM PYTHON SOURCE LINES 52-53
 
 You can of course call it again with different arguments
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-59
+.. GENERATED FROM PYTHON SOURCE LINES 53-57
 
 .. code-block:: Python
 
@@ -164,7 +162,7 @@ You can of course call it again with different arguments
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-75
+.. GENERATED FROM PYTHON SOURCE LINES 58-73
 
 While the *binding* of the results in a data structure is nice, the real benefit of
 constructing condor models is in calling iterative solvers. For example, we could
@@ -182,7 +180,7 @@ equations
 and letting an iterative solver find the solution :math:`x^*,y^*` satisfying both
 residual equations given parameters :math:`r` and :math:`\theta`. In Condor,
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-97
+.. GENERATED FROM PYTHON SOURCE LINES 73-95
 
 .. code-block:: Python
 
@@ -221,7 +219,7 @@ residual equations given parameters :math:`r` and :math:`\theta`. In Condor,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-104
+.. GENERATED FROM PYTHON SOURCE LINES 96-102
 
 Note also that passing the inputs (or any intermediates) to plain numeric functions
 that can handle symbolic objects as well as pure numerical objects (float or numpy
@@ -230,7 +228,7 @@ arrays) could work for this simple example. However, since we *embedded* the
 values is directly accessible if the ``bind_embedded_models`` option is ``True``
 (which it is by default), as in:
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-108
+.. GENERATED FROM PYTHON SOURCE LINES 102-106
 
 .. code-block:: Python
 
@@ -251,7 +249,7 @@ values is directly accessible if the ``bind_embedded_models`` option is ``True``
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-114
+.. GENERATED FROM PYTHON SOURCE LINES 107-112
 
 Note that this has multiple solutions due to the form of the algebraic relationship of
 the polar/rectangular transformation. The :class:`AlgebraicSystem` uses Newton's
@@ -259,7 +257,7 @@ method as the solver, so the solution that is found depends on the initial condi
 The :attr:`initializer` attribute on the :attr:`variable` field determines the initial
 position. For example,
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-120
+.. GENERATED FROM PYTHON SOURCE LINES 112-118
 
 .. code-block:: Python
 
@@ -282,12 +280,12 @@ position. For example,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 121-123
+.. GENERATED FROM PYTHON SOURCE LINES 119-121
 
 An additional :attr:`warm_start` attribute determines whether the initializer is
 over-written. Since the default is true, we can inspect the initializer values,
 
-.. GENERATED FROM PYTHON SOURCE LINES 123-126
+.. GENERATED FROM PYTHON SOURCE LINES 121-124
 
 .. code-block:: Python
 
@@ -307,11 +305,11 @@ over-written. Since the default is true, we can inspect the initializer values,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-128
+.. GENERATED FROM PYTHON SOURCE LINES 125-126
 
 and re-solve with attr:`warm_start` False
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-130
+.. GENERATED FROM PYTHON SOURCE LINES 126-128
 
 .. code-block:: Python
 
@@ -327,7 +325,7 @@ and re-solve with attr:`warm_start` False
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.028 seconds)
+   **Total running time of the script:** (0 minutes 0.026 seconds)
 
 
 .. _sphx_glr_download_tutorial_polar_transform.py:

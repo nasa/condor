@@ -22,17 +22,15 @@
 Introduction to Condor
 ======================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-29
+.. GENERATED FROM PYTHON SOURCE LINES 8-27
 
 We wanted to have an API that looks as much like a mathematical description as
 possible with as little distraction from programming cruft as possible. For example,
 an arbitrary system of equations like from Sellar [#sellar]_,
 
 .. math::
-   \begin{align}
    y_{1}&=x_{0}^{2}+x_{1}+x_{2}-0.2\,y_{2} \\
    y_{2}&=\sqrt{y_{1}}+x_{0}+x_{1}
-   \end{align}
 
 should be writable as
 
@@ -46,7 +44,7 @@ symbol must be defined. In an engineering memo, we might say "where :math:`y_1,y
 are the variables to solve and :math:`x \in \mathbb{R}^3` parameterizes the system of
 equations," which suggests the API for an algebraic system of equations as
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-42
+.. GENERATED FROM PYTHON SOURCE LINES 27-40
 
 .. code-block:: Python
 
@@ -70,12 +68,12 @@ equations," which suggests the API for an algebraic system of equations as
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-45
+.. GENERATED FROM PYTHON SOURCE LINES 41-43
 
 which can be evaluated by instantiating the model with numerical values for the
 parameters:
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-48
+.. GENERATED FROM PYTHON SOURCE LINES 43-46
 
 .. code-block:: Python
 
@@ -89,13 +87,13 @@ parameters:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-52
+.. GENERATED FROM PYTHON SOURCE LINES 47-50
 
 Once the model is finished running, the model *binds* the numerical results from the
 iterative solver to the named *element* and *field* attributes on the instance. That
 is, elements of fields accessible directly:
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-55
+.. GENERATED FROM PYTHON SOURCE LINES 50-53
 
 .. code-block:: Python
 
@@ -115,11 +113,11 @@ is, elements of fields accessible directly:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-57
+.. GENERATED FROM PYTHON SOURCE LINES 54-55
 
 Fields are bound as dataclasses
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-61
+.. GENERATED FROM PYTHON SOURCE LINES 55-59
 
 .. code-block:: Python
 
@@ -140,7 +138,7 @@ Fields are bound as dataclasses
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-77
+.. GENERATED FROM PYTHON SOURCE LINES 60-73
 
 Models can be used recursively, building up more sophisticated models by *embedding*
 models within another. However, system encapsulation is enforced so only elements from
@@ -149,16 +147,14 @@ we may wish to optimize Sellar's algebraic system of equations. Mathematically, 
 define the optimization as
 
 .. math::
-   \begin{aligned}
    \operatorname*{minimize}_{x \in \mathbb{R}^3} & \quad x_2^2+x_1+y_1+e^{-y_{2}} \\
    \text{subject to} & \quad 3.16 \le y_1 \\
    & \quad y_2 \le 24.0
-   \end{aligned}
 
 where :math:`y_1` and :math:`y_2` are the solution to the system of algebraic
 equations described above. In condor, we can write this as
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-91
+.. GENERATED FROM PYTHON SOURCE LINES 73-87
 
 .. code-block:: Python
 
@@ -183,12 +179,12 @@ equations described above. In condor, we can write this as
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-94
+.. GENERATED FROM PYTHON SOURCE LINES 88-90
 
 As with the system of algebraic equations, we can numerically solve this optimization
 problem by providing an initial value for the variables and instantiating the model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-98
+.. GENERATED FROM PYTHON SOURCE LINES 90-94
 
 .. code-block:: Python
 
@@ -257,19 +253,19 @@ problem by providing an initial value for the variables and instantiating the mo
     Number of equality constraint Jacobian evaluations   = 0
     Number of inequality constraint Jacobian evaluations = 16
     Number of Lagrangian Hessian evaluations             = 15
-    Total seconds in IPOPT                               = 0.050
+    Total seconds in IPOPT                               = 0.051
 
     EXIT: Optimal Solution Found.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-101
+.. GENERATED FROM PYTHON SOURCE LINES 95-97
 
 The resulting object will have a dot-able data structure with the bound results,
 including the embedded ``Coupling`` model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-106
+.. GENERATED FROM PYTHON SOURCE LINES 97-102
 
 .. code-block:: Python
 
@@ -293,7 +289,7 @@ including the embedded ``Coupling`` model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-112
+.. GENERATED FROM PYTHON SOURCE LINES 103-108
 
 .. rubric:: References
 

@@ -17,12 +17,10 @@ Working with trajectories
 # equations (ODEs) given by
 #
 # .. math::
-#    \begin{align}
 #    \dot{r} &= v \cos \gamma \\
 #    \dot{h} &= v \sin \gamma \\
 #    \dot{\gamma} &= (CL(\alpha) \cdot v^2 - g \cos \gamma) / v \\
 #    \dot{v} &= - CD(\alpha) \cdot v^2 - g \sin \gamma \\
-#    \end{align}
 #
 # where :math:`r` is the range, or horizontal position, :math:`h` is the altitude, or
 # vertical position, :math:`v` is the velocity,  :math:`\gamma` is the flight-path
@@ -31,10 +29,8 @@ Working with trajectories
 # gravity. Simple models of the lift and drag are given by
 #
 # .. math::
-#    \begin{align}
 #    CL(\alpha) &= CL_{\alpha} \cdot \alpha \\
 #    CD(\alpha) &= CD_0 + CD_{i,q} \cdot CL^2 \\
-#    \end{align}
 #
 # where :math:`CL_{\alpha}` is the lift slope, :math:`CD_0` is the 0-lift drag, and
 # :math:`CD_{i,q}` is the quadratic coefficient for the lift-induced drag. In Condor, we

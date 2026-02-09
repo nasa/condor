@@ -22,7 +22,7 @@
 Working with trajectories
 =========================
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-42
+.. GENERATED FROM PYTHON SOURCE LINES 8-38
 
 Condor is not intended to be an optimal control library per se, but we often end up
 working with trajectories a great deal and spent considerable effort to make modeling
@@ -36,12 +36,10 @@ angle-of-attack control. We can represent this as a system of ordinary different
 equations (ODEs) given by
 
 .. math::
-   \begin{align}
    \dot{r} &= v \cos \gamma \\
    \dot{h} &= v \sin \gamma \\
    \dot{\gamma} &= (CL(\alpha) \cdot v^2 - g \cos \gamma) / v \\
    \dot{v} &= - CD(\alpha) \cdot v^2 - g \sin \gamma \\
-   \end{align}
 
 where :math:`r` is the range, or horizontal position, :math:`h` is the altitude, or
 vertical position, :math:`v` is the velocity,  :math:`\gamma` is the flight-path
@@ -50,16 +48,14 @@ lift, :math:`CL`, and drag, :math:`CD`, and :math:`g` is the acceleration due to
 gravity. Simple models of the lift and drag are given by
 
 .. math::
-   \begin{align}
    CL(\alpha) &= CL_{\alpha} \cdot \alpha \\
    CD(\alpha) &= CD_0 + CD_{i,q} \cdot CL^2 \\
-   \end{align}
 
 where :math:`CL_{\alpha}` is the lift slope, :math:`CD_0` is the 0-lift drag, and
 :math:`CD_{i,q}` is the quadratic coefficient for the lift-induced drag. In Condor, we
 can implement this as,
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-74
+.. GENERATED FROM PYTHON SOURCE LINES 38-70
 
 .. code-block:: Python
 
@@ -102,7 +98,7 @@ can implement this as,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-84
+.. GENERATED FROM PYTHON SOURCE LINES 71-80
 
 The :attr:`modal` field is used to define elements with deferred and possibly varying
 behavior, so we use this for the angle-of-attack so we can simulate multiple
@@ -114,7 +110,7 @@ time of the model.  It is more mathematically consistent to have the initial val
 defined in the trajectory analysis, but for convenience we declared it as part of the
 ODE system.
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-90
+.. GENERATED FROM PYTHON SOURCE LINES 80-86
 
 .. code-block:: Python
 
@@ -131,14 +127,14 @@ ODE system.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-95
+.. GENERATED FROM PYTHON SOURCE LINES 87-91
 
 The fields of the original :class:`Glider` simulation are copied to the
 :class:`TrajectoryAnalysis` so the parameter values must be supplied to evaluate the
 model numerically.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-99
+.. GENERATED FROM PYTHON SOURCE LINES 91-95
 
 .. code-block:: Python
 
@@ -153,13 +149,13 @@ model numerically.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-103
+.. GENERATED FROM PYTHON SOURCE LINES 96-99
 
 In addition to binding static parameters like the other built-in models, the
 time-histories for the :attr:`state` and :attr:`dynamic_output` are bound and can be
 accessed for plotting. For example, we can plot time histories
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-115
+.. GENERATED FROM PYTHON SOURCE LINES 99-111
 
 .. code-block:: Python
 
@@ -193,11 +189,11 @@ accessed for plotting. For example, we can plot time histories
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-117
+.. GENERATED FROM PYTHON SOURCE LINES 112-113
 
 and the flight path
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-139
+.. GENERATED FROM PYTHON SOURCE LINES 113-135
 
 .. code-block:: Python
 
@@ -241,7 +237,7 @@ and the flight path
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-146
+.. GENERATED FROM PYTHON SOURCE LINES 136-142
 
 Modeling the Ground with an Event
 ---------------------------------
@@ -250,7 +246,7 @@ Notice the glider eventually flies straight through the ground. We can fix that 
 an :class:`Event` sub-model that detects the altitude zero-crossing and flips the
 descent to an ascent with a simple parametrized loss model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 146-155
+.. GENERATED FROM PYTHON SOURCE LINES 142-151
 
 .. code-block:: Python
 
@@ -270,13 +266,13 @@ descent to an ascent with a simple parametrized loss model.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 156-159
+.. GENERATED FROM PYTHON SOURCE LINES 152-155
 
 We still need to create a new :class:`TrajectoryAnalysis` since the :class:`FirstSim`
 was bound to the :class:`Glider` model at the time of creation (without the bounce
 event).
 
-.. GENERATED FROM PYTHON SOURCE LINES 159-170
+.. GENERATED FROM PYTHON SOURCE LINES 155-166
 
 .. code-block:: Python
 
@@ -305,11 +301,11 @@ event).
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f61b11d0170>
+    <matplotlib.legend.Legend object at 0x7f09ea189760>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-181
+.. GENERATED FROM PYTHON SOURCE LINES 167-177
 
 Angle of Attack Control with a Mode
 -----------------------------------
@@ -322,7 +318,7 @@ To ensure proper numerical behavior, we follow [orbital ref] and use an accumula
 state to encode the flight controller logic. In this case, we create an event to
 detect the switch from ascent to descent and perform a state update.
 
-.. GENERATED FROM PYTHON SOURCE LINES 181-189
+.. GENERATED FROM PYTHON SOURCE LINES 177-185
 
 .. code-block:: Python
 
@@ -341,12 +337,12 @@ detect the switch from ascent to descent and perform a state update.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 190-192
+.. GENERATED FROM PYTHON SOURCE LINES 186-188
 
 The mode can now be triggered by the accumulator state update, where we set
 :math:`\alpha` to a new constant parameter.
 
-.. GENERATED FROM PYTHON SOURCE LINES 192-200
+.. GENERATED FROM PYTHON SOURCE LINES 188-196
 
 .. code-block:: Python
 
@@ -365,11 +361,11 @@ The mode can now be triggered by the accumulator state update, where we set
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 201-202
+.. GENERATED FROM PYTHON SOURCE LINES 197-198
 
 The glider now travels a little further with this control behavior.
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-214
+.. GENERATED FROM PYTHON SOURCE LINES 198-210
 
 .. code-block:: Python
 
@@ -399,11 +395,11 @@ The glider now travels a little further with this control behavior.
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f61b021d970>
+    <matplotlib.legend.Legend object at 0x7f09e9d30710>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 215-235
+.. GENERATED FROM PYTHON SOURCE LINES 211-231
 
 Trajectory Outputs
 ------------------
@@ -426,7 +422,7 @@ First we'll change the control behavior to use a constant angle of attack throug
 whole trajectory to get the peak altitude to vary. We'll also make the bounce event
 terminal since we're interested in the flown range.
 
-.. GENERATED FROM PYTHON SOURCE LINES 235-244
+.. GENERATED FROM PYTHON SOURCE LINES 231-240
 
 .. code-block:: Python
 
@@ -446,13 +442,13 @@ terminal since we're interested in the flown range.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-248
+.. GENERATED FROM PYTHON SOURCE LINES 241-244
 
 We can form the area under the flight-path curve by taking the derivative
 :math:`\dot{r}` and using it to form the integrand. We can also just take the final
 max altitude state we added with the ``MaxAlt`` event and the final range.
 
-.. GENERATED FROM PYTHON SOURCE LINES 248-268
+.. GENERATED FROM PYTHON SOURCE LINES 244-264
 
 .. code-block:: Python
 
@@ -483,11 +479,11 @@ max altitude state we added with the ``MaxAlt`` event and the final range.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 269-270
+.. GENERATED FROM PYTHON SOURCE LINES 265-266
 
 Then we can compare areas with different hold angles of attack:
 
-.. GENERATED FROM PYTHON SOURCE LINES 270-280
+.. GENERATED FROM PYTHON SOURCE LINES 266-276
 
 .. code-block:: Python
 
@@ -516,7 +512,7 @@ Then we can compare areas with different hold angles of attack:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 282-287
+.. GENERATED FROM PYTHON SOURCE LINES 278-283
 
 .. code-block:: Python
 
@@ -539,11 +535,11 @@ Then we can compare areas with different hold angles of attack:
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f61b020aff0>
+    <matplotlib.legend.Legend object at 0x7f09e9d1b500>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 288-295
+.. GENERATED FROM PYTHON SOURCE LINES 284-291
 
 Embedding
 ---------
@@ -553,7 +549,7 @@ within other Condor models, for example to maximize a combination of the peak he
 and flown range.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-324
+.. GENERATED FROM PYTHON SOURCE LINES 291-320
 
 .. code-block:: Python
 
@@ -604,7 +600,7 @@ and flown range.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 325-331
+.. GENERATED FROM PYTHON SOURCE LINES 321-327
 
 We can store the iteration history using :attr:`iter_callback` option on
 :class:`OptimizationProblem`, pointing it to the method of a class to store the
@@ -613,7 +609,7 @@ optimization problem itself, we use
 :meth:`~condor.contrib.OptimizationProblem.from_values` to reconstruct the internals
 of the analysis with the simulation outputs bound to the ``sim`` attribute.
 
-.. GENERATED FROM PYTHON SOURCE LINES 331-359
+.. GENERATED FROM PYTHON SOURCE LINES 327-355
 
 .. code-block:: Python
 
@@ -666,7 +662,7 @@ of the analysis with the simulation outputs bound to the ``sim`` attribute.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 27.019 seconds)
+   **Total running time of the script:** (0 minutes 26.667 seconds)
 
 
 .. _sphx_glr_download_tutorial_trajectory.py:

@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.926** total execution time for 3 files **from howto**:
+**00:00.929** total execution time for 3 files **from howto**:
 
 .. container::
 
@@ -36,8 +36,8 @@ Computation times
      - 00:00.413
      - 0.0
    * - :ref:`sphx_glr_howto_table_basics.py` (``table_basics.py``)
-     - 00:00.375
+     - 00:00.367
      - 0.0
    * - :ref:`sphx_glr_howto_parallel_processing.py` (``parallel_processing.py``)
-     - 00:00.137
+     - 00:00.150
      - 0.0

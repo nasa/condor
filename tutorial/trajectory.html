@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="How-To Guide" href="../howto/index.html"><link rel="prev" title="Polar Transformation" href="polar_transform.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Working with trajectories - Condor 0.3.3.dev94+gb4a8198e5 documentation</title>
+        <title>Working with trajectories - Condor 0.3.3.dev95+g2009c282c documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev94+gb4a8198e5 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev95+g2009c282c documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev94+gb4a8198e5 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev95+g2009c282c documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -289,12 +289,10 @@ angle-of-attack control. We can represent this as a system of ordinary different
 equations (ODEs) given by</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-\dot{r} &amp;= v \cos \gamma \\
+\[\begin{split}\dot{r} &amp;= v \cos \gamma \\
 \dot{h} &amp;= v \sin \gamma \\
 \dot{\gamma} &amp;= (CL(\alpha) \cdot v^2 - g \cos \gamma) / v \\
-\dot{v} &amp;= - CD(\alpha) \cdot v^2 - g \sin \gamma \\
-\end{align}\end{split}\]</div>
+\dot{v} &amp;= - CD(\alpha) \cdot v^2 - g \sin \gamma \\\end{split}\]</div>
 </div>
 <p>where <span class="math notranslate nohighlight">\(r\)</span> is the range, or horizontal position, <span class="math notranslate nohighlight">\(h\)</span> is the altitude, or
 vertical position, <span class="math notranslate nohighlight">\(v\)</span> is the velocity,  <span class="math notranslate nohighlight">\(\gamma\)</span> is the flight-path
@@ -303,10 +301,8 @@ lift, <span class="math notranslate nohighlight">\(CL\)</span>, and drag, <span 
 gravity. Simple models of the lift and drag are given by</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-CL(\alpha) &amp;= CL_{\alpha} \cdot \alpha \\
-CD(\alpha) &amp;= CD_0 + CD_{i,q} \cdot CL^2 \\
-\end{align}\end{split}\]</div>
+\[\begin{split}CL(\alpha) &amp;= CL_{\alpha} \cdot \alpha \\
+CD(\alpha) &amp;= CD_0 + CD_{i,q} \cdot CL^2 \\\end{split}\]</div>
 </div>
 <p>where <span class="math notranslate nohighlight">\(CL_{\alpha}\)</span> is the lift slope, <span class="math notranslate nohighlight">\(CD_0\)</span> is the 0-lift drag, and
 <span class="math notranslate nohighlight">\(CD_{i,q}\)</span> is the quadratic coefficient for the lift-induced drag. In Condor, we
@@ -432,7 +428,7 @@ event).</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;original sim&quot;</span><span class="p">,</span> <span class="s2">&quot;with bounce&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_003.png" srcset="../_images/sphx_glr_trajectory_003.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f61b11d0170&gt;
+<img src="../_images/sphx_glr_trajectory_003.png" srcset="../_images/sphx_glr_trajectory_003.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f09ea189760&gt;
 </pre></div>
 </div>
 </section>
@@ -469,7 +465,7 @@ detect the switch from ascent to descent and perform a state update.</p>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;original sim&quot;</span><span class="p">,</span> <span class="s2">&quot;with bounce&quot;</span><span class="p">,</span> <span class="s2">&quot;gradual descent&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_004.png" srcset="../_images/sphx_glr_trajectory_004.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f61b021d970&gt;
+<img src="../_images/sphx_glr_trajectory_004.png" srcset="../_images/sphx_glr_trajectory_004.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f09e9d30710&gt;
 </pre></div>
 </div>
 </section>
@@ -540,7 +536,7 @@ alpha = -0.5 deg: [214.23621474]
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\alpha$&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">results</span></a><span class="p">])</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_005.png" srcset="../_images/sphx_glr_trajectory_005.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f61b020aff0&gt;
+<img src="../_images/sphx_glr_trajectory_005.png" srcset="../_images/sphx_glr_trajectory_005.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f09e9d1b500&gt;
 </pre></div>
 </div>
 </section>
@@ -617,7 +613,7 @@ of the analysis with the simulation outputs bound to the <code class="docutils l
 <img src="../_images/sphx_glr_trajectory_007.png" srcset="../_images/sphx_glr_trajectory_007.png" alt="max altitude iterations" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(-3.0, 45.0)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 27.019 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 26.667 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-trajectory-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c798b650080c665ed6e5e3ce733d7166/trajectory.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">trajectory.ipynb</span></code></a></p>
@@ -705,7 +701,7 @@ of the analysis with the simulation outputs bound to the <code class="docutils l
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=e2f9ba53"></script>
+</div><script src="../_static/documentation_options.js?v=204aad35"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

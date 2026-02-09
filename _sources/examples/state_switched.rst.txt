@@ -21,7 +21,7 @@
 Optimal Transfer With State Trigger
 ===================================
 
-.. GENERATED FROM PYTHON SOURCE LINES 5-70
+.. GENERATED FROM PYTHON SOURCE LINES 5-72
 
 .. code-block:: Python
 
@@ -46,6 +46,8 @@ Optimal Transfer With State Trigger
         p2 = parameter()
 
         u = modal()
+
+        dynamic_output.u2 = u**2
 
         dot[x] = A @ x + B * u
 
@@ -97,7 +99,7 @@ Optimal Transfer With State Trigger
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-94
+.. GENERATED FROM PYTHON SOURCE LINES 73-96
 
 .. code-block:: Python
 
@@ -134,26 +136,26 @@ Optimal Transfer With State Trigger
 
     /opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
-    time to run: 0.4286923370000295
-    [-2.99999595] [1.00000548]
+    time to run: 0.21970373800002108
+    [-3.00000001] [1.]
      message: Optimization terminated successfully.
      success: True
       status: 0
-         fun: 1.5883506769291672e-11
+         fun: 1.5050883330650572e-17
            x: [-3.000e+00  1.000e+00]
-         nit: 11
-         jac: [ 7.526e-07  5.483e-06]
-        nfev: 24
-        njev: 24
+         nit: 6
+         jac: [-3.168e-09  1.554e-14]
+        nfev: 14
+        njev: 14
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-96
+.. GENERATED FROM PYTHON SOURCE LINES 97-98
 
 Original result:
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-99
+.. GENERATED FROM PYTHON SOURCE LINES 98-101
 
 .. code-block:: Python
 
@@ -180,15 +182,22 @@ Original result:
          :srcset: /examples/images/sphx_glr_state_switched_002.png
          :class: sphx-glr-multi-img
 
+    *
+
+      .. image-sg:: /examples/images/sphx_glr_state_switched_003.png
+         :alt: Transfer TransferDynamicOutput.u2
+         :srcset: /examples/images/sphx_glr_state_switched_003.png
+         :class: sphx-glr-multi-img
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-101
+
+.. GENERATED FROM PYTHON SOURCE LINES 102-103
 
 Comparing resampling results
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-109
+.. GENERATED FROM PYTHON SOURCE LINES 103-111
 
 .. code-block:: Python
 
@@ -207,11 +216,11 @@ Comparing resampling results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-111
+.. GENERATED FROM PYTHON SOURCE LINES 112-113
 
 plotting utilities
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-130
+.. GENERATED FROM PYTHON SOURCE LINES 113-132
 
 .. code-block:: Python
 
@@ -241,42 +250,16 @@ plotting utilities
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 131-132
+.. GENERATED FROM PYTHON SOURCE LINES 133-134
 
 In this case, we actually up-sampled
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-134
+.. GENERATED FROM PYTHON SOURCE LINES 134-136
 
 .. code-block:: Python
 
     axes = make_figure()
 
-
-
-
-.. image-sg:: /examples/images/sphx_glr_state_switched_003.png
-   :alt: state switched
-   :srcset: /examples/images/sphx_glr_state_switched_003.png
-   :class: sphx-glr-single-img
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 135-136
-
-looking near the first event trigger, we see the impact of re-sampling without events
-
-.. GENERATED FROM PYTHON SOURCE LINES 136-142
-
-.. code-block:: Python
-
-
-    axes = make_figure()
-    plt.xlim(3.1, 3.8)
-    axes[0].set_ylim(-4, -2)
-    axes[1].set_ylim(3.15, 3.525)
-    plt.show()
 
 
 
@@ -289,10 +272,36 @@ looking near the first event trigger, we see the impact of re-sampling without e
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 137-138
+
+looking near the first event trigger, we see the impact of re-sampling without events
+
+.. GENERATED FROM PYTHON SOURCE LINES 138-144
+
+.. code-block:: Python
+
+
+    axes = make_figure()
+    plt.xlim(3.1, 3.8)
+    axes[0].set_ylim(-4, -2)
+    axes[1].set_ylim(3.15, 3.525)
+    plt.show()
+
+
+
+.. image-sg:: /examples/images/sphx_glr_state_switched_005.png
+   :alt: state switched
+   :srcset: /examples/images/sphx_glr_state_switched_005.png
+   :class: sphx-glr-single-img
+
+
+
+
+
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.995 seconds)
+   **Total running time of the script:** (0 minutes 0.880 seconds)
 
 
 .. _sphx_glr_download_examples_state_switched.py:

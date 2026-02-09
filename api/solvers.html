@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Topics" href="../topics/index.html"><link rel="prev" title="Backend Modules" href="backend.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Solvers - Condor 0.3.3.dev94+gb4a8198e5 documentation</title>
+        <title>Solvers - Condor 0.3.3.dev95+g2009c282c documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev94+gb4a8198e5 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev95+g2009c282c documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev94+gb4a8198e5 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev95+g2009c282c documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -277,11 +277,11 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="condor.solvers.sweeping_gradient_method.SolverSciPyBase">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">condor.solvers.sweeping_gradient_method.</span></span><span class="sig-name descname"><span class="pre">SolverSciPyBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_min_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_step_after_event</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootfinder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">brentq&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separate_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.solvers.sweeping_gradient_method.SolverSciPyBase" title="Link to this definition">¶</a></dt>
-<dd><p>Baseclass for using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.ode.html#scipy.integrate.ode" title="(in SciPy v1.16.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.integrate.ode</span></code></a> with advanced features.</p>
+<dd><p>Baseclass for using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.ode.html#scipy.integrate.ode" title="(in SciPy v1.17.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.integrate.ode</span></code></a> with advanced features.</p>
 <p>Wraps standard scipy integrator class with functionality for  event handling,
 multiple-segment time generators, and adaptive minumum number of steps.
 Options are generally a pass through to the underlying integrator (e.g.,
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.ode.html#scipy.integrate.ode" title="(in SciPy v1.16.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.integrate.ode</span></code></a>, <code class="docutils literal notranslate"><span class="pre">dopri5</span></code> or <code class="docutils literal notranslate"><span class="pre">dop853</span></code> currently). This
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.ode.html#scipy.integrate.ode" title="(in SciPy v1.17.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.integrate.ode</span></code></a>, <code class="docutils literal notranslate"><span class="pre">dopri5</span></code> or <code class="docutils literal notranslate"><span class="pre">dop853</span></code> currently). This
 implementation performs an event function zero-crossing check at each time-step;
 when an event function zero-crossing is detected, a rootfinding and event update
 operation is performed. Special options on the <code class="docutils literal notranslate"><span class="pre">sweeping_gradient_method</span></code>
@@ -294,7 +294,7 @@ solver which are described below.</p>
 max_step</p></li>
 <li><p><strong>separate_events</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Coincident events get stored separately in the ODE result object</p></li>
 <li><p><strong>reset_step_after_event</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – After an event occurs, reset the step size to the first_step</p></li>
-<li><p><strong>rootfinder</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">callable</span></code>) – Interval root-finder function. Defaults to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html#scipy.optimize.brentq" title="(in SciPy v1.16.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimize.brentq()</span></code></a>, and
+<li><p><strong>rootfinder</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">callable</span></code>) – Interval root-finder function. Defaults to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html#scipy.optimize.brentq" title="(in SciPy v1.17.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.optimize.brentq()</span></code></a>, and
 must take the equivalent positional arguments, <code class="docutils literal notranslate"><span class="pre">f</span></code>, <code class="docutils literal notranslate"><span class="pre">a</span></code>, and <code class="docutils literal notranslate"><span class="pre">b</span></code>, and
 return <code class="docutils literal notranslate"><span class="pre">x0</span></code>, where <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">x0</span> <span class="pre">&lt;=</span> <span class="pre">b</span></code> and <code class="docutils literal notranslate"><span class="pre">f(x0)</span></code> is the zero.</p>
 <p>Keyword arguments with a <code class="docutils literal notranslate"><span class="pre">rootfinder_</span></code> prefix are passed to the rootfinder
@@ -389,7 +389,7 @@ method during the rootfinding step.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=e2f9ba53"></script>
+</div><script src="../_static/documentation_options.js?v=204aad35"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

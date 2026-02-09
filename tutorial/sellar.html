@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Polar Transformation" href="polar_transform.html"><link rel="prev" title="Tutorials" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Introduction to Condor - Condor 0.3.3.dev94+gb4a8198e5 documentation</title>
+        <title>Introduction to Condor - Condor 0.3.3.dev95+g2009c282c documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev94+gb4a8198e5 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev95+g2009c282c documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev94+gb4a8198e5 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev95+g2009c282c documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -284,10 +284,8 @@ possible with as little distraction from programming cruft as possible. For exam
 an arbitrary system of equations like from Sellar <a class="footnote-reference brackets" href="#sellar" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>,</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-y_{1}&amp;=x_{0}^{2}+x_{1}+x_{2}-0.2\,y_{2} \\
-y_{2}&amp;=\sqrt{y_{1}}+x_{0}+x_{1}
-\end{align}\end{split}\]</div>
+\[\begin{split}y_{1}&amp;=x_{0}^{2}+x_{1}+x_{2}-0.2\,y_{2} \\
+y_{2}&amp;=\sqrt{y_{1}}+x_{0}+x_{1}\end{split}\]</div>
 </div>
 <p>should be writable as</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">y1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">y2</span>
@@ -338,11 +336,9 @@ we may wish to optimize Sellar’s algebraic system of equations. Mathematically
 define the optimization as</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{aligned}
-\operatorname*{minimize}_{x \in \mathbb{R}^3} &amp; \quad x_2^2+x_1+y_1+e^{-y_{2}} \\
+\[\begin{split}\operatorname*{minimize}_{x \in \mathbb{R}^3} &amp; \quad x_2^2+x_1+y_1+e^{-y_{2}} \\
 \text{subject to} &amp; \quad 3.16 \le y_1 \\
-&amp; \quad y_2 \le 24.0
-\end{aligned}\end{split}\]</div>
+&amp; \quad y_2 \le 24.0\end{split}\]</div>
 </div>
 <p>where <span class="math notranslate nohighlight">\(y_1\)</span> and <span class="math notranslate nohighlight">\(y_2\)</span> are the solution to the system of algebraic
 equations described above. In condor, we can write this as</p>
@@ -418,7 +414,7 @@ Number of inequality constraint evaluations          = 16
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 16
 Number of Lagrangian Hessian evaluations             = 15
-Total seconds in IPOPT                               = 0.050
+Total seconds in IPOPT                               = 0.051
 
 EXIT: Optimal Solution Found.
 </pre></div>
@@ -508,7 +504,7 @@ Concurrent Subspace Optimization for Multidisciplinary System Design,” 1996.
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=e2f9ba53"></script>
+</div><script src="../_static/documentation_options.js?v=204aad35"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

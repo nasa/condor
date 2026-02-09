@@ -207,8 +207,8 @@ desired final position :math:`(0, 0)`.
 
  .. code-block:: none
 
-    [ 0.   0.   0.   0.   0.   0.   0.   0.   0.   0.   0.   0.  -8.5 -8.5
-     -8.5 -8.5 -8.5 -8.5 -8.5 -8.5]
+    [ 0.   0.   0.   0.   0.   0.   0.   0.   0.  -8.5 -8.5 -8.5 -8.5 -8.5
+     -8.5]
 
 
 
@@ -285,12 +285,12 @@ error over transfer and final times.
 
     /opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
-    time to run: 0.3793663590000165
+    time to run: 0.2848675849999722
     [2.99999968] [2.99999216]
      message: Optimization terminated successfully.
      success: True
       status: 0
-         fun: 3.008671708973335e-11
+         fun: 3.008671643193588e-11
            x: [ 3.000e+00  3.000e+00]
          nit: 12
          jac: [-4.048e-06 -7.514e-06]
@@ -389,7 +389,7 @@ Another version of the transfer analysis excluding the switch event.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.749 seconds)
+   **Total running time of the script:** (0 minutes 0.650 seconds)
 
 
 .. _sphx_glr_download_examples_time_switch.py:
