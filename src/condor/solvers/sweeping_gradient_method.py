@@ -713,7 +713,7 @@ class ResultBase:
     def load(cls, filename):
         data = dict(np.load(filename))
         data["e"] = [
-            Root(index=ei, rootsfound=er)
+            Root(index=int(ei), rootsfound=er)
             for ei, er in zip(data.pop("e_idxs"), data.pop("e_roots"))
         ]
         return cls(system=None, **data)

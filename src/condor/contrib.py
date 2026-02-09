@@ -759,6 +759,17 @@ class TrajectoryAnalysis(
         return new_self
 
     @classmethod
+    def load_result(cls, filename):
+        implementation = cls.__class__.get_implementation_class(cls)
+        return implementation.load(cls, filename)
+
+    def save_result(self, filename):
+        if (implementation := getattr(self, "implementation", None)) is None:
+            cls = self.__class__
+            implementation = cls.__class__.get_implementation_class(cls)
+        return implementation.save(model_instance=self, filename=filename)
+
+    @classmethod
     def point_analysis(cls, t, *args, **kwargs):
         """Compute the state rates for the ODESystems that were bound (at the time of
         construction).

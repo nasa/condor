@@ -546,6 +546,36 @@ class TrajectoryAnalysis:
             jacobian_of=jacobian_of,  # same as self.callback, currently
         )
 
+    @staticmethod
+    def bind_result(model_instance, res):
+        model_instance._res = res
+        model_instance.t = np.array(res.t)
+
+        model_instance.bind_field(
+            model_instance.__class__.state.wrap(
+                res.x.T,
+            )
+        )
+        model_instance.bind_field(
+            model_instance.__class__.dynamic_output.wrap(
+                res.y.T,
+            )
+        )
+
+    @staticmethod
+    def load(model, filename):
+        model_instance = model.__new__(model)
+        TrajectoryAnalysis.bind_result(model_instance, sgm.Result.load(filename))
+        model_instance.bind_field(model.parameter.wrap(model_instance._res.p))
+        model_instance.input_kwargs = model_instance.parameter.asdict()
+        return model_instance
+
+    def save(self=None, model_instance=None, filename=None):
+        if self is None:
+            self = TrajectoryAnalysis  # noqa: PLW0642
+        if model_instance._res is not None:
+            model_instance._res.save(filename)
+
     def __call__(self, model_instance):
         self.callback.from_implementation = True
         self.args = model_instance.parameter.flatten()
@@ -554,28 +584,16 @@ class TrajectoryAnalysis:
 
         if hasattr(self.trajectory_analysis_nom, "res"):
             res = self.trajectory_analysis_nom.res
-            model_instance._res = res
-            model_instance.t = np.array(res.t)
-
-            model_instance.bind_field(
-                self.model.state.wrap(
-                    res.x.T,
-                )
-            )
+            yy = np.empty((res.t.size, self.model.dynamic_output._count))
             if self.dynamic_output_func:
-                yy = np.empty((model_instance.t.size, self.model.dynamic_output._count))
                 for idx, (t, x) in enumerate(zip(res.t, res.x)):
                     yy[idx, None] = self.dynamic_output_func(res.p, t, x).T
-                model_instance.bind_field(
-                    self.model.dynamic_output.wrap(
-                        yy.T,
-                    )
-                )
                 # sweepyng solver doesn't compute outputs at every time step anymore to
                 # reduce run-time of solver. Could tell res the size of the output to
                 # move this processing there, but it makes sense to only do the
                 # calculation if it's at the user level
-                res.y = yy
+            res.y = yy
+            self.bind_result(model_instance, res)
         else:
             model_instance._res = None
 
