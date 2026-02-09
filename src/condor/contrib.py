@@ -759,11 +759,17 @@ class TrajectoryAnalysis(
         return new_self
 
     @classmethod
-    def load_result(cls, filename):
+    def from_file(cls, filename):
+        """Read TrajctoryAnalysis object to file using implementation's `load` method.
+        Data written using `to_file` can be loaded using this method.
+        """
         implementation = cls.__class__.get_implementation_class(cls)
         return implementation.load(cls, filename)
 
-    def save_result(self, filename):
+    def to_file(self, filename):
+        """Write TrajctoryAnalysis object to file using implementation's `save` method
+        Data written using this method can be loaded using `from_file`.
+        """
         if (implementation := getattr(self, "implementation", None)) is None:
             cls = self.__class__
             implementation = cls.__class__.get_implementation_class(cls)
