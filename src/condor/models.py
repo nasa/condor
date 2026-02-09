@@ -10,6 +10,7 @@ from condor.fields import (
     BaseElement,
     Direction,
     Field,
+    FieldValues,
     FreeField,
     MatchedField,
     WithDefaultField,
@@ -1543,20 +1544,26 @@ class Model(metaclass=ModelType):
         assignment_updates = {}
         for field in self._meta.output_fields:
             sym_bound_field = getattr(self, field._name)
-            sym_bound_field_dict = dc.asdict(sym_bound_field)
-
             ran_bound_field = getattr(bound_embedded_model, field._name)
-            ran_bound_field_dict = dc.asdict(ran_bound_field)
 
-            assignment_updates.update(
-                {
-                    sym_val: ran_val
-                    for sym_val, ran_val in zip(
-                        sym_bound_field_dict.values(), ran_bound_field_dict.values()
-                    )
-                    if isinstance(sym_val, backend.symbol_class)
-                }
-            )
+            if isinstance(sym_bound_field, FieldValues) and isinstance(
+                ran_bound_field, FieldValues
+            ):
+                sym_bound_field_dict = dc.asdict(sym_bound_field)
+                ran_bound_field_dict = dc.asdict(ran_bound_field)
+                assignment_updates.update(
+                    {
+                        sym_val: ran_val
+                        for sym_val, ran_val in zip(
+                            sym_bound_field_dict.values(), ran_bound_field_dict.values()
+                        )
+                        if isinstance(sym_val, backend.symbol_class)
+                    }
+                )
+            elif isinstance(sym_bound_field, backend.symbol_class):
+                assignment_updates.update({sym_bound_field: ran_bound_field})
+            else:
+                raise ValueError
         return assignment_updates
 
 

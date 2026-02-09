@@ -21,10 +21,8 @@ Sellar [sellar]_ introduces an arbitrary system of algebraic equations to
 represent coupling in multi-disciplinary analysis,
 
 .. math::
-   \begin{align}
    y_{1}&=x_{0}^{2}+x_{1}+x_{2}-0.2\,y_{2} \\
-   y_{2}&=\sqrt{y_{1}}+x_{0}+x_{1}
-   \end{align}
+   y_{2}&=\sqrt{y_{1}}+x_{0}+x_{1} \\
 
 should be writable as
 

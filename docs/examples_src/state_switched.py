@@ -24,6 +24,8 @@ class DblInt(co.ODESystem):
 
     u = modal()
 
+    dynamic_output.u2 = u**2
+
     dot[x] = A @ x + B * u
 
 
