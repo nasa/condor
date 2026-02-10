@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fields and Elements" href="fields.html"><link rel="prev" title="Condor API" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Contrib Models - Condor 0.3.3.dev95+g2009c282c documentation</title>
+        <title>Contrib Models - Condor 0.3.3.dev96+g6b46f81da documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev95+g2009c282c documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev96+g6b46f81da documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev95+g2009c282c documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev96+g6b46f81da documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -282,12 +282,10 @@
 <p>Outputs are functions solely of inputs:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-y_1 &amp;=&amp; f_1(x_1, x_2, \dots, x_n) \\
+\[\begin{split}y_1 &amp;=&amp; f_1(x_1, x_2, \dots, x_n) \\
 y_2 &amp;=&amp; f_2(x_1, x_2, \dots, x_n) \\
 &amp; \vdots &amp; \\
-y_m &amp;=&amp; f_m(x_1, x_2, \dots, x_n)
-\end{align}\end{split}\]</div>
+y_m &amp;=&amp; f_m(x_1, x_2, \dots, x_n)\end{split}\]</div>
 </div>
 <p>where each <span class="math notranslate nohighlight">\(y_i\)</span> is a name-assigned expression on the <code class="docutils literal notranslate"><span class="pre">output</span></code> field and
 each <span class="math notranslate nohighlight">\(x_i\)</span> is an element drawn from the <code class="docutils literal notranslate"><span class="pre">input</span></code> field.</p>
@@ -346,22 +344,18 @@ conditions. Use (-1, 0) to specify the not-a-knot boundary conditions
 is driven to a solution at <span class="math notranslate nohighlight">\(x^*\)</span>:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-R_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &amp;=&amp; 0 \\
+\[\begin{split}R_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &amp;=&amp; 0 \\
 \vdots &amp; &amp; \\
-R_n(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &amp;=&amp; 0
-\end{align}\end{split}\]</div>
+R_n(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &amp;=&amp; 0\end{split}\]</div>
 </div>
 <p>Condor solves for the <span class="math notranslate nohighlight">\(x_i^*\)</span> and can automatically calculate the derivatives
 <span class="math notranslate nohighlight">\(\frac{dx_i}{du_j}\)</span> as needed for parent solvers, etc.</p>
 <p>Additional explicit outputs at the solution may also be included:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-y_1 &amp;=&amp; f_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) \\
+\[\begin{split}y_1 &amp;=&amp; f_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) \\
 &amp; \vdots &amp; \\
-y_l &amp;=&amp; f_m(x_1, \dots, u_m, x_1^*, \dots, x_n^*)
-\end{align}\end{split}\]</div>
+y_l &amp;=&amp; f_m(x_1, \dots, u_m, x_1^*, \dots, x_n^*)\end{split}\]</div>
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="condor.contrib.AlgebraicSystem.parameter">
@@ -462,10 +456,8 @@ declaration.</p>
 optionally additional outputs <span class="math notranslate nohighlight">\(y\)</span>:</p>
 <div class="math-wrapper docutils container">
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-\dot{x}_i &amp;= f(t,x_1,\ldots,x_n,p_1,\ldots,p_m) \\
-y_i &amp;= h(t,x_1,\ldots,x_n,p_1,\ldots,p_m)
-\end{align}\end{split}\]</div>
+\[\begin{split}\dot{x}_i &amp;= f(t,x_1,\ldots,x_n,p_1,\ldots,p_m) \\
+y_i &amp;= h(t,x_1,\ldots,x_n,p_1,\ldots,p_m)\end{split}\]</div>
 </div>
 <p>where <span class="math notranslate nohighlight">\(x\)</span> are the states fully defining the evolution of the system, <span class="math notranslate nohighlight">\(t\)</span>
 is the independent variable (typically time, but may be anything), and <span class="math notranslate nohighlight">\(p\)</span> are
@@ -761,7 +753,7 @@ construction).</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=204aad35"></script>
+</div><script src="../_static/documentation_options.js?v=a732c74b"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

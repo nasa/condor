@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**01:08.108** total execution time for 14 files **from all galleries**:
+**00:59.233** total execution time for 14 files **from all galleries**:
 
 .. container::
 
@@ -33,43 +33,43 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_tutorial_trajectory.py` (``tutorial_src/trajectory.py``)
-     - 00:26.667
+     - 00:23.024
      - 0.0
    * - :ref:`sphx_glr_examples_sp_lqr.py` (``examples_src/sp_lqr.py``)
-     - 00:22.771
+     - 00:19.208
      - 0.0
    * - :ref:`sphx_glr_examples_orbital_1.py` (``examples_src/orbital_1.py``)
-     - 00:12.619
+     - 00:11.769
      - 0.0
    * - :ref:`sphx_glr_examples_ct_lqr.py` (``examples_src/ct_lqr.py``)
-     - 00:03.175
+     - 00:02.725
      - 0.0
    * - :ref:`sphx_glr_examples_state_switched.py` (``examples_src/state_switched.py``)
-     - 00:00.880
+     - 00:00.730
      - 0.0
    * - :ref:`sphx_glr_examples_time_switch.py` (``examples_src/time_switch.py``)
-     - 00:00.650
+     - 00:00.553
      - 0.0
    * - :ref:`sphx_glr_howto_configuration.py` (``howto_src/configuration.py``)
-     - 00:00.413
+     - 00:00.333
      - 0.0
    * - :ref:`sphx_glr_howto_table_basics.py` (``howto_src/table_basics.py``)
-     - 00:00.367
+     - 00:00.310
      - 0.0
    * - :ref:`sphx_glr_examples_rosenbrock.py` (``examples_src/rosenbrock.py``)
-     - 00:00.200
-     - 0.0
-   * - :ref:`sphx_glr_howto_parallel_processing.py` (``howto_src/parallel_processing.py``)
-     - 00:00.150
+     - 00:00.185
      - 0.0
    * - :ref:`sphx_glr_tutorial_sellar.py` (``tutorial_src/sellar.py``)
-     - 00:00.147
+     - 00:00.168
+     - 0.0
+   * - :ref:`sphx_glr_howto_parallel_processing.py` (``howto_src/parallel_processing.py``)
+     - 00:00.167
      - 0.0
    * - :ref:`sphx_glr_examples_templating.py` (``examples_src/templating.py``)
-     - 00:00.039
+     - 00:00.034
      - 0.0
    * - :ref:`sphx_glr_tutorial_polar_transform.py` (``tutorial_src/polar_transform.py``)
-     - 00:00.026
+     - 00:00.023
      - 0.0
    * - :ref:`sphx_glr_examples_custom_model_template_with_metaprogramming.py` (``examples_src/custom_model_template_with_metaprogramming.py``)
      - 00:00.004

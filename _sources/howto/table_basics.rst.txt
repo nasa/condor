@@ -120,7 +120,7 @@ have shape ``(n_x1, n_x2, ...)``
 
  .. code-block:: none
 
-    TableLookupOutput(y1=array([7.62482755]))
+    TableLookupOutput(y1=array([7.68031019]))
 
 
 
@@ -177,7 +177,7 @@ independently, or a single custom value can be broadcast to each input (and boun
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.367 seconds)
+   **Total running time of the script:** (0 minutes 0.310 seconds)
 
 
 .. _sphx_glr_download_howto_table_basics.py:
