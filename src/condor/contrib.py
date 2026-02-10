@@ -659,9 +659,10 @@ class TrajectoryAnalysis(
         return new_self
 
     def resample(self, dt, include_output=True, include_events=True, max_deg=3):
-        """Re-sample the trajectory, to a grid based on evenly-spaced points. With
-        include_events=True, two points will be inserted for each internal event to get
-        the state immediately before and after the event."""
+        """Re-sample the trajectory to a grid based on evenly-spaced points of size dt.
+        With include_events=True, two points will be inserted for each internal event to
+        get the state immediately before and after the event. with dt <= 0., get the
+        original (with solver's adaptive step-size) back"""
         original_instance = getattr(self, "_original_instance", self)
 
         if original_instance is not self:
