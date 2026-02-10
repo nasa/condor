@@ -52,12 +52,10 @@ class ExplicitSystem(ModelTemplate):
     Outputs are functions solely of inputs:
 
     .. math::
-       \begin{align}
        y_1 &=& f_1(x_1, x_2, \dots, x_n) \\
        y_2 &=& f_2(x_1, x_2, \dots, x_n) \\
        & \vdots & \\
        y_m &=& f_m(x_1, x_2, \dots, x_n)
-       \end{align}
 
     where each :math:`y_i` is a name-assigned expression on the ``output`` field and
     each :math:`x_i` is an element drawn from the ``input`` field.
@@ -88,11 +86,9 @@ class AlgebraicSystem(ModelTemplate, model_metaclass=AlgebraicSystemType):
     is driven to a solution at :math:`x^*`:
 
     .. math::
-       \begin{align}
        R_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &=& 0 \\
        \vdots & & \\
        R_n(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &=& 0
-       \end{align}
 
     Condor solves for the :math:`x_i^*` and can automatically calculate the derivatives
     :math:`\frac{dx_i}{du_j}` as needed for parent solvers, etc.
@@ -100,11 +96,9 @@ class AlgebraicSystem(ModelTemplate, model_metaclass=AlgebraicSystemType):
     Additional explicit outputs at the solution may also be included:
 
     .. math::
-        \begin{align}
         y_1 &=& f_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) \\
         & \vdots & \\
         y_l &=& f_m(x_1, \dots, u_m, x_1^*, \dots, x_n^*)
-        \end{align}
 
     """
 
@@ -276,10 +270,8 @@ class ODESystem(ModelTemplate):
     optionally additional outputs :math:`y`:
 
     .. math::
-       \begin{align}
        \dot{x}_i &= f(t,x_1,\ldots,x_n,p_1,\ldots,p_m) \\
        y_i &= h(t,x_1,\ldots,x_n,p_1,\ldots,p_m)
-       \end{align}
 
     where :math:`x` are the states fully defining the evolution of the system, :math:`t`
     is the independent variable (typically time, but may be anything), and :math:`p` are
