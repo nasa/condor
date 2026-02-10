@@ -678,7 +678,8 @@ class TrajectoryAnalysis(
             return self
 
         new_self = model.__new__(model)
-        new_self.implementation = self.implementation
+        if (self_implementation := getattr(self, "implementation", None)) is not None:
+            new_self.implementation = self.implementation
         new_self._original_instance = original_instance
         new_self.bind_field(self.parameter)
         new_self.input_kwargs = self.input_kwargs
@@ -701,7 +702,11 @@ class TrajectoryAnalysis(
 
         state_interp = ResultInterpolant(self._res, max_deg=max_deg)
         xs = np.empty((t_size, model.state._count))
-        include_output = include_output and model.dynamic_output._count
+        include_output = (
+            include_output
+            and model.dynamic_output._count
+            and self_implementation is not None
+        )
         if include_output:
             dynamic_output = self.implementation.state_system.dynamic_output
             p = self._res.p
