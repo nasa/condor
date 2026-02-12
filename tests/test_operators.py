@@ -295,6 +295,19 @@ def test_jacobian():
     assert np.all(np.isclose(np.kron(np.eye(3), A), jj.z))
 
 
+def test_vector_norm_diff_at_0():
+    class MyNorm(co.ExplicitSystem):
+        x = input(shape=3)
+        output.y = ops.vector_norm(x)
+        output.z = ops.jacobian(y, x)
+
+    out0 = MyNorm(np.zeros(3))
+    assert np.all(out0.z == 0.0)
+
+    out1 = MyNorm([1, 0, 0])
+    assert np.all(out1.z == out1.x)
+
+
 def test_cross():
     class MyCross(co.ExplicitSystem):
         x = input(shape=3)
