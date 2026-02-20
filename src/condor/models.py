@@ -78,18 +78,6 @@ class BaseModelMetaData:
         return new_meta
 
 
-class AnnotationsDict(dict):
-    def __init__(self, *args, cls_dict, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.cls_dict = cls_dict
-
-    def __setitem__(self, attr_name, attr_val):
-        if isinstance(attr_val, AssignedField):
-            setattr(attr_val, attr_name, self.cls_dict[attr_name])
-
-        super().__setitem__(attr_name, attr_val)
-
-
 # appears in __new__ as attrs
 class BaseCondorClassDict(dict):
     def __init__(
@@ -121,10 +109,6 @@ class BaseCondorClassDict(dict):
         return super().__getitem__(*args, **kwargs)
 
     def __setitem__(self, attr_name, attr_val):
-        if attr_name == "__annotations__" and len(attr_val) == 0:
-            super().__setitem__(attr_name, AnnotationsDict(cls_dict=self))
-            return
-
         if (
             self.meta.template is not None
             and attr_name in type(self.meta.template).reserved_words
