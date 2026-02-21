@@ -82,6 +82,7 @@ class SolverSciPyBase(SolverMixin):
         self.adaptive_min_steps = adaptive_min_steps
         self.separate_events = separate_events
         self.reset_step_after_event = reset_step_after_event
+        self.max_step_size = max_step_size
         self.solver = scipy_ode(
             system.dots,
         )
@@ -99,6 +100,10 @@ class SolverSciPyBase(SolverMixin):
                 self.root_options[k.replace("rootfinder_", "")] = v
             else:
                 self.int_options[k] = v
+
+        self.do_update_integrator_options = (
+            adaptive_min_steps or not reset_step_after_event or max_step_size == 0.0
+        )
 
         self.solver.set_integrator(**self.int_options)
         self.solver.set_solout(self.solout)
@@ -122,7 +127,7 @@ class SolverSciPyBase(SolverMixin):
             results.e and results.e[-1].index >= len(results.t) - 1
         )
         if not immediately_after_event and np.any(
-            np.abs(gs_sign) > 0
+            np.abs(gs_sign) > 1
             # & (np.abs(new_gs) > self.int_options["atol"]/1E3)
         ):
             self.rootinfo = gs_sign
@@ -230,7 +235,10 @@ class SolverSciPyBase(SolverMixin):
                     dict(max_step=np.abs(next_t - last_t) / self.adaptive_min_steps)
                 )
 
-            if self.adaptive_min_steps or not self.reset_step_after_event:
+            if self.max_step_size == 0.0:
+                self.int_options["max_step"] = np.abs(next_t - last_t)
+
+            if self.do_update_integrator_options:
                 self.solver.set_integrator(**self.int_options)
                 self.solver.set_solout(self.solout)
 
@@ -705,7 +713,7 @@ class ResultBase:
     def load(cls, filename):
         data = dict(np.load(filename))
         data["e"] = [
-            Root(index=ei, rootsfound=er)
+            Root(index=int(ei), rootsfound=er)
             for ei, er in zip(data.pop("e_idxs"), data.pop("e_roots"))
         ]
         return cls(system=None, **data)

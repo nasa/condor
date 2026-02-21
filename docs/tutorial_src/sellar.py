@@ -10,10 +10,8 @@ Introduction to Condor
 # an arbitrary system of equations like from Sellar [#sellar]_,
 #
 # .. math::
-#    \begin{align}
 #    y_{1}&=x_{0}^{2}+x_{1}+x_{2}-0.2\,y_{2} \\
 #    y_{2}&=\sqrt{y_{1}}+x_{0}+x_{1}
-#    \end{align}
 #
 # should be writable as
 #
@@ -66,11 +64,9 @@ print(coupling.variable)
 # define the optimization as
 #
 # .. math::
-#    \begin{aligned}
 #    \operatorname*{minimize}_{x \in \mathbb{R}^3} & \quad x_2^2+x_1+y_1+e^{-y_{2}} \\
 #    \text{subject to} & \quad 3.16 \le y_1 \\
 #    & \quad y_2 \le 24.0
-#    \end{aligned}
 #
 # where :math:`y_1` and :math:`y_2` are the solution to the system of algebraic
 # equations described above. In condor, we can write this as

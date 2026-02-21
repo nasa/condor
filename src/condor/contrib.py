@@ -594,6 +594,7 @@ class TrajectoryAnalysis(
 
     @classmethod
     def initial_condition(cls, *args, **kwargs):
+        """Evaluate the initial condition x0(p)"""
         """should initial condition be x0(t, p) not just p?
         bind dynamic output, time, modal? or do point analysis there?
         but maybe still time?
@@ -605,6 +606,57 @@ class TrajectoryAnalysis(
         x0 = cls._meta.initial_condition_function(p)
         self.bind_field(cls.state.wrap(x0))
         return self
+
+    def __getitem__(self, idx):
+        """index the time history in the time dimension; applies the index to the numpy
+        array(s) of the underlying result data so it supports indexing by integer, list
+        of integer, or slice. Only applies to numerically resolved TrajectoryAnalysis
+        """
+        index_symbolic_msg = "Cannot index symbolic TrajectoryAnalysis"
+        if self._res is None:
+            raise ValueError(index_symbolic_msg)
+
+        model = self.__class__
+        new_self = model.__new__(model)
+        new_self.bind_field(self.parameter)
+        new_self.input_kwargs = self.input_kwargs
+
+        original_instance = getattr(self, "_original_instance", self)
+        # allow chained indexing, but attach original_instance so re-sample occurs on
+        # original
+        new_self._original_instance = original_instance
+
+        if isinstance(idx, int):
+            idx = [idx]
+
+        xs = self._res.x[idx, :]
+        ys = self._res.y[idx, :]
+
+        if isinstance(idx, slice):
+            e_check_idx = np.arange(self._res.t.size)[idx]
+            if not e_check_idx.size:
+                malformed_slice_msg = "malformed slice"
+                raise ValueError(malformed_slice_msg)
+        else:
+            e_check_idx = np.array(idx)
+
+        es = []
+        for e in self._res.e:
+            if (new_index := np.where(e.index == e_check_idx)[0]).size == 1:
+                es.append(Root(new_index[0], e.rootsfound))
+            elif new_index.size > 1:
+                raise ValueError
+        [e for e in self._res.e if e.index in e_check_idx]
+
+        new_self.t = self._res.t[idx]
+        new_self.bind_field(model.state.wrap(xs.T))
+        new_self.bind_field(model.dynamic_output.wrap(ys.T))
+
+        new_self._res = Result(
+            t=new_self.t, x=xs, y=ys, e=es, p=self._res.p, system=self._res.system
+        )
+
+        return new_self
 
     def resample(self, dt, include_output=True, include_events=True, max_deg=3):
         """Re-sample the trajectory, to a grid based on evenly-spaced points. With
@@ -629,6 +681,7 @@ class TrajectoryAnalysis(
         new_self.implementation = self.implementation
         new_self._original_instance = original_instance
         new_self.bind_field(self.parameter)
+        new_self.input_kwargs = self.input_kwargs
 
         t_grid = np.arange(self._res.t[0], self._res.t[-1], dt)
         t_size = t_grid.size
@@ -650,7 +703,7 @@ class TrajectoryAnalysis(
         xs = np.empty((t_size, model.state._count))
         include_output = include_output and model.dynamic_output._count
         if include_output:
-            dynamic_output = self.implementation.StateSystem.dynamic_output
+            dynamic_output = self.implementation.state_system.dynamic_output
             p = self._res.p
             ys = np.empty((t_size, model.dynamic_output._count))
         else:
@@ -658,7 +711,7 @@ class TrajectoryAnalysis(
 
         idx0 = 0
 
-        for x_interp_segment in state_interp:
+        for event, x_interp_segment in zip(self._res.e, state_interp):
             t_select = np.where(
                 (new_self.t >= x_interp_segment.t0)
                 & (new_self.t <= x_interp_segment.t1)
@@ -671,7 +724,7 @@ class TrajectoryAnalysis(
                 xs[idx0, :] = self._res.x[x_interp_segment.idx0]
                 if include_output:
                     ys[idx0, :] = self._res.y[x_interp_segment.idx0]
-                es.append(Root(idx0, None))
+                es.append(Root(idx0, event.rootsfound))
                 idx0 += 1
                 idx1 += 1
                 # TODO figure out how to get root info
@@ -693,7 +746,7 @@ class TrajectoryAnalysis(
             xs[idx1 + 1, :] = self._res.x[x_interp_segment.idx1]
             if include_output:
                 ys[idx1 + 1, :] = self._res.y[x_interp_segment.idx1]
-            es.append(Root(idx1, None))
+            es.append(Root(idx1, self._res.e[-1].rootsfound))
 
         new_self.bind_field(model.state.wrap(xs.T))
 
@@ -704,6 +757,23 @@ class TrajectoryAnalysis(
             t=new_self.t, x=xs, y=ys, e=es, p=self._res.p, system=self._res.system
         )
         return new_self
+
+    @classmethod
+    def from_file(cls, filename):
+        """Read TrajctoryAnalysis object to file using implementation's `load` method.
+        Data written using `to_file` can be loaded using this method.
+        """
+        implementation = cls.__class__.get_implementation_class(cls)
+        return implementation.load(cls, filename)
+
+    def to_file(self, filename):
+        """Write TrajctoryAnalysis object to file using implementation's `save` method
+        Data written using this method can be loaded using `from_file`.
+        """
+        if (implementation := getattr(self, "implementation", None)) is None:
+            cls = self.__class__
+            implementation = cls.__class__.get_implementation_class(cls)
+        return implementation.save(model_instance=self, filename=filename)
 
     @classmethod
     def point_analysis(cls, t, *args, **kwargs):
