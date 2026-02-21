@@ -45,6 +45,8 @@ class BaseModelMetaData:
     backend_repr_elements: dict = dc.field(default_factory=backend.SymbolCompatibleDict)
     options: object = None
 
+    inherited_methods: dict = dc.field(default_factory=dict)
+
     # assembly/component can also get children/parent
     # assembly/components get inheritance rules? yes, submodels don't need it -- only
     # attach to primary. or should events be assemblies to re-use them? probably not --
@@ -1220,6 +1222,7 @@ class ModelType(BaseModelType):
                         new_cls,
                     )
                     setattr(new_cls, key, val.__get__(None, new_cls))
+                    new_cls._meta.inherited_methods[key] = val.__get__(None, new_cls)
 
                 if not isinstance(val, Field) and callable(val):
                     log.debug(
@@ -1230,6 +1233,7 @@ class ModelType(BaseModelType):
                         new_cls,
                     )
                     setattr(new_cls, key, val)
+                    new_cls._meta.inherited_methods[key] = val
 
     @classmethod
     def process_placeholders(cls, new_cls, attrs, placeholder_field=None):
