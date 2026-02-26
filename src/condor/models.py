@@ -46,6 +46,8 @@ class BaseModelMetaData:
     backend_repr_elements: dict = dc.field(default_factory=backend.SymbolCompatibleDict)
     options: object = None
 
+    inherited_methods: dict = dc.field(default_factory=dict)
+
     # assembly/component can also get children/parent
     # assembly/components get inheritance rules? yes, submodels don't need it -- only
     # attach to primary. or should events be assemblies to re-use them? probably not --
@@ -79,18 +81,6 @@ class BaseModelMetaData:
         return new_meta
 
 
-class AnnotationsDict(dict):
-    def __init__(self, *args, cls_dict, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.cls_dict = cls_dict
-
-    def __setitem__(self, attr_name, attr_val):
-        if isinstance(attr_val, AssignedField):
-            setattr(attr_val, attr_name, self.cls_dict[attr_name])
-
-        super().__setitem__(attr_name, attr_val)
-
-
 # appears in __new__ as attrs
 class BaseCondorClassDict(dict):
     def __init__(
@@ -122,10 +112,6 @@ class BaseCondorClassDict(dict):
         return super().__getitem__(*args, **kwargs)
 
     def __setitem__(self, attr_name, attr_val):
-        if attr_name == "__annotations__" and len(attr_val) == 0:
-            super().__setitem__(attr_name, AnnotationsDict(cls_dict=self))
-            return
-
         if (
             self.meta.template is not None
             and attr_name in type(self.meta.template).reserved_words
@@ -1237,6 +1223,7 @@ class ModelType(BaseModelType):
                         new_cls,
                     )
                     setattr(new_cls, key, val.__get__(None, new_cls))
+                    new_cls._meta.inherited_methods[key] = val.__get__(None, new_cls)
 
                 if not isinstance(val, Field) and callable(val):
                     log.debug(
@@ -1247,6 +1234,7 @@ class ModelType(BaseModelType):
                         new_cls,
                     )
                     setattr(new_cls, key, val)
+                    new_cls._meta.inherited_methods[key] = val
 
     @classmethod
     def process_placeholders(cls, new_cls, attrs, placeholder_field=None):
