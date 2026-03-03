@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:40.299** total execution time for 8 files **from examples**:
+**00:41.494** total execution time for 8 files **from examples**:
 
 .. container::
 
@@ -33,22 +33,22 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_sp_lqr.py` (``sp_lqr.py``)
-     - 00:22.629
+     - 00:23.350
      - 0.0
    * - :ref:`sphx_glr_examples_orbital_1.py` (``orbital_1.py``)
-     - 00:12.726
+     - 00:13.042
      - 0.0
    * - :ref:`sphx_glr_examples_ct_lqr.py` (``ct_lqr.py``)
-     - 00:03.132
+     - 00:03.233
      - 0.0
    * - :ref:`sphx_glr_examples_state_switched.py` (``state_switched.py``)
-     - 00:00.909
+     - 00:00.936
      - 0.0
    * - :ref:`sphx_glr_examples_time_switch.py` (``time_switch.py``)
-     - 00:00.655
+     - 00:00.680
      - 0.0
    * - :ref:`sphx_glr_examples_rosenbrock.py` (``rosenbrock.py``)
-     - 00:00.203
+     - 00:00.206
      - 0.0
    * - :ref:`sphx_glr_examples_templating.py` (``templating.py``)
      - 00:00.041

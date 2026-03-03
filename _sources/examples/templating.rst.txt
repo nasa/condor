@@ -30,9 +30,9 @@ Creating Model Templates
 
  .. code-block:: none
 
-    creating wrapper with func <function Class.test at 0x7f800b2b4360> on <__main__.instancemethod object at 0x7f800b1b7f80>
-    returning self <__main__.instancemethod object at 0x7f800b1b7f80>  with <function Class.test at 0x7f800b2b4360> <__main__.Class object at 0x7f800b1b50a0> <class '__main__.Class'>
-    calling self <__main__.instancemethod object at 0x7f800b1b7f80>  with <function Class.test at 0x7f800b2b4360> <__main__.Class object at 0x7f800b1b50a0> 3.0
+    creating wrapper with func <function Class.test at 0x7fe13c90c9a0> on <__main__.instancemethod object at 0x7fe13ca1b680>
+    returning self <__main__.instancemethod object at 0x7fe13ca1b680>  with <function Class.test at 0x7fe13c90c9a0> <__main__.Class object at 0x7fe13ca1b140> <class '__main__.Class'>
+    calling self <__main__.instancemethod object at 0x7fe13ca1b680>  with <function Class.test at 0x7fe13c90c9a0> <__main__.Class object at 0x7fe13ca1b140> 3.0
     5.0
     <Sys: x=1.2, y=3.4> SysOutput(w=array([13.]), z=array([4.84]))
     This is Ipopt version 3.14.11, running with linear solver MUMPS 5.4.1.

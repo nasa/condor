@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Solvers" href="solvers.html"><link rel="prev" title="Implementations" href="implementations.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Backend Modules - Condor 0.3.3.dev97+g51bb1f0f7 documentation</title>
+        <title>Backend Modules - Condor 0.3.3.dev98+g296bdf273 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev97+g51bb1f0f7 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev98+g296bdf273 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev97+g51bb1f0f7 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev98+g296bdf273 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -319,6 +319,31 @@ operators</p>
 <dd><p>wrap function <code class="xref py py-attr docutils literal notranslate"><span class="pre">f</span></code> to allow elements, symbolic, and numeric values to be
 usable</p>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="condor.backend.operators.diag">
+<span class="sig-prename descclassname"><span class="pre">condor.backend.operators.</span></span><span class="sig-name descname"><span class="pre">diag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.backend.operators.diag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="condor.backend.operators.concat">
+<span class="sig-prename descclassname"><span class="pre">condor.backend.operators.</span></span><span class="sig-name descname"><span class="pre">concat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.backend.operators.concat" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="condor.backend.operators.unstack">
+<span class="sig-prename descclassname"><span class="pre">condor.backend.operators.</span></span><span class="sig-name descname"><span class="pre">unstack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.backend.operators.unstack" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="condor.backend.operators.fabs">
+<span class="sig-prename descclassname"><span class="pre">condor.backend.operators.</span></span><span class="sig-name descname"><span class="pre">fabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.backend.operators.fabs" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="condor.backend.operators.sign">
+<span class="sig-prename descclassname"><span class="pre">condor.backend.operators.</span></span><span class="sig-name descname"><span class="pre">sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.backend.operators.sign" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="condor.backend.operators.min">
@@ -1061,6 +1086,11 @@ with jacobian, etc. operators</p>
 <li><a class="reference internal" href="#condor.backend.operators.nan"><code class="docutils literal notranslate"><span class="pre">nan</span></code></a></li>
 <li><a class="reference internal" href="#condor.backend.operators.if_else"><code class="docutils literal notranslate"><span class="pre">if_else()</span></code></a></li>
 <li><a class="reference internal" href="#condor.backend.operators.wrap"><code class="docutils literal notranslate"><span class="pre">wrap()</span></code></a></li>
+<li><a class="reference internal" href="#condor.backend.operators.diag"><code class="docutils literal notranslate"><span class="pre">diag()</span></code></a></li>
+<li><a class="reference internal" href="#condor.backend.operators.concat"><code class="docutils literal notranslate"><span class="pre">concat()</span></code></a></li>
+<li><a class="reference internal" href="#condor.backend.operators.unstack"><code class="docutils literal notranslate"><span class="pre">unstack()</span></code></a></li>
+<li><a class="reference internal" href="#condor.backend.operators.fabs"><code class="docutils literal notranslate"><span class="pre">fabs()</span></code></a></li>
+<li><a class="reference internal" href="#condor.backend.operators.sign"><code class="docutils literal notranslate"><span class="pre">sign()</span></code></a></li>
 <li><a class="reference internal" href="#condor.backend.operators.min"><code class="docutils literal notranslate"><span class="pre">min()</span></code></a></li>
 <li><a class="reference internal" href="#condor.backend.operators.max"><code class="docutils literal notranslate"><span class="pre">max()</span></code></a></li>
 <li><a class="reference internal" href="#condor.backend.operators.mod"><code class="docutils literal notranslate"><span class="pre">mod()</span></code></a></li>
@@ -1160,7 +1190,7 @@ with jacobian, etc. operators</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=d5f3213c"></script>
+</div><script src="../_static/documentation_options.js?v=f4757b10"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

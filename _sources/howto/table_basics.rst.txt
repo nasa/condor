@@ -177,7 +177,7 @@ independently, or a single custom value can be broadcast to each input (and boun
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.366 seconds)
+   **Total running time of the script:** (0 minutes 0.380 seconds)
 
 
 .. _sphx_glr_download_howto_table_basics.py:
