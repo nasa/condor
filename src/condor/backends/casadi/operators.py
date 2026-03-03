@@ -52,13 +52,23 @@ def diag(v, k=0):
     return casadi.diag(v)
 
 
-def vector_norm(x, ord=2):
+def vector_norm_undiff_at_0(x, ord=2):
     if ord == 2:
         return casadi.norm_2(x)
     if ord == 1:
         return casadi.norm_1(x)
     if ord == inf:
         return casadi.norm_inf(x)
+
+
+def vector_norm(x, ord=2):
+    norm = vector_norm_undiff_at_0(x, ord=ord)
+    return casadi.if_else(
+        norm > 0.0,
+        norm,
+        0.0,
+        True,
+    )
 
 
 def sum(x, axis=None):

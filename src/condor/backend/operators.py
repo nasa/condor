@@ -36,15 +36,6 @@ substitute = backend_mod.operators.substitute
 zeros = backend_mod.operators.zeros
 eye = backend_mod.operators.eye
 ones = backend_mod.operators.ones
-diag = backend_mod.operators.diag  # possibly not part of array API?
-
-# "manipulation functions"
-concat = backend_mod.operators.concat
-# stack?
-unstack = backend_mod.operators.unstack
-
-fabs = backend_mod.operators.fabs
-sign = backend_mod.operators.sign
 
 
 # "element-wise functions"
@@ -59,6 +50,16 @@ def wrap(f):
 
     return _
 
+
+diag = wrap(backend_mod.operators.diag)
+
+# "manipulation functions"
+concat = wrap(backend_mod.operators.concat)
+# stack?
+unstack = wrap(backend_mod.operators.unstack)
+
+fabs = wrap(backend_mod.operators.fabs)
+sign = wrap(backend_mod.operators.sign)
 
 min = wrap(backend_mod.operators.min)  #: array API standard for min
 max = wrap(backend_mod.operators.max)
