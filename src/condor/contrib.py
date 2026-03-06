@@ -679,12 +679,9 @@ class TrajectoryAnalysis(
         t_size = t_grid.size
         if include_events:
             t_size += 2 * len(self._res.e) - 1
-            es = []
         elif t_grid[-1] + dt == self._res.t[-1]:
             t_size += 1
 
-        if not include_events:
-            es = None
         # self.t = np.empty((t_size,))
         new_self.t = np.ones((t_size,)) * -1  # all self.t should go to new_self.t
         new_self.t[: t_grid.size] = t_grid
@@ -699,10 +696,11 @@ class TrajectoryAnalysis(
             p = self._res.p
             ys = np.empty((t_size, model.dynamic_output._count))
         else:
-            ys = None
+            ys = []
 
         idx0 = 0
 
+        es = []
         for event, x_interp_segment in zip(self._res.e, state_interp):
             t_select = np.where(
                 (new_self.t >= x_interp_segment.t0)

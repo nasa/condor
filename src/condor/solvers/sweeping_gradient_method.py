@@ -693,10 +693,7 @@ class ResultBase:
             e=self.e[key],
         )
 
-    def save(
-        self,
-        filename,
-    ):
+    def save(self, filename):
         e_idxs = [e.index for e in self.e]
         e_roots = [e.rootsfound for e in self.e]
         np.savez(

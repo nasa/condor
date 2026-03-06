@@ -380,3 +380,24 @@ def test_mode_param_to_mode(odesys):
         tf = 10
 
     Sim(wn=10, u_hold=0.8)
+
+
+def test_file_io(odesys, tmp_path):
+    class Ev(odesys.Event):
+        function = x
+
+    class Sim(odesys.TrajectoryAnalysis):
+        tf = 10
+
+    sim = Sim(wn=1)
+
+    fp1 = tmp_path / "sim.npz"
+    sim.to_file(fp1)
+    sim_from_file = Sim.from_file(fp1)
+    assert len(sim_from_file._res.e) > 1
+
+    fp2 = tmp_path / "sim_no_events.npz"
+    sim_resamp = sim.resample(0.1, include_events=False)
+    sim_resamp.to_file(fp2)
+    sim_resamp_from_file = Sim.from_file(fp2)
+    assert len(sim_resamp_from_file._res.e) == 0
