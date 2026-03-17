@@ -682,8 +682,7 @@ class TrajectoryAnalysis(
         elif t_grid[-1] + dt == self._res.t[-1]:
             t_size += 1
 
-        # self.t = np.empty((t_size,))
-        new_self.t = np.ones((t_size,)) * -1  # all self.t should go to new_self.t
+        new_self.t = np.full((t_size,), -1)
         new_self.t[: t_grid.size] = t_grid
         if t_grid[-1] + dt == self._res.t[-1]:
             new_self.t[t_grid.size] = t_grid[-1] + dt
@@ -720,7 +719,9 @@ class TrajectoryAnalysis(
                 # TODO figure out how to get root info
 
             ts_to_call = new_self.t[idx0:idx1]
-            xs[idx0:idx1] = x_interp_segment(ts_to_call)
+            xs[idx0:idx1] = np.atleast_2d(x_interp_segment(ts_to_call)).reshape(
+                len(ts_to_call), -1
+            )
             if include_output:
                 for idx, t, x in zip(range(idx0, idx1), ts_to_call, xs[idx0:idx1]):
                     ys[idx, None] = dynamic_output(p, t, x).T

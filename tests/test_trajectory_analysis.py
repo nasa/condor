@@ -332,7 +332,7 @@ def test_state_switched():
 
 
 @pytest.fixture
-def odesys():
+def mass_spring_ode():
     class MassSpring(co.ODESystem):
         x = state()
         v = state()
@@ -345,48 +345,48 @@ def odesys():
     return MassSpring
 
 
-def test_event_state_to_mode(odesys):
+def test_event_state_to_mode(mass_spring_ode):
     # verify you can reference a state created in an event from a mode
 
-    class Event(odesys.Event):
+    class Event(mass_spring_ode.Event):
         function = v
         count = state(name="count_")
         update[count] = count + 1
 
-    class Mode(odesys.Mode):
+    class Mode(mass_spring_ode.Mode):
         condition = Event.count > 0
         action[u] = 1
 
-    class Sim(odesys.TrajectoryAnalysis):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
         total_count = trajectory_output(Event.count)
         tf = 10
 
     print(Sim(wn=10).total_count)
 
 
-def test_mode_param_to_mode(odesys):
+def test_mode_param_to_mode(mass_spring_ode):
     # verify you can reference a parameter created in a mode in another mode
 
-    class ModeA(odesys.Mode):
+    class ModeA(mass_spring_ode.Mode):
         condition = v > 0
         u_hold = parameter()
         action[u] = u_hold
 
-    class ModeB(odesys.Mode):
+    class ModeB(mass_spring_ode.Mode):
         condition = 1
         action[u] = ModeA.u_hold
 
-    class Sim(odesys.TrajectoryAnalysis):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
         tf = 10
 
     Sim(wn=10, u_hold=0.8)
 
 
-def test_file_io(odesys, tmp_path):
-    class Ev(odesys.Event):
+def test_file_io(mass_spring_ode, tmp_path):
+    class Ev(mass_spring_ode.Event):
         function = x
 
-    class Sim(odesys.TrajectoryAnalysis):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
         tf = 10
 
     sim = Sim(wn=1)
@@ -401,3 +401,20 @@ def test_file_io(odesys, tmp_path):
     sim_resamp.to_file(fp2)
     sim_resamp_from_file = Sim.from_file(fp2)
     assert len(sim_resamp_from_file._res.e) == 0
+
+
+def test_resample_single_state():
+    class ODE(co.ODESystem):
+        a = parameter()
+        x = state()
+        dot[x] = -a * x
+
+    class Sim(ODE.TrajectoryAnalysis):
+        tf = 10
+        initial[x] = 1
+
+    sim = Sim(a=0.5)
+
+    sim_resamp = sim.resample(1.0, include_events=False)
+    assert sim_resamp._res.x.shape == (11, 1)
+    assert sim_resamp._res.e == []
