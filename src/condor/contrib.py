@@ -678,11 +678,11 @@ class TrajectoryAnalysis(
         t_grid = np.arange(self._res.t[0], self._res.t[-1], dt)
         t_size = t_grid.size
         if include_events:
-            t_size += 2 * len(self._res.e) - 1
+            t_size += 2 * len(self._res.e)
         elif t_grid[-1] + dt == self._res.t[-1]:
             t_size += 1
 
-        new_self.t = np.full((t_size,), -1)
+        new_self.t = np.full((t_size,), -1, dtype=float)
         new_self.t[: t_grid.size] = t_grid
         if t_grid[-1] + dt == self._res.t[-1]:
             new_self.t[t_grid.size] = t_grid[-1] + dt

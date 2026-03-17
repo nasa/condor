@@ -342,6 +342,8 @@ def mass_spring_ode():
         dot[v] = u - wn**2 * x
         initial[x] = 1
 
+        dynamic_output.specific_energy = 0.5 * wn**2 * x**2 + 0.5 * v**2
+
     return MassSpring
 
 
@@ -360,8 +362,6 @@ def test_event_state_to_mode(mass_spring_ode):
     class Sim(mass_spring_ode.TrajectoryAnalysis):
         total_count = trajectory_output(Event.count)
         tf = 10
-
-    print(Sim(wn=10).total_count)
 
 
 def test_mode_param_to_mode(mass_spring_ode):
@@ -410,7 +410,7 @@ def test_resample_single_state():
         dot[x] = -a * x
 
     class Sim(ODE.TrajectoryAnalysis):
-        tf = 10
+        tf = 10.0  # TODO test with tf not on resample grid
         initial[x] = 1
 
     sim = Sim(a=0.5)
@@ -418,3 +418,21 @@ def test_resample_single_state():
     sim_resamp = sim.resample(1.0, include_events=False)
     assert sim_resamp._res.x.shape == (11, 1)
     assert sim_resamp._res.e == []
+
+    sim_resamp_events = sim.resample(1.0, include_events=True)
+    assert sim_resamp_events._res.x.shape == (14, 1)
+    assert len(sim_resamp_events._res.e) == 2
+
+
+@pytest.mark.parametrize("e_time", [0.5, 0.55])  # on/off grid
+def test_resample_with_events(mass_spring_ode, e_time):
+    class Ev(mass_spring_ode.Event):
+        at_time = e_time
+
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 1
+
+    sim = Sim(wn=10)
+
+    sim_resamp = sim.resample(0.1, include_events=True)
+    assert len(sim_resamp._res.e) == 3
