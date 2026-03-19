@@ -380,3 +380,104 @@ def test_mode_param_to_mode(odesys):
         tf = 10
 
     Sim(wn=10, u_hold=0.8)
+
+
+class TestResampleSingleState:
+    """Tests for TrajectoryAnalysis.resample with single-state ODEs (issue #70)."""
+
+    def test_resample_single_state(self):
+        """Exact reproduction of issue #70: single-state ODE resample crashes."""
+        class ODE(co.ODESystem):
+            a = parameter()
+            x = state()
+            dot[x] = -a * x
+
+        class Traj(ODE.TrajectoryAnalysis):
+            tf = 10
+            initial[x] = 1
+
+        sim = Traj(a=0.5)
+        resampled = sim.resample(1.0, include_events=False)
+        assert resampled.t.size > 0
+
+    def test_resample_single_state_values(self):
+        """Verify resampled values follow exponential decay."""
+        class ODE(co.ODESystem):
+            a = parameter()
+            x = state()
+            dot[x] = -a * x
+
+        class Traj(ODE.TrajectoryAnalysis):
+            tf = 10
+            initial[x] = 1
+
+        sim = Traj(a=0.5)
+        resampled = sim.resample(1.0, include_events=False)
+        expected = np.exp(-0.5 * resampled.t)
+        np.testing.assert_allclose(resampled.x, expected, rtol=1e-4)
+
+    def test_resample_single_state_no_output(self):
+        class ODE(co.ODESystem):
+            a = parameter()
+            x = state()
+            dot[x] = -a * x
+
+        class Traj(ODE.TrajectoryAnalysis):
+            tf = 10
+            initial[x] = 1
+
+        sim = Traj(a=0.5)
+        resampled = sim.resample(1.0, include_events=False, include_output=False)
+        assert resampled.t.size > 0
+
+    def test_resample_single_state_with_dynamic_output(self):
+        """Single-state ODE with dynamic_output — tests .T reshape path."""
+        class ODE(co.ODESystem):
+            a = parameter()
+            x = state()
+            dynamic_output.velocity = -a * x
+            dot[x] = -a * x
+
+        class Traj(ODE.TrajectoryAnalysis):
+            tf = 10
+            initial[x] = 1
+            vel = dynamic_output.velocity
+
+        sim = Traj(a=0.5)
+        resampled = sim.resample(1.0, include_events=False, include_output=True)
+        assert resampled.t.size > 0
+
+    def test_resample_single_state_small_dt(self):
+        """Smaller dt produces more points."""
+        class ODE(co.ODESystem):
+            a = parameter()
+            x = state()
+            dot[x] = -a * x
+
+        class Traj(ODE.TrajectoryAnalysis):
+            tf = 10
+            initial[x] = 1
+
+        sim = Traj(a=0.5)
+        r1 = sim.resample(2.0, include_events=False)
+        r2 = sim.resample(0.5, include_events=False)
+        assert r2.t.size > r1.t.size
+
+    def test_resample_multi_state_still_works(self):
+        """Ensure multi-state ODEs are not broken by the ndim fix."""
+        class ODE(co.ODESystem):
+            x = state()
+            v = state()
+            dot[x] = v
+            dot[v] = -x
+
+        class Traj(ODE.TrajectoryAnalysis):
+            tf = 10
+            initial[x] = 1
+            initial[v] = 0
+
+        sim = Traj()
+        resampled = sim.resample(0.5, include_events=False)
+        assert resampled.t.size > 0
+        # Simple harmonic oscillator: x(t) = cos(t)
+        np.testing.assert_allclose(resampled.x, np.cos(resampled.t), rtol=1e-3)
