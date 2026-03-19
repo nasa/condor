@@ -722,7 +722,10 @@ class TrajectoryAnalysis(
                 # TODO figure out how to get root info
 
             ts_to_call = new_self.t[idx0:idx1]
-            xs[idx0:idx1] = x_interp_segment(ts_to_call)
+            interp_result = x_interp_segment(ts_to_call)
+            if interp_result.ndim == 1:
+                interp_result = interp_result[:, np.newaxis]
+            xs[idx0:idx1] = interp_result
             if include_output:
                 for idx, t, x in zip(range(idx0, idx1), ts_to_call, xs[idx0:idx1]):
                     ys[idx, None] = dynamic_output(p, t, x).T
