@@ -446,6 +446,9 @@ class TestResampleSingleState:
         sim = Traj(a=0.5)
         resampled = sim.resample(1.0, include_events=False, include_output=True)
         assert resampled.t.size > 0
+        # velocity = -a * x = -0.5 * exp(-0.5 * t)
+        expected_vel = -0.5 * np.exp(-0.5 * resampled.t)
+        np.testing.assert_allclose(resampled.velocity, expected_vel, rtol=1e-4)
 
     def test_resample_single_state_small_dt(self):
         """Smaller dt produces more points."""
