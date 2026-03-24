@@ -696,7 +696,7 @@ class ResultBase:
     def save(self, filename):
         e_idxs = [e.index for e in self.e]
         e_roots = [e.rootsfound for e in self.e]
-        np.savez(
+        np.savez_compressed(
             filename,
             e_idxs=e_idxs,
             e_roots=e_roots,
