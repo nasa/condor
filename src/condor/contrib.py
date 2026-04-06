@@ -670,10 +670,11 @@ class TrajectoryAnalysis(
             return self
 
         new_self = model.__new__(model)
+        # TODO: add option to rebuild the implemention
         if getattr(self, "implementation", False):
             new_self.implementation = self.implementation
-        else:
-            include_output = False # override include_output if implementation is not found
+        else:  # override include_output if implementation is not found
+            include_output = False
         new_self._original_instance = original_instance
         new_self.bind_field(self.parameter)
         new_self.input_kwargs = self.input_kwargs
