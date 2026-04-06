@@ -670,7 +670,10 @@ class TrajectoryAnalysis(
             return self
 
         new_self = model.__new__(model)
-        new_self.implementation = self.implementation
+        if getattr(self, "implementation", False):
+            new_self.implementation = self.implementation
+        else:
+            include_output = False # override include_output if implementation is not found
         new_self._original_instance = original_instance
         new_self.bind_field(self.parameter)
         new_self.input_kwargs = self.input_kwargs
