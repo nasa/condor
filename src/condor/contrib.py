@@ -670,6 +670,7 @@ class TrajectoryAnalysis(
             return self
 
         new_self = model.__new__(model)
+        # TODO: add option to rebuild the implemention
         if getattr(self, "implementation", False):
             new_self.implementation = self.implementation
         else:
