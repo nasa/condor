@@ -705,6 +705,8 @@ class TrajectoryAnalysis(
                 (new_self.t >= x_interp_segment.t0)
                 & (new_self.t <= x_interp_segment.t1)
             )
+            if t_select[0].size == 0:
+                continue
             idx0 = t_select[0][0]
             idx1 = t_select[0][-1] + 1
 
