@@ -651,9 +651,27 @@ class TrajectoryAnalysis(
         return new_self
 
     def resample(self, dt, include_output=True, include_events=True, max_deg=3):
-        """Re-sample the trajectory, to a grid based on evenly-spaced points. With
-        include_events=True, two points will be inserted for each internal event to get
-        the state immediately before and after the event."""
+        """Re-sample the trajectory on a grid of evenly-spaced points
+
+        Parameters
+        ----------
+        dt : float
+            Sample spacing in the independent variable (usually time).
+        include_output : bool, optional
+            Include :attr:`~ODESystem.dynamic_output` in the returned result.
+        include_events : bool, optional
+            Include events regardless of whether or not they fall on a multiple of `dt`.
+            Two points will be inserted for each internal event to get the state
+            immediately before and after the event.
+        max_deg : int, optional
+            Maximum degree of the interpolating spline. Actual degree used in any given
+            segment between events may be fewer if there are not sufficient samples.
+
+        Returns
+        -------
+        new_sim : TrajectoryAnalysis
+            A new trajectory instance with the requested sample spacing.
+        """
         original_instance = getattr(self, "_original_instance", self)
 
         if original_instance is not self:
