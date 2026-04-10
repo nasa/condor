@@ -540,3 +540,15 @@ def test_resample_separate_events(mass_spring_ode):
 
     with pytest.raises(NotImplementedError):
         sim.resample(0.1)
+
+
+def test_resample_no_impl(mass_spring_ode):
+    # mock pickle dump/load (as in multiprocessing) by deleting implementation
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 10
+
+    sim = Sim(wn=10)
+    del sim.implementation
+
+    with pytest.warns(UserWarning, match="include_output"):
+        sim.resample(0.5, include_output=True)

@@ -1,6 +1,7 @@
 """Built-in model templates"""
 
 import logging
+import warnings
 from dataclasses import dataclass, field
 
 import ndsplines
@@ -683,9 +684,8 @@ class TrajectoryAnalysis(
             )
 
         if self.options_dict.get("separate_events", False):
-            raise NotImplementedError(
-                "Resampling a trajectory with separate_events=True` not yet supported"
-            )
+            msg = "Resampling a trajectory with separate_events=True` not yet supported"
+            raise NotImplementedError(msg)
 
         model = self.__class__
 
@@ -693,11 +693,19 @@ class TrajectoryAnalysis(
             return self
 
         new_self = model.__new__(model)
+
         # TODO: add option to rebuild the implemention
-        if getattr(self, "implementation", False):
+        if hasattr(self, "implementation"):
             new_self.implementation = self.implementation
-        else:  # override include_output if implementation is not found
+        elif include_output:  # override include_output if implementation is not found
             include_output = False
+            warnings.warn(
+                "Trajectory instances without an implementation currently do not "
+                "support dynamic output sampling. Set include_output=False to "
+                "suppress.",
+                stacklevel=2,
+            )
+
         new_self._original_instance = original_instance
         new_self.bind_field(self.parameter)
         new_self.input_kwargs = self.input_kwargs
