@@ -729,14 +729,11 @@ class TrajectoryAnalysis(
             new_x = np.empty((t_grid.size, self._res.x.shape[1]), float)
             for seg in interp:
                 i_to_samp = np.nonzero((t_grid >= seg.t0) & (t_grid < seg.t1))
-                if len(i_to_samp) == 0:
-                    continue
-
-                print(i_to_samp)
                 x_seg = seg(t_grid[i_to_samp])
                 if x_seg.ndim == 1:
                     x_seg = x_seg[:, None]
                 new_x[i_to_samp] = x_seg
+            new_x[-1] = self._res.x[-1]
         else:
             all_et = self._res.t[[e.index for e in self._res.e]]
             samps_and_es = np.intersect1d(t_grid, all_et, assume_unique=True)
