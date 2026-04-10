@@ -663,7 +663,8 @@ class TrajectoryAnalysis(
         include_events : bool, optional
             Include events regardless of whether or not they fall on a multiple of `dt`.
             Two points will be inserted for each internal event to get the state
-            immediately before and after the event.
+            immediately before and after the event. If disabled and a sample coincides
+            exactly with an event, the state *after* the update is returned.
         max_deg : int, optional
             Maximum degree of the interpolating spline. Actual degree used in any given
             segment between events may be fewer if there are not sufficient samples.
