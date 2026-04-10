@@ -695,8 +695,8 @@ class TrajectoryAnalysis(
         new_self = model.__new__(model)
 
         # TODO: add option to rebuild the implemention
-        if hasattr(self, "implementation"):
-            new_self.implementation = self.implementation
+        if (impl := getattr(self, "implementation", None)) is not None:
+            new_self.implementation = impl
         elif include_output:  # override include_output if implementation is not found
             include_output = False
             warnings.warn(
