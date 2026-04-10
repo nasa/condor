@@ -693,79 +693,80 @@ class TrajectoryAnalysis(
         new_self.bind_field(self.parameter)
         new_self.input_kwargs = self.input_kwargs
 
-        t_grid = np.arange(self._res.t[0], self._res.t[-1], dt)
-        t_size = t_grid.size
-        if include_events:
-            t_size += 2 * len(self._res.e)
-        elif t_grid[-1] + dt == self._res.t[-1]:
-            t_size += 1
+        t0, tf = self.t[[0, -1]]
 
-        new_self.t = np.full((t_size,), -1, dtype=float)
-        new_self.t[: t_grid.size] = t_grid
-        if t_grid[-1] + dt == self._res.t[-1]:
-            new_self.t[t_grid.size] = t_grid[-1] + dt
+        # grid with endpoint if it coincides with tf
+        length = np.ceil((tf - t0) / dt)
+        if length * dt == tf:
+            t_grid = np.arange(t0, tf + dt, dt)
+        else:
+            t_grid = np.arange(t0, tf, dt)
 
-        state_interp = ResultInterpolant(self._res, max_deg=max_deg)
-        xs = np.empty((t_size, model.state._count))
+        interp = ResultInterpolant(self._res, max_deg=3)
+
+        new_e = []
+        new_y = []
+
+        if not include_events:
+            new_t = t_grid
+            new_x = np.empty((t_grid.size, self._res.x.shape[1]), float)
+            for seg in interp:
+                i_to_samp = np.nonzero((t_grid >= seg.t0) & (t_grid <= seg.t1))
+                if len(i_to_samp) == 0:
+                    continue
+
+                x_seg = seg(t_grid[i_to_samp])
+                if x_seg.ndim == 1:
+                    x_seg = x_seg[:, None]
+                new_x[i_to_samp] = x_seg
+        else:
+            all_et = self._res.t[[e.index for e in self._res.e]]
+            samps_and_es = np.intersect1d(t_grid, all_et, assume_unique=True)
+            n_samps = t_grid.size + 2 * all_et.size - samps_and_es.size
+
+            new_t = np.empty(n_samps, float)
+            new_x = np.empty((n_samps, self._res.x.shape[1]), float)
+
+            new_t[[0, -1]] = t0, tf
+            new_x[[0, -1]] = self._res.x[[0, -1]]
+            idx0 = 1
+            for seg, ev in zip(interp, self._res.e, strict=False):
+                i_to_samp = np.nonzero((t_grid > seg.t0) & (t_grid < seg.t1))[0]
+                n_samp_seg = len(i_to_samp)
+
+                # insert event times
+                new_t[idx0] = seg.t0
+                new_t[idx0 + 1 + n_samp_seg] = seg.t1
+                # insert sample times
+                new_t[idx0 + 1 : idx0 + 1 + n_samp_seg] = t_grid[i_to_samp]
+
+                # interpolate
+                x_seg = seg(new_t[idx0 : idx0 + n_samp_seg + 2])
+                if x_seg.ndim == 1:
+                    x_seg = x_seg[:, None]
+                new_x[idx0 : idx0 + n_samp_seg + 2] = x_seg
+
+                new_e.append(Root(idx0, ev.rootsfound))
+
+                idx0 += n_samp_seg + 2
+
+            new_e.append(Root(idx0, self._res.e[-1].rootsfound))
+
         include_output = include_output and model.dynamic_output._count
         if include_output:
             dynamic_output = self.implementation.state_system.dynamic_output
             p = self._res.p
-            ys = np.empty((t_size, model.dynamic_output._count))
-        else:
-            ys = []
+            new_y = np.empty((new_t.size, model.dynamic_output._count))
+            for i, (t, x) in enumerate(zip(new_t, new_x, strict=True)):
+                new_y[i] = dynamic_output(p, t, x).T
 
-        idx0 = 0
-
-        es = []
-        for event, x_interp_segment in zip(self._res.e, state_interp):
-            t_select = np.where(
-                (new_self.t >= x_interp_segment.t0)
-                & (new_self.t <= x_interp_segment.t1)
-            )
-            if t_select[0].size == 0:
-                continue
-            idx0 = t_select[0][0]
-            idx1 = t_select[0][-1] + 1
-
-            if include_events:
-                new_self.t[idx0 + 1 :] = new_self.t[idx0:-1]
-                xs[idx0, :] = self._res.x[x_interp_segment.idx0]
-                if include_output:
-                    ys[idx0, :] = self._res.y[x_interp_segment.idx0]
-                es.append(Root(idx0, event.rootsfound))
-                idx0 += 1
-                idx1 += 1
-                # TODO figure out how to get root info
-
-            ts_to_call = new_self.t[idx0:idx1]
-            xs[idx0:idx1] = np.atleast_2d(x_interp_segment(ts_to_call)).reshape(
-                len(ts_to_call), -1
-            )
-            if include_output:
-                for idx, t, x in zip(range(idx0, idx1), ts_to_call, xs[idx0:idx1]):
-                    ys[idx, None] = dynamic_output(p, t, x).T
-
-            if include_events:
-                new_self.t[idx1 + 1 :] = new_self.t[idx1:-1]
-                new_self.t[idx1 : idx1 + 2] = self._res.t[x_interp_segment.idx1]
-                xs[idx1, :] = self._res.x[x_interp_segment.idx1]
-                if include_output:
-                    ys[idx1, :] = self._res.y[x_interp_segment.idx1]
-
-        if include_events:
-            xs[idx1 + 1, :] = self._res.x[x_interp_segment.idx1]
-            if include_output:
-                ys[idx1 + 1, :] = self._res.y[x_interp_segment.idx1]
-            es.append(Root(idx1, self._res.e[-1].rootsfound))
-
-        new_self.bind_field(model.state.wrap(xs.T))
-
+        new_self.t = new_t
+        new_self.bind_field(model.state.wrap(new_x.T))
         if include_output:
-            new_self.bind_field(model.dynamic_output.wrap(ys.T))
+            new_self.bind_field(model.dynamic_output.wrap(new_y.T))
 
         new_self._res = Result(
-            t=new_self.t, x=xs, y=ys, e=es, p=self._res.p, system=self._res.system
+            t=new_t, x=new_x, y=new_y, e=new_e, p=self._res.p, system=self._res.system
         )
         return new_self
 
