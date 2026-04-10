@@ -552,3 +552,21 @@ def test_resample_no_impl(mass_spring_ode):
 
     with pytest.warns(UserWarning, match="include_output"):
         sim.resample(0.5, include_output=True)
+
+
+def test_resample_check_tplus(mass_spring_ode):
+    # check that resample with include_events=False and a coincident event take from t+
+    # strategy is to create an event exactly coincident with a sample time and update
+    # the state to switch signs, check that the sample at the event has the changed sign
+
+    class Ev(mass_spring_ode.Event):
+        at_time = 0.5
+        update[x] = -1
+
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 1
+
+    sim = Sim(wn=1)
+    simd = sim.resample(0.1, include_events=False)
+    assert all(simd.x[simd.t < 0.45] > 0)
+    assert all(simd.x[simd.t > 0.45] < 0)
