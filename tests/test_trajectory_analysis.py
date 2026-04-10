@@ -527,3 +527,16 @@ def test_resample_single_state():
     sim_resamp_events = sim.resample(1.0, include_events=True)
     assert sim_resamp_events._res.x.shape == (13, 1)
     assert len(sim_resamp_events._res.e) == 2
+
+
+def test_resample_separate_events(mass_spring_ode):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 1
+
+        class Options:
+            separate_events = True
+
+    sim = Sim(wn=10)
+
+    with pytest.raises(NotImplementedError):
+        sim.resample(0.1)

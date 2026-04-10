@@ -682,6 +682,11 @@ class TrajectoryAnalysis(
                 max_deg=max_deg,
             )
 
+        if self.options_dict.get("separate_events", False):
+            raise NotImplementedError(
+                "Resampling a trajectory with separate_events=True` not yet supported"
+            )
+
         model = self.__class__
 
         if dt <= 0.0:
@@ -711,10 +716,11 @@ class TrajectoryAnalysis(
             new_t = t_grid
             new_x = np.empty((t_grid.size, self._res.x.shape[1]), float)
             for seg in interp:
-                i_to_samp = np.nonzero((t_grid >= seg.t0) & (t_grid <= seg.t1))
+                i_to_samp = np.nonzero((t_grid >= seg.t0) & (t_grid < seg.t1))
                 if len(i_to_samp) == 0:
                     continue
 
+                print(i_to_samp)
                 x_seg = seg(t_grid[i_to_samp])
                 if x_seg.ndim == 1:
                     x_seg = x_seg[:, None]
