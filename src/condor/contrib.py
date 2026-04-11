@@ -684,7 +684,7 @@ class TrajectoryAnalysis(
                 max_deg=max_deg,
             )
 
-        if self.options_dict.get("separate_events", False):
+        if getattr(self.Options, "separate_events", False):
             msg = "Resampling a trajectory with separate_events not yet supported"
             raise NotImplementedError(msg)
 
