@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fields and Elements" href="fields.html"><link rel="prev" title="Condor API" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Contrib Models - Condor 0.3.3.dev98+g296bdf273 documentation</title>
+        <title>Contrib Models - Condor 0.3.3.dev99+g7a0f6228b documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.3.dev98+g296bdf273 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.3.dev99+g7a0f6228b documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.3.dev98+g296bdf273 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.3.dev99+g7a0f6228b documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -597,9 +597,27 @@ occuring before <code class="docutils literal notranslate"><span class="pre">tf<
 <dl class="py method">
 <dt class="sig sig-object py" id="condor.contrib.TrajectoryAnalysis.resample">
 <span class="sig-name descname"><span class="pre">resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#condor.contrib.TrajectoryAnalysis.resample" title="Link to this definition">¶</a></dt>
-<dd><p>Re-sample the trajectory, to a grid based on evenly-spaced points. With
-include_events=True, two points will be inserted for each internal event to get
-the state immediately before and after the event.</p>
+<dd><p>Re-sample the trajectory on a grid of evenly-spaced points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Sample spacing in the independent variable (usually time).</p></li>
+<li><p><strong>include_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – Include <a class="reference internal" href="#condor.contrib.ODESystem.dynamic_output" title="condor.contrib.ODESystem.dynamic_output"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dynamic_output</span></code></a> in the returned result.</p></li>
+<li><p><strong>include_events</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – Include events regardless of whether or not they fall on a multiple of <cite>dt</cite>.
+Two points will be inserted for each internal event to get the state
+immediately before and after the event. If disabled and a sample coincides
+exactly with an event, the state <em>after</em> the update is returned.</p></li>
+<li><p><strong>max_deg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>optional</em>) – Maximum degree of the interpolating spline. Actual degree used in any given
+segment between events may be fewer if there are not sufficient samples.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>new_sim</strong> – A new trajectory instance with the requested sample spacing.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#condor.contrib.TrajectoryAnalysis" title="condor.contrib.TrajectoryAnalysis"><code class="xref py py-class docutils literal notranslate"><span class="pre">TrajectoryAnalysis</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -753,7 +771,7 @@ construction).</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=f4757b10"></script>
+</div><script src="../_static/documentation_options.js?v=096907f6"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

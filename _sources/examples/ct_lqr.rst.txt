@@ -120,7 +120,7 @@ problem:
 
  .. code-block:: none
 
-    /opt/hostedtoolcache/Python/3.12.12/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
+    /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
     [[1.00000506 1.73205902]]
 
@@ -204,7 +204,7 @@ Compare with the solution from the continuous algebraic Riccati equation:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.233 seconds)
+   **Total running time of the script:** (0 minutes 2.658 seconds)
 
 
 .. _sphx_glr_download_examples_ct_lqr.py:
