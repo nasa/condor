@@ -332,7 +332,7 @@ def test_state_switched():
 
 
 @pytest.fixture
-def odesys():
+def mass_spring_ode():
     class MassSpring(co.ODESystem):
         x = state()
         v = state()
@@ -342,41 +342,231 @@ def odesys():
         dot[v] = u - wn**2 * x
         initial[x] = 1
 
+        dynamic_output.specific_energy = 0.5 * wn**2 * x**2 + 0.5 * v**2
+
     return MassSpring
 
 
-def test_event_state_to_mode(odesys):
+def test_event_state_to_mode(mass_spring_ode):
     # verify you can reference a state created in an event from a mode
 
-    class Event(odesys.Event):
+    class Event(mass_spring_ode.Event):
         function = v
         count = state(name="count_")
         update[count] = count + 1
 
-    class Mode(odesys.Mode):
+    class Mode(mass_spring_ode.Mode):
         condition = Event.count > 0
         action[u] = 1
 
-    class Sim(odesys.TrajectoryAnalysis):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
         total_count = trajectory_output(Event.count)
         tf = 10
 
-    print(Sim(wn=10).total_count)
 
-
-def test_mode_param_to_mode(odesys):
+def test_mode_param_to_mode(mass_spring_ode):
     # verify you can reference a parameter created in a mode in another mode
 
-    class ModeA(odesys.Mode):
+    class ModeA(mass_spring_ode.Mode):
         condition = v > 0
         u_hold = parameter()
         action[u] = u_hold
 
-    class ModeB(odesys.Mode):
+    class ModeB(mass_spring_ode.Mode):
         condition = 1
         action[u] = ModeA.u_hold
 
-    class Sim(odesys.TrajectoryAnalysis):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
         tf = 10
 
     Sim(wn=10, u_hold=0.8)
+
+
+def test_file_io(mass_spring_ode, tmp_path):
+    class Ev(mass_spring_ode.Event):
+        function = x
+
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 10
+
+    sim = Sim(wn=1)
+
+    fp1 = tmp_path / "sim.npz"
+    sim.to_file(fp1)
+    sim_from_file = Sim.from_file(fp1)
+    assert len(sim_from_file._res.e) > 1
+
+    fp2 = tmp_path / "sim_no_events.npz"
+    sim_resamp = sim.resample(0.1, include_events=False)
+    sim_resamp.to_file(fp2)
+    sim_resamp_from_file = Sim.from_file(fp2)
+    assert len(sim_resamp_from_file._res.e) == 0
+
+
+def make_resample_sim(tf_, e_times=None, add_output=False):
+    class MassSpring(co.ODESystem):
+        x = state()
+        v = state()
+        wn = parameter()
+
+        dot[x] = v
+        dot[v] = wn**2 * x
+
+        initial[x] = 1
+
+        if add_output:
+            dynamic_output.ke = 0.5 * v**2
+
+    if e_times:
+        for e in e_times:
+
+            class Ev(MassSpring.Event):
+                at_time = e
+
+    class Sim(MassSpring.TrajectoryAnalysis):
+        tf = tf_
+
+    sim = Sim(wn=8.0)
+    return sim
+
+
+def test_resample_no_events():
+    sim = make_resample_sim(1.0, add_output=False)
+
+    simd = sim.resample(0.2, include_events=False)
+    np.testing.assert_allclose(
+        simd.t,
+        [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+        rtol=1e-12,
+        atol=1e-12,
+    )
+
+    # include_events doubles t0 and tf
+    simd2 = sim.resample(0.2, include_events=True)
+    np.testing.assert_allclose(
+        simd2.t,
+        [0.0, 0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0],
+        rtol=1e-12,
+        atol=1e-12,
+    )
+
+    assert simd._res.y == []
+
+
+@pytest.mark.parametrize("add_output", [False, True])
+def test_resample_with_events(add_output):
+    # cases:
+    #   - no samples between two events
+    #   - sample coincides exactly with event
+
+    e_times = [0.05, 0.06, 0.3, 0.4]
+    sim = make_resample_sim(1.0, e_times=e_times, add_output=add_output)
+
+    simd = sim.resample(0.2, include_events=False)
+    np.testing.assert_allclose(
+        simd.t,
+        [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+        rtol=1e-12,
+        atol=1e-12,
+    )
+    if add_output:
+        assert simd.ke.size == simd.t.size
+    else:
+        assert simd._res.y == []
+
+    simd = sim.resample(0.2, include_events=True, include_output=add_output)
+    np.testing.assert_allclose(
+        simd.t,
+        [0.0, 0.0, 0.05, 0.05, 0.06, 0.06, 0.2, 0.3, 0.3, 0.4, 0.4, 0.6, 0.8, 1.0, 1.0],
+        rtol=1e-12,
+        atol=1e-12,
+    )
+    if add_output:
+        assert simd.ke.size == simd.t.size
+    else:
+        assert simd._res.y == []
+
+
+def test_resample_nonsampled_tf():
+    sim = make_resample_sim(1.1, add_output=False)
+    simd = sim.resample(0.2, include_events=False)
+    np.testing.assert_allclose(
+        simd.t,
+        [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+        rtol=1e-12,
+        atol=1e-12,
+    )
+
+    tf = 1.0 + 1e-8
+    sim = make_resample_sim(tf, e_times=[0.5])
+    simd = sim.resample(0.2, include_events=True)
+    np.testing.assert_allclose(
+        simd.t,
+        [0.0, 0.0, 0.2, 0.4, 0.5, 0.5, 0.6, 0.8, 1.0, tf, tf],
+        rtol=1e-12,
+        atol=1e-12,
+    )
+
+
+def test_resample_single_state():
+    class ODE(co.ODESystem):
+        a = parameter()
+        x = state()
+        dot[x] = -a * x
+
+    class Sim(ODE.TrajectoryAnalysis):
+        tf = 10.0
+        initial[x] = 1
+
+    sim = Sim(a=0.5)
+
+    sim_resamp = sim.resample(1.0, include_events=False)
+    assert sim_resamp._res.x.shape == (11, 1)
+    assert sim_resamp._res.e == []
+
+    sim_resamp_events = sim.resample(1.0, include_events=True)
+    assert sim_resamp_events._res.x.shape == (13, 1)
+    assert len(sim_resamp_events._res.e) == 2
+
+
+def test_resample_separate_events(mass_spring_ode):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 1
+
+        class Options:
+            separate_events = True
+
+    sim = Sim(wn=10)
+
+    with pytest.raises(NotImplementedError):
+        sim.resample(0.1)
+
+
+def test_resample_no_impl(mass_spring_ode):
+    # mock pickle dump/load (as in multiprocessing) by deleting implementation
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 10
+
+    sim = Sim(wn=10)
+    del sim.implementation
+
+    with pytest.warns(UserWarning, match="include_output"):
+        sim.resample(0.5, include_output=True)
+
+
+def test_resample_check_tplus(mass_spring_ode):
+    # check that resample with include_events=False and a coincident event take from t+
+    # strategy is to create an event exactly coincident with a sample time and update
+    # the state to switch signs, check that the sample at the event has the changed sign
+
+    class Ev(mass_spring_ode.Event):
+        at_time = 0.5
+        update[x] = -1
+
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 1
+
+    sim = Sim(wn=1)
+    simd = sim.resample(0.1, include_events=False)
+    assert all(simd.x[simd.t < 0.45] > 0)
+    assert all(simd.x[simd.t > 0.45] < 0)
