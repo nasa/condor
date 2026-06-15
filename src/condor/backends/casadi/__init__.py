@@ -447,7 +447,10 @@ def evalf(expr, backend_repr2value):
         list(backend_repr2value.keys()),
         expr,
     )
-    return func(*backend_repr2value.values())
+    out = func(*backend_repr2value.values())
+    if isinstance(out, dict):
+        return out["o0"].toarray()
+    return out
 
 
 class CasadiFunctionCallback(casadi.Callback):
