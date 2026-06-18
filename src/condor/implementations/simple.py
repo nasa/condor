@@ -1,11 +1,12 @@
 import numpy as np
-import condor as co
 
 from condor.backend import (
     callables_to_operator,
-    expression_to_operator,
-    get_symbol_data,
     evalf,
+    get_symbol_data,
+)
+from condor.backend import (
+    operators as ops,
 )
 from condor.fields import BaseElement, Field, MatchedElement, MatchedField, asdict
 
@@ -43,11 +44,19 @@ class ExplicitSystem:
 
     def __call__(self, model_instance):
         if isinstance(model_instance.input.flatten(), np.ndarray):
-            self.out = evalf(self.symbol_outputs, {self.symbol_inputs:model_instance.input.flatten()})
+            self.out = evalf(
+                self.symbol_outputs,
+                {self.symbol_inputs: model_instance.input.flatten()},
+            )
         else:
-            inputDict = {getattr(self.model, k).backend_repr:v for k,v in model_instance.input.asdict().items()}
-            self.out = co.backend.operators.substitute(self.symbol_outputs, inputDict)
+            new_input = model_instance.input.wrap(model_instance.input.flatten())
+            input_dict = {
+                getattr(self.model, k).backend_repr: v
+                for k, v in new_input.asdict().items()
+            }
+            self.out = ops.substitute(self.symbol_outputs, input_dict)
         model_instance.bind_field(self.model.output.wrap(self.out))
+
 
 symmetric_error_message = (
     "symmetric flag only applies for two matched fields that are the same"
