@@ -7,6 +7,10 @@ Examples
 Here's an assortment of examples demonstrating Condor features.
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 
