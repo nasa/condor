@@ -226,17 +226,20 @@ def plot_traj(sim, x_idx=0, y_idx=2):
 
     n_std = 3
 
-    for pos_vel, cov in zip(sim.x.T.squeeze(), sim.C.T):
-        pos = pos_vel[[x_idx, y_idx]]
-        C = cov[[x_idx, y_idx]][:, [x_idx, y_idx]]
-        lambda_, v = np.linalg.eig(C)
-        lambda_ = np.sqrt(lambda_)
+    xy = [x_idx, y_idx]
+    pos = sim.x.squeeze().T[:, xy]
+    cov_sel = np.meshgrid(xy, xy, indexing="ij")
+    cov = sim.C.T[:, cov_sel[0], cov_sel[1]]
 
+    lam, v = np.linalg.eigh(cov)
+    lam = np.sqrt(lam)
+
+    for i in range(pos.shape[0]):
         ellipse = Ellipse(
-            pos,
-            width=lambda_[0] * n_std * 2,
-            height=lambda_[1] * n_std * 2,
-            angle=np.degrees(np.arctan2(*v[:, 0][::-1])),
+            pos[i],
+            width=lam[i, 0] * n_std * 2,
+            height=lam[i, 1] * n_std * 2,
+            angle=np.degrees(np.arctan2(*v[i, ::-1, 0])),
             edgecolor=sim_color,
             facecolor="none",
         )
