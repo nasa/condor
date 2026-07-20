@@ -229,7 +229,7 @@ def plot_traj(sim, x_idx=0, y_idx=2):
     for pos_vel, cov in zip(sim.x.T.squeeze(), sim.C.T):
         pos = pos_vel[[x_idx, y_idx]]
         C = cov[[x_idx, y_idx]][:, [x_idx, y_idx]]
-        lambda_, v = np.linalg.eig(C)
+        lambda_, v = np.linalg.eigh(C)
         lambda_ = np.sqrt(lambda_)
 
         ellipse = Ellipse(
