@@ -134,12 +134,16 @@ class TrajectoryAnalysis:
             model.dot, self.simulation_signature, subs=control_sub_expression
         )
 
-        self.state_jacobian_expr = jacobian(state_equation_func.expr, self.x)
-        self.state_dot_jac_func = expression_to_operator(
-            self.simulation_signature,
-            self.state_jacobian_expr,
-            f"{ode_model.__name__}_state_jacobian",
-        )
+        try:  # TODO: CVODE (currently unsupported) needs this
+            self.state_jacobian_expr = jacobian(state_equation_func.expr, self.x)
+            self.state_dot_jac_func = expression_to_operator(
+                self.simulation_signature,
+                self.state_jacobian_expr,
+                f"{ode_model.__name__}_state_jacobian",
+            )
+        except RuntimeError:
+            self.state_jacobian_expr = None
+            self.state_dot_jac_func = None
 
         self.e_exprs = []
         self.h_exprs = []
