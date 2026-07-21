@@ -47,6 +47,7 @@ class BaseModelMetaData:
     options: object = None
 
     inherited_methods: dict = dc.field(default_factory=dict)
+    is_template: bool = False
 
     # assembly/component can also get children/parent
     # assembly/components get inheritance rules? yes, submodels don't need it -- only
@@ -891,7 +892,9 @@ class ModelTemplateType(BaseModelType):
                 )
                 is not None
             ):
-                meta = user_model_metclass.metadata_class(model_name=model_name)
+                meta = user_model_metclass.metadata_class(
+                    model_name=model_name, is_template=as_template
+                )
             # actually creating a model template, TODO at some point tap into
             # inheritance tree for now nothing fails this check
             if as_template:
@@ -1463,6 +1466,8 @@ class Model(metaclass=ModelType):
                 }
             )
 
+        self.update_model_assignments(model_assignments)
+
         for (
             embedded_model_ref_name,
             embedded_model_instance,
@@ -1489,6 +1494,9 @@ class Model(metaclass=ModelType):
             )
 
             bound_embedded_model.bind_embedded_models()
+
+    def update_model_assignments(self, model_assignments):
+        return
 
     def bind_input_as_embedded(
         self,
@@ -1537,6 +1545,7 @@ class Model(metaclass=ModelType):
             if isinstance(sym_bound_field, FieldValues) and isinstance(
                 ran_bound_field, FieldValues
             ):
+                # TODO: sym_bound_field_dict is really just list_of?
                 sym_bound_field_dict = dc.asdict(sym_bound_field)
                 ran_bound_field_dict = dc.asdict(ran_bound_field)
                 assignment_updates.update(
