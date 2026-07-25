@@ -135,9 +135,9 @@ def process_relational_element(elem):
         relational_op = True
         elem.backend_repr = rhs - lhs
         if hasattr(elem, "upper_bound"):
-            elem.upper_bound = 0.0
+            elem.upper_bound = np.zeros(elem.backend_repr.shape)
         if hasattr(elem, "lower_bound"):
-            elem.lower_bound = 0.0
+            elem.lower_bound = np.zeros(elem.backend_repr.shape)
 
     if relational_op and (real_lower_bound or real_upper_bound):
         msg = f"Do not use relational constraints with bounds for {elem}"
@@ -162,9 +162,9 @@ class BackendSymbolData(BackendSymbolDataMixin):
         # might potentially want to overwrite for casadi-specific validation, etc.
         super().__post_init__(self, *args, **kwargs)
 
-    def flatten_value(self, value):
+    def flatten_value(self, value, force_asymetric=False):
         """flatten a value to the appropriate representation for the backend"""
-        if self.symmetric:
+        if self.symmetric and not force_asymetric:
             unique_values = symmetric_to_unique(
                 value, symbolic=isinstance(value, symbol_class)
             )
@@ -326,9 +326,9 @@ def get_symbol_data(symbol, symmetric=None):
             symmetric = symbol_is(symbol, symbol.T) and size > 1
         else:
             symmetric = (
-                np.isclose(symbol, symbol.T).all()
-                and len(shape) == 2
+                len(shape) == 2
                 and shape[0] == shape[1]
+                and np.isclose(symbol, symbol.T).all()
             )
 
     return BackendSymbolData(
@@ -340,9 +340,15 @@ def get_symbol_data(symbol, symmetric=None):
 
 def symbol_is(a, b):
     """evaluate whether two symbols are the same with idiosyncrasies for symbol class"""
-    return (a.shape == b.shape) and (
-        (a == b).is_one() or casadi.is_equal(a, b, int(1e10))
-    )
+    if a.shape != b.shape:
+        return False
+    equality_expr = a == b
+    if isinstance(equality_expr, bool):
+        return equality_expr
+    if isinstance(equality_expr, (symbol_class, casadi.DM)):
+        return equality_expr.is_one() or casadi.is_equal(a, b, int(1e10))
+    if isinstance(equality_expr, np.ndarray):
+        return equality_expr.all()
 
 
 class WrappedSymbol:
@@ -449,7 +455,8 @@ class CasadiFunctionCallback(casadi.Callback):
 
     def __init__(
         self,
-        wrapper_funcs,
+        function,
+        get_jacobian_func=None,
         implementation=None,
         model_name="",
         jacobian_of=None,
@@ -458,7 +465,9 @@ class CasadiFunctionCallback(casadi.Callback):
         opts=None,
     ):
         """
-        wrapper_funcs -- list of callables to wrap, in order of ascending derivatives
+        function -- callable to evaluate out_symbol = function(input_symbol)
+        get_jacobian_func -- callable that returns callable to
+              evaluate df/dy (input_symbol)
 
         jacobian_of -- used internally to recursively create references of related
         callbacks, as needed.
@@ -472,6 +481,10 @@ class CasadiFunctionCallback(casadi.Callback):
 
         """
         casadi.Callback.__init__(self)
+
+        self.function = function
+        self.get_jacobian_func = get_jacobian_func
+        self.jacobian_callback = None
 
         self.input_symbol = input_symbol
         self.output_symbol = output_symbol
@@ -501,27 +514,13 @@ class CasadiFunctionCallback(casadi.Callback):
         else:
             self.placeholder_func = jacobian_of.placeholder_func.jacobian()
 
-        self.wrapper_func = wrapper_funcs[0]
-        if len(wrapper_funcs) == 1:
-            self.jacobian = None
-        else:
-            # using callables_to_operator SHOULD mean that casadi backend for one-layer
-            # callable can re-enter native casadi -- infinite differentiable, etc.
-            self.jacobian = callables_to_operator(
-                wrapper_funcs=wrapper_funcs[1:],
-                implementation=None,
-                model_name=model_name,
-                jacobian_of=self,
-                opts=opts,
-            )
-
         self.jacobian_of = jacobian_of
         self.implementation = implementation
         self.opts = opts
 
+        self.construct()
+
     def construct(self):
-        if self.jacobian is not None:
-            self.jacobian.construct()
         super().construct(self.placeholder_func.name(), self.opts)
 
     def init(self):
@@ -537,7 +536,7 @@ class CasadiFunctionCallback(casadi.Callback):
         return self.placeholder_func.n_out()
 
     def eval(self, args):
-        out = self.wrapper_func(args[0])
+        out = self.function(args[0])
 
         if self.jacobian_of:
             if self.jacobian_of.jacobian_of:
@@ -605,14 +604,20 @@ class CasadiFunctionCallback(casadi.Callback):
         # return casadi.Function(
 
     def has_jacobian(self):
-        return self.jacobian is not None
+        return self.get_jacobian_func is not None
 
     def get_jacobian(self, name, inames, onames, opts):
-        # breakpoint()
-        return self.jacobian
+        if self.has_jacobian():
+            if self.jacobian_callback is None:
+                self.jacobian_callback = self.get_jacobian_func(self)
+            return self.jacobian_callback
 
 
-def callables_to_operator(wrapper_funcs, *args, **kwargs):
+# generic name for shim
+FunctionOperator = CasadiFunctionCallback
+
+
+def callables_to_operator(wrapper_funcs, *args, jacobian_of=None, **kwargs):
     """check if this is actually something that needs to get wrapped or if it's a
     native op... if latter, return directly; if former, create callback.
 
@@ -654,7 +659,20 @@ def callables_to_operator(wrapper_funcs, *args, **kwargs):
     """
     if isinstance(wrapper_funcs[0], casadi.Function):
         return wrapper_funcs[0]
-    return CasadiFunctionCallback(wrapper_funcs, *args, **kwargs)
+    if len(wrapper_funcs) > 1:
+        return CasadiFunctionCallback(
+            wrapper_funcs[0],
+            *args,
+            jacobian_of=jacobian_of,
+            get_jacobian_func=lambda jacobian_of_: callables_to_operator(
+                wrapper_funcs[1:], *args, jacobian_of=jacobian_of_, **kwargs
+            ),
+            **kwargs,
+        )
+    else:
+        return CasadiFunctionCallback(
+            wrapper_funcs[0], *args, jacobian_of=jacobian_of, **kwargs
+        )
 
 
 def expression_to_operator(input_symbols, output_expressions, name="", **kwargs):

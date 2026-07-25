@@ -6,6 +6,9 @@ backend = co.backend
 ops = backend.operators
 
 
+rng = np.random.default_rng(12345)
+
+
 def test_reshaping():
     class Reshape(co.ExplicitSystem):
         """
@@ -26,8 +29,8 @@ def test_reshaping():
         output.reshape_mat = reshape.mat
         output.reshape_mat_y = reshape.mat @ y
 
-    x = np.arange(3) * 1.0
-    y = np.arange(4) * 1.0
+    x = rng.random(3)
+    y = rng.random(4)
 
     reshape_mat = Reshape(x, y).mat
     assert np.all(reshape_mat == (x[:, None] @ y[None, :]))

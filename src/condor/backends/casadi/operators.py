@@ -89,6 +89,16 @@ def vector_norm(x, ord=2):
     raise NotImplementedError(f"Norm order {ord} not supported for this backend.")
 
 
+def vector_norm(x, ord=2):
+    norm = vector_norm_undiff_at_0(x, ord=ord)
+    return casadi.if_else(
+        norm > 0.0,
+        norm,
+        0.0,
+        True,
+    )
+
+
 def sum(x, axis=None):
     """Aggregate `x` along `axis`, mimicking NumPy’s behavior with a CasADi fallback."""
     try:
@@ -113,6 +123,7 @@ def clip(val, amin, amax):
 # Linear algebra helpers
 # ---------------------------------------------------------------------------
 solve = casadi.solve
+pinv = casadi.pinv
 
 
 # ---------------------------------------------------------------------------

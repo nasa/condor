@@ -1,6 +1,7 @@
 """Built-in model templates"""
 
 import logging
+import warnings
 from dataclasses import dataclass, field
 
 import ndsplines
@@ -34,6 +35,7 @@ from condor.models import (
     SubmodelType,
     check_attr_name,
 )
+from condor.solvers.sweeping_gradient_method import Result, ResultInterpolant, Root
 
 log = logging.getLogger(__name__)
 
@@ -51,12 +53,10 @@ class ExplicitSystem(ModelTemplate):
     Outputs are functions solely of inputs:
 
     .. math::
-       \begin{align}
        y_1 &=& f_1(x_1, x_2, \dots, x_n) \\
        y_2 &=& f_2(x_1, x_2, \dots, x_n) \\
        & \vdots & \\
        y_m &=& f_m(x_1, x_2, \dots, x_n)
-       \end{align}
 
     where each :math:`y_i` is a name-assigned expression on the ``output`` field and
     each :math:`x_i` is an element drawn from the ``input`` field.
@@ -87,11 +87,9 @@ class AlgebraicSystem(ModelTemplate, model_metaclass=AlgebraicSystemType):
     is driven to a solution at :math:`x^*`:
 
     .. math::
-       \begin{align}
        R_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &=& 0 \\
        \vdots & & \\
        R_n(u_1, \dots, u_m, x_1^*, \dots, x_n^*) &=& 0
-       \end{align}
 
     Condor solves for the :math:`x_i^*` and can automatically calculate the derivatives
     :math:`\frac{dx_i}{du_j}` as needed for parent solvers, etc.
@@ -99,11 +97,9 @@ class AlgebraicSystem(ModelTemplate, model_metaclass=AlgebraicSystemType):
     Additional explicit outputs at the solution may also be included:
 
     .. math::
-        \begin{align}
         y_1 &=& f_1(u_1, \dots, u_m, x_1^*, \dots, x_n^*) \\
         & \vdots & \\
         y_l &=& f_m(x_1, \dots, u_m, x_1^*, \dots, x_n^*)
-        \end{align}
 
     """
 
@@ -275,10 +271,8 @@ class ODESystem(ModelTemplate):
     optionally additional outputs :math:`y`:
 
     .. math::
-       \begin{align}
        \dot{x}_i &= f(t,x_1,\ldots,x_n,p_1,\ldots,p_m) \\
        y_i &= h(t,x_1,\ldots,x_n,p_1,\ldots,p_m)
-       \end{align}
 
     where :math:`x` are the states fully defining the evolution of the system, :math:`t`
     is the independent variable (typically time, but may be anything), and :math:`p` are
@@ -593,6 +587,7 @@ class TrajectoryAnalysis(
 
     @classmethod
     def initial_condition(cls, *args, **kwargs):
+        """Evaluate the initial condition x0(p)"""
         """should initial condition be x0(t, p) not just p?
         bind dynamic output, time, modal? or do point analysis there?
         but maybe still time?
@@ -604,6 +599,209 @@ class TrajectoryAnalysis(
         x0 = cls._meta.initial_condition_function(p)
         self.bind_field(cls.state.wrap(x0))
         return self
+
+    def __getitem__(self, idx):
+        """index the time history in the time dimension; applies the index to the numpy
+        array(s) of the underlying result data so it supports indexing by integer, list
+        of integer, or slice. Only applies to numerically resolved TrajectoryAnalysis
+        """
+        index_symbolic_msg = "Cannot index symbolic TrajectoryAnalysis"
+        if self._res is None:
+            raise ValueError(index_symbolic_msg)
+
+        model = self.__class__
+        new_self = model.__new__(model)
+        new_self.bind_field(self.parameter)
+        new_self.input_kwargs = self.input_kwargs
+
+        original_instance = getattr(self, "_original_instance", self)
+        # allow chained indexing, but attach original_instance so re-sample occurs on
+        # original
+        new_self._original_instance = original_instance
+
+        if isinstance(idx, int):
+            idx = [idx]
+
+        xs = self._res.x[idx, :]
+        ys = self._res.y[idx, :]
+
+        if isinstance(idx, slice):
+            e_check_idx = np.arange(self._res.t.size)[idx]
+            if not e_check_idx.size:
+                malformed_slice_msg = "malformed slice"
+                raise ValueError(malformed_slice_msg)
+        else:
+            e_check_idx = np.array(idx)
+
+        es = []
+        for e in self._res.e:
+            if (new_index := np.where(e.index == e_check_idx)[0]).size == 1:
+                es.append(Root(new_index[0], e.rootsfound))
+            elif new_index.size > 1:
+                raise ValueError
+        [e for e in self._res.e if e.index in e_check_idx]
+
+        new_self.t = self._res.t[idx]
+        new_self.bind_field(model.state.wrap(xs.T))
+        new_self.bind_field(model.dynamic_output.wrap(ys.T))
+
+        new_self._res = Result(
+            t=new_self.t, x=xs, y=ys, e=es, p=self._res.p, system=self._res.system
+        )
+
+        return new_self
+
+    def resample(self, dt, include_output=True, include_events=True, max_deg=3):
+        """Re-sample the trajectory on a grid of evenly-spaced points
+
+        Parameters
+        ----------
+        dt : float
+            Sample spacing in the independent variable (usually time).
+        include_output : bool, optional
+            Include :attr:`~ODESystem.dynamic_output` in the returned result.
+        include_events : bool, optional
+            Include events regardless of whether or not they fall on a multiple of `dt`.
+            Two points will be inserted for each internal event to get the state
+            immediately before and after the event. If disabled and a sample coincides
+            exactly with an event, the state *after* the update is returned.
+        max_deg : int, optional
+            Maximum degree of the interpolating spline. Actual degree used in any given
+            segment between events may be fewer if there are not sufficient samples.
+
+        Returns
+        -------
+        new_sim : TrajectoryAnalysis
+            A new trajectory instance with the requested sample spacing.
+        """
+        original_instance = getattr(self, "_original_instance", self)
+
+        if original_instance is not self:
+            return original_instance.resample(
+                dt=dt,
+                include_output=include_output,
+                include_events=include_events,
+                max_deg=max_deg,
+            )
+
+        if getattr(self.Options, "separate_events", False):
+            msg = "Resampling a trajectory with separate_events not yet supported"
+            raise NotImplementedError(msg)
+
+        model = self.__class__
+
+        if dt <= 0.0:
+            return self
+
+        new_self = model.__new__(model)
+
+        # TODO: add option to rebuild the implemention
+        if (impl := getattr(self, "implementation", None)) is not None:
+            new_self.implementation = impl
+        elif include_output:  # override include_output if implementation is not found
+            include_output = False
+            warnings.warn(
+                "Trajectory instances without an implementation currently do not "
+                "support dynamic output sampling. Set include_output=False to "
+                "suppress.",
+                stacklevel=2,
+            )
+
+        new_self._original_instance = original_instance
+        new_self.bind_field(self.parameter)
+        new_self.input_kwargs = self.input_kwargs
+
+        t0, tf = self.t[[0, -1]]
+
+        # grid with endpoint if it coincides with tf
+        length = np.ceil((tf - t0) / dt)
+        if length * dt == tf:
+            t_grid = np.arange(t0, tf + dt, dt)
+        else:
+            t_grid = np.arange(t0, tf, dt)
+
+        interp = ResultInterpolant(self._res, max_deg=3)
+
+        new_e = []
+        new_y = []
+
+        if not include_events:
+            new_t = t_grid
+            new_x = np.empty((t_grid.size, self._res.x.shape[1]), float)
+            for seg in interp:
+                i_to_samp = np.nonzero((t_grid >= seg.t0) & (t_grid < seg.t1))
+                x_seg = seg(t_grid[i_to_samp])
+                if x_seg.ndim == 1:
+                    x_seg = x_seg[:, None]
+                new_x[i_to_samp] = x_seg
+            new_x[-1] = self._res.x[-1]
+        else:
+            all_et = self._res.t[[e.index for e in self._res.e]]
+            samps_and_es = np.intersect1d(t_grid, all_et, assume_unique=True)
+            n_samps = t_grid.size + 2 * all_et.size - samps_and_es.size
+
+            new_t = np.empty(n_samps, float)
+            new_x = np.empty((n_samps, self._res.x.shape[1]), float)
+
+            new_t[[0, -1]] = t0, tf
+            new_x[[0, -1]] = self._res.x[[0, -1]]
+            idx0 = 1
+            for seg, ev in zip(interp, self._res.e, strict=False):
+                i_to_samp = np.nonzero((t_grid > seg.t0) & (t_grid < seg.t1))[0]
+                n_samp_seg = len(i_to_samp)
+
+                # insert event times
+                new_t[idx0] = seg.t0
+                new_t[idx0 + 1 + n_samp_seg] = seg.t1
+                # insert sample times
+                new_t[idx0 + 1 : idx0 + 1 + n_samp_seg] = t_grid[i_to_samp]
+
+                # interpolate
+                x_seg = seg(new_t[idx0 : idx0 + n_samp_seg + 2])
+                if x_seg.ndim == 1:
+                    x_seg = x_seg[:, None]
+                new_x[idx0 : idx0 + n_samp_seg + 2] = x_seg
+
+                new_e.append(Root(idx0, ev.rootsfound))
+
+                idx0 += n_samp_seg + 2
+
+            new_e.append(Root(idx0, self._res.e[-1].rootsfound))
+
+        include_output = include_output and model.dynamic_output._count
+        if include_output:
+            dynamic_output = self.implementation.state_system.dynamic_output
+            p = self._res.p
+            new_y = np.empty((new_t.size, model.dynamic_output._count))
+            for i, (t, x) in enumerate(zip(new_t, new_x, strict=True)):
+                new_y[i] = dynamic_output(p, t, x).T
+
+        new_self.t = new_t
+        new_self.bind_field(model.state.wrap(new_x.T))
+        if include_output:
+            new_self.bind_field(model.dynamic_output.wrap(new_y.T))
+
+        new_self._res = Result(
+            t=new_t, x=new_x, y=new_y, e=new_e, p=self._res.p, system=self._res.system
+        )
+        return new_self
+
+    @classmethod
+    def from_file(cls, filename):
+        """Read TrajctoryAnalysis object to file using implementation's `load` method.
+        Data written using `to_file` can be loaded using this method.
+        """
+        implementation = cls.__class__.get_implementation_class(cls)
+        return implementation.load(cls, filename)
+
+    def to_file(self, filename):
+        """Write TrajctoryAnalysis object to file using implementation's `save` method
+        Data written using this method can be loaded using `from_file`.
+        """
+        if (implementation := getattr(self, "implementation", None)) is None:
+            cls = self.__class__
+            implementation = cls.__class__.get_implementation_class(cls)
+        return implementation.save(model_instance=self, filename=filename)
 
     @classmethod
     def point_analysis(cls, t, *args, **kwargs):

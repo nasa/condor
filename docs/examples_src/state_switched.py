@@ -24,6 +24,8 @@ class DblInt(co.ODESystem):
 
     u = modal()
 
+    dynamic_output.u2 = u**2
+
     dot[x] = A @ x + B * u
 
 
@@ -92,9 +94,50 @@ print(opt.p1, opt.p2)
 print(opt._stats)
 
 # %%
+# Original result:
 
-LTI_plot(opt.sim)
+axes = LTI_plot(opt.sim)
 
 # %%
+# Comparing resampling results
 
+sim_1 = opt.sim.resample(0.125)
+sim_2 = opt.sim.resample(0.125, include_events=False)
+sim_3 = sim_1.resample(0.125, include_events=False)
+
+# resample always calls the original simulation result to have full fidelity
+assert np.all(sim_2._res.x == sim_3._res.x)
+
+# %%
+# plotting utilities
+
+
+def plot_x(axes, sim, label):
+    for ax, x in zip(axes, sim.x):
+        ax.plot(sim.t, x.squeeze(), "o-", label=label)
+
+
+def make_figure():
+    fig, axes = plt.subplots(2, constrained_layout=True, sharex=True)
+    for ax in axes:
+        ax.grid(True)
+
+    plot_x(axes, opt.sim, "original")
+    plot_x(axes, sim_1, "resample with events")
+    plot_x(axes, sim_2, "resample without events")
+    plt.legend()
+    return axes
+
+
+# %%
+# In this case, we actually up-sampled
+axes = make_figure()
+
+# %%
+# looking near the first event trigger, we see the impact of re-sampling without events
+
+axes = make_figure()
+plt.xlim(3.1, 3.8)
+axes[0].set_ylim(-4, -2)
+axes[1].set_ylim(3.15, 3.525)
 plt.show()

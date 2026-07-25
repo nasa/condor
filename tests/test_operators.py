@@ -49,6 +49,38 @@ def test_min_max():
     assert np.all(out.z.squeeze() == np.fmin(x, y))
 
 
+def test_diff():
+    class TestDiff(co.ExplicitSystem):
+        x = input(shape=(5, 7))
+        output.y = ops.diff(x, axis=-1)
+        output.z = ops.diff(x, axis=1)
+        output.w = ops.diff(x, axis=0)
+
+    x = rng.random((5, 7))
+    test_diff = TestDiff(x)
+    assert test_diff.y == pytest.approx(np.diff(x, axis=-1))
+    assert test_diff.z == pytest.approx(np.diff(x, axis=1))
+    assert test_diff.w == pytest.approx(np.diff(x, axis=0))
+
+
+def test_prod():
+    class TestProd(co.ExplicitSystem):
+        x = input(shape=(10, 10))
+        output.u = ops.prod(x, axis=0)
+        output.v = ops.prod(x, axis=1)
+        output.w = ops.prod(x, axis=None)
+        output.y = ops.prod(x)
+
+    x = rng.random(100).reshape(10, 10)
+    x = np.mean(x) / x
+    s = TestProd(x)
+    assert np.all(np.isclose(s.u.squeeze(), np.prod(x, axis=0)))
+    assert np.all(np.isclose(s.v.squeeze(), np.prod(x, axis=1)))
+    assert np.isclose(s.w.squeeze(), np.prod(x, axis=None))
+    assert np.isclose(s.y, np.prod(x))
+    assert s.w == s.y
+
+
 def test_sum():
     class TestSum(co.ExplicitSystem):
         x = input(shape=(10, 10))
@@ -58,6 +90,7 @@ def test_sum():
         output.y = ops.sum(x)
 
     x = rng.random(100).reshape(10, 10)
+    x = np.mean(x) / x
     s = TestSum(x)
     assert np.all(np.isclose(s.u.squeeze(), np.sum(x, axis=0)))
     assert np.all(np.isclose(s.v.squeeze(), np.sum(x, axis=1)))
@@ -81,6 +114,100 @@ def test_fabs_sign():
     tfs = TestFabsSign(0)
     assert tfs.fabsx == 0
     assert tfs.signx == 0
+
+
+def test_ischeck():
+    class Check1(co.ExplicitSystem):
+        u = input()
+        output.x = ops.isfinite(u)
+        output.y = ops.isnan(u)
+        output.z = ops.isinf(u)
+
+    assert Check1(np.nan).x == 0
+    assert Check1(np.inf).x == 0
+    assert Check1(-np.inf).x == 0
+    assert Check1(0.0).x == 1.0
+    assert Check1(1.0).x == 1.0
+    assert Check1(ops.pi).x == 1.0
+
+    assert Check1(np.nan).y == 1
+    assert Check1(np.inf).y == 0
+    assert Check1(-np.inf).y == 0
+    assert Check1(0.0).y == 0.0
+    assert Check1(1.0).y == 0.0
+    assert Check1(ops.pi).y == 0.0
+
+    assert Check1(np.nan).z == 0
+    assert Check1(np.inf).z == 1
+    assert Check1(-np.inf).z == 1
+    assert Check1(0.0).z == 0.0
+    assert Check1(1.0).z == 0.0
+    assert Check1(ops.pi).z == 0.0
+
+    class Check4(co.ExplicitSystem):
+        u = input(shape=4)
+        output.x = ops.isfinite(u)
+        output.y = ops.isnan(u)
+        output.z = ops.isinf(u)
+        cc = ops.concat([x, y, z], axis=1)
+
+        output.any = ops.any(cc)
+        output.any0 = ops.any(cc, axis=0)
+        output.any1 = ops.any(cc, axis=1)
+
+        output.all = ops.all(cc)
+        output.all0 = ops.all(cc, axis=0)
+        output.all1 = ops.all(cc, axis=1)
+
+    check4 = Check4([1.0, 0, np.inf, np.nan])
+    assert np.all(check4.x.squeeze() == np.array([1.0, 1.0, 0.0, 0.0]))
+    assert np.all(check4.y.squeeze() == np.array([0.0, 0.0, 0.0, 1.0]))
+    assert np.all(check4.z.squeeze() == np.array([0.0, 0.0, 1.0, 0.0]))
+    assert check4.any
+    assert 1 - check4.all
+
+    check4_any = Check4([0.0, 0.0, 0.0, 0.0])
+    assert check4_any.any
+    assert np.all(check4_any.any0.squeeze() == np.array([1, 0, 0]))
+    assert np.all(check4_any.any1.squeeze())
+
+    assert 1 - check4_any.all
+    assert np.all(check4_any.all0.squeeze() == np.array([1, 0, 0]))
+
+    class Check4a(co.ExplicitSystem):
+        u = input(shape=4)
+        output.any = ops.any(u)
+        output.any0 = ops.any(u, axis=0)
+        output.any1 = ops.any(u, axis=1)
+        output.all = ops.all(u)
+        output.all0 = ops.all(u, axis=0)
+        output.all1 = ops.all(u, axis=1)
+
+    check4a_1 = Check4a([1.0, 0, np.inf, np.nan])
+    assert check4a_1.any
+    assert check4a_1.any0
+    assert np.all(check4a_1.any1.squeeze() == [1, 0, 1, 1])
+
+    assert 1 - check4a_1.all
+    assert 1 - check4a_1.all0
+    assert np.all(check4a_1.all1.squeeze() == [1, 0, 1, 1])
+
+    check4a_2 = Check4a(
+        [
+            0.0,
+            0,
+            0.0,
+            0.0,
+        ]
+    )
+    assert 1 - check4a_2.any
+    assert 1 - check4a_2.any0
+    assert np.all(1 - check4a_2.any1)
+
+    check4a_3 = Check4a([1.0, -10, np.inf, np.nan])
+    assert check4a_3.all
+    assert check4a_3.all0
+    assert np.all(check4a_3.all1)
 
 
 def test_floor_ceil():
@@ -166,6 +293,19 @@ def test_jacobian():
     # TODO: casadi backend is doing a kronecker product, should be able to figure this
     # future backends might not!
     assert np.all(np.isclose(np.kron(np.eye(3), A), jj.z))
+
+
+def test_vector_norm_diff_at_0():
+    class MyNorm(co.ExplicitSystem):
+        x = input(shape=3)
+        output.y = ops.vector_norm(x)
+        output.z = ops.jacobian(y, x)
+
+    out0 = MyNorm(np.zeros(3))
+    assert np.all(out0.z == 0.0)
+
+    out1 = MyNorm([1, 0, 0])
+    assert np.all(out1.z == out1.x)
 
 
 def test_cross():

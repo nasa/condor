@@ -398,8 +398,10 @@ class FrontendElementData:
     backend_repr: backend.symbol_class
     name: str = ""
 
-    def flat_index(self):
-        return self.field_type.flat_index(self)
+    def flat_index(self, on_field=None):
+        if on_field is None:
+            on_field = self.field_type
+        return on_field.flat_index(self)
 
 
 def _generic_op(op, is_r=False):
@@ -427,7 +429,11 @@ class BaseElement(
     def __hash__(self):
         return hash(
             (
-                self.backend_repr,
+                # TODO: how to DRY this up? also in MatchedElement.__hash__
+                # (adding match to hash)
+                self.backend_repr
+                if isinstance(self.backend_repr, backend.symbol_class)
+                else tuple(np.array(self.backend_repr).flatten().tolist()),
                 self.shape,
                 self.field_type._name,
                 self.field_type._model_name,
@@ -466,6 +472,14 @@ class BaseElement(
     @property
     def T(self):  # noqa: N802
         return self.backend_repr.T
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            # short circuit using is if it's the same type of element
+            return self is other
+        if isinstance(other, backend.symbol_class):
+            return _generic_op(operator.eq)
+        return super().__eq__(other)
 
     __le__ = _generic_op(operator.le)
     __lt__ = _generic_op(operator.lt)
@@ -665,8 +679,12 @@ class BoundedElement(FreeElement):
     def __post_init__(self):
         super().__post_init__()
         # since bounds generally must be numeric, broadcasting should just work
-        self.upper_bound = np.broadcast_to(self.upper_bound, self.shape)
-        self.lower_bound = np.broadcast_to(self.lower_bound, self.shape)
+        self.upper_bound = np.broadcast_to(
+            np.atleast_2d(self.upper_bound).reshape((-1, 1)), self.shape
+        )
+        self.lower_bound = np.broadcast_to(
+            np.atleast_2d(self.lower_bound).reshape((-1, 1)), self.shape
+        )
 
 
 @dc.dataclass(repr=False)
@@ -842,7 +860,20 @@ class MatchedElementMixin:
 class MatchedElement(BaseElement, MatchedElementMixin):
     """Element matched with another element of another field"""
 
-    pass
+    def __hash__(self):
+        return hash(
+            (
+                # TODO: how to DRY this up? also in BaseElement.__hash__
+                # (adding match to hash)
+                self.backend_repr
+                if isinstance(self.backend_repr, backend.symbol_class)
+                else tuple(np.array(self.backend_repr).flatten().tolist()),
+                self.match,
+                self.shape,
+                self.field_type._name,
+                self.field_type._model_name,
+            )
+        )
 
 
 def zero_like(match):

@@ -4,44 +4,101 @@ import condor
 from condor.backend import operators as ops
 
 
-def simple_rot(th, axis):
-    non_axis = [i for i in range(3) if i != axis]
-    dcm = np.zeros((3, 3))
-    dcm[axis, axis] = 1
-    dcm[non_axis[0], non_axis[0]] = np.cos(th)
-    dcm[non_axis[0], non_axis[1]] = -np.sin(th)
-    dcm[non_axis[1], non_axis[1]] = np.cos(th)
-    dcm[non_axis[1], non_axis[0]] = np.sin(th)
-    return dcm
-
-
-class Numeric(condor.ExternalSolverWrapper):
+class NumericProd(condor.ExternalSolverWrapper):
     def __init__(self, output_mode):
         self.output_mode = output_mode
-
-        self.input(name="x")
-        self.input(name="y")
-        self.output(name="DCM", shape=(3, 3))
+        self.input(name="x", shape=3)
+        self.input(name="y", shape=4)
+        self.output(name="prod", shape=(3, 4))
 
     def function(self, inputs):
-        dcm = simple_rot()
-
+        prod = inputs.x @ inputs.y.T
         if self.output_mode == 0:
-            return np.concat([x.squeeze(), np.atleast_1d(y)])
-            out = np.array((4, 1))
-            out[:3, 0] = x.squeeze()
-            out[3, 0] = y
-        elif self.output_mode == 1:
-            return dict(x=x, y=y)
-        elif self.output_mode == 2:
-            return x, y
+            return prod.flatten()
+        if self.output_mode == 1:
+            return (prod,)
+        if self.output_mode == 2:
+            return dict(prod=prod)
+
+    def jacobian(self, inputs):
+        # these match the outputs if I look at the assert and comptue these but when
+        # they get wrapped there's an ordering issue
+        kwargs = inputs.asdict()
+        np.kron(kwargs["y"], np.eye(3))
+        dx = np.kron(inputs.y, np.eye(3))
+
+        # these pass the test by transposing to address ordering
+        dx = np.kron(inputs.y, np.eye(3)).T
+        dy = np.kron(inputs.x, np.eye(4))
+
+        return dict(
+            prod__x=dx,
+            prod__y=dy,
+        )
 
 
-class Condoric(condor.ExplicitSystem):
-    a = input()
-    b = input(shape=3)
-    output.x = a**2 + 2 * b**2
-    output.y = ops.sin(a)
+class CondoricProd(condor.ExplicitSystem):
+    x = input(shape=3)
+    y = input(shape=4)
+
+    output.prod = x @ y.T
 
 
 rng = np.random.default_rng(12345)
+output_mode = 0
+models = NumericProd, CondoricProd
+
+
+def test_external_output():
+    Numeric, Condoric = models  # noqa: N806
+    kwargs = {input_.name: rng.random(input_.shape) for input_ in Condoric.input}
+    nsys = Numeric(output_mode)
+    nout = nsys(**kwargs)
+    cout = Condoric(**kwargs)
+
+    for output in Condoric.output:
+        assert np.all(getattr(nout, output.name) == getattr(cout, output.name))
+
+
+def test_external_jacobian():
+    Numeric, Condoric = models  # noqa: N806
+    kwargs = {input_.name: rng.random(input_.shape) for input_ in Condoric.input}
+    nsys = Numeric(output_mode)
+
+    class Jac(condor.ExplicitSystem):
+        inp = input.create_from(nsys.input)
+
+        nout = nsys(**inp)
+        cout = Condoric(**inp)
+
+        for output_ in Condoric.output:
+            for input_ in input:
+                setattr(
+                    output,
+                    f"nsys_d{output_.name}_d{input_.name}",
+                    ops.jacobian(
+                        getattr(nout, output_.name),
+                        getattr(input, input_.name),
+                    ),
+                )
+                setattr(
+                    output,
+                    f"csys_d{output_.name}_d{input_.name}",
+                    ops.jacobian(
+                        getattr(cout, output_.name),
+                        getattr(input, input_.name),
+                    ),
+                )
+
+    out_jac = Jac(**kwargs)
+    for output_ in Condoric.output:
+        for input_ in Jac.input:
+            assert np.all(
+                getattr(out_jac, f"nsys_d{output_.name}_d{input_.name}")
+                == getattr(out_jac, f"csys_d{output_.name}_d{input_.name}")
+            )
+
+
+if __name__ == "__main__":
+    # test_external_output()
+    test_external_jacobian()

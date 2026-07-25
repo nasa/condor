@@ -10,6 +10,7 @@ from condor.fields import (
     BaseElement,
     Direction,
     Field,
+    FieldValues,
     FreeField,
     MatchedField,
     WithDefaultField,
@@ -45,6 +46,9 @@ class BaseModelMetaData:
     backend_repr_elements: dict = dc.field(default_factory=backend.SymbolCompatibleDict)
     options: object = None
 
+    inherited_methods: dict = dc.field(default_factory=dict)
+    is_template: bool = False
+
     # assembly/component can also get children/parent
     # assembly/components get inheritance rules? yes, submodels don't need it -- only
     # attach to primary. or should events be assemblies to re-use them? probably not --
@@ -78,18 +82,6 @@ class BaseModelMetaData:
         return new_meta
 
 
-class AnnotationsDict(dict):
-    def __init__(self, *args, cls_dict, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.cls_dict = cls_dict
-
-    def __setitem__(self, attr_name, attr_val):
-        if isinstance(attr_val, AssignedField):
-            setattr(attr_val, attr_name, self.cls_dict[attr_name])
-
-        super().__setitem__(attr_name, attr_val)
-
-
 # appears in __new__ as attrs
 class BaseCondorClassDict(dict):
     def __init__(
@@ -121,10 +113,6 @@ class BaseCondorClassDict(dict):
         return super().__getitem__(*args, **kwargs)
 
     def __setitem__(self, attr_name, attr_val):
-        if attr_name == "__annotations__" and len(attr_val) == 0:
-            super().__setitem__(attr_name, AnnotationsDict(cls_dict=self))
-            return
-
         if (
             self.meta.template is not None
             and attr_name in type(self.meta.template).reserved_words
@@ -904,7 +892,9 @@ class ModelTemplateType(BaseModelType):
                 )
                 is not None
             ):
-                meta = user_model_metclass.metadata_class(model_name=model_name)
+                meta = user_model_metclass.metadata_class(
+                    model_name=model_name, is_template=as_template
+                )
             # actually creating a model template, TODO at some point tap into
             # inheritance tree for now nothing fails this check
             if as_template:
@@ -1236,6 +1226,7 @@ class ModelType(BaseModelType):
                         new_cls,
                     )
                     setattr(new_cls, key, val.__get__(None, new_cls))
+                    new_cls._meta.inherited_methods[key] = val.__get__(None, new_cls)
 
                 if not isinstance(val, Field) and callable(val):
                     log.debug(
@@ -1246,6 +1237,7 @@ class ModelType(BaseModelType):
                         new_cls,
                     )
                     setattr(new_cls, key, val)
+                    new_cls._meta.inherited_methods[key] = val
 
     @classmethod
     def process_placeholders(cls, new_cls, attrs, placeholder_field=None):
@@ -1474,6 +1466,8 @@ class Model(metaclass=ModelType):
                 }
             )
 
+        self.update_model_assignments(model_assignments)
+
         for (
             embedded_model_ref_name,
             embedded_model_instance,
@@ -1500,6 +1494,9 @@ class Model(metaclass=ModelType):
             )
 
             bound_embedded_model.bind_embedded_models()
+
+    def update_model_assignments(self, model_assignments):
+        return
 
     def bind_input_as_embedded(
         self,
@@ -1543,20 +1540,27 @@ class Model(metaclass=ModelType):
         assignment_updates = {}
         for field in self._meta.output_fields:
             sym_bound_field = getattr(self, field._name)
-            sym_bound_field_dict = dc.asdict(sym_bound_field)
-
             ran_bound_field = getattr(bound_embedded_model, field._name)
-            ran_bound_field_dict = dc.asdict(ran_bound_field)
 
-            assignment_updates.update(
-                {
-                    sym_val: ran_val
-                    for sym_val, ran_val in zip(
-                        sym_bound_field_dict.values(), ran_bound_field_dict.values()
-                    )
-                    if isinstance(sym_val, backend.symbol_class)
-                }
-            )
+            if isinstance(sym_bound_field, FieldValues) and isinstance(
+                ran_bound_field, FieldValues
+            ):
+                # TODO: sym_bound_field_dict is really just list_of?
+                sym_bound_field_dict = dc.asdict(sym_bound_field)
+                ran_bound_field_dict = dc.asdict(ran_bound_field)
+                assignment_updates.update(
+                    {
+                        sym_val: ran_val
+                        for sym_val, ran_val in zip(
+                            sym_bound_field_dict.values(), ran_bound_field_dict.values()
+                        )
+                        if isinstance(sym_val, backend.symbol_class)
+                    }
+                )
+            elif isinstance(sym_bound_field, backend.symbol_class):
+                assignment_updates.update({sym_bound_field: ran_bound_field})
+            else:
+                raise ValueError
         return assignment_updates
 
 

@@ -101,7 +101,10 @@ class MultiMatchedField(MatchedField, element_class=MatchedElement):
                 )
                 for match_elem in elem.match
             ]
-            to_mat[tuple(mat_select)] = elem.backend_repr
+            to_shape = to_mat[tuple(mat_select)].shape
+            to_mat[tuple(mat_select)] = np.atleast_1d(
+                elem.flatten_value(elem.backend_repr, force_asymetric=True)
+            ).reshape(to_shape)
         return to_mat
 
     def key_to_matched_elements(self, k):
@@ -141,26 +144,21 @@ class MultiMatchedField(MatchedField, element_class=MatchedElement):
             )
             raise ValueError(msg)
 
-        # TODO document order/shape?
-        for match_i in match:
-            for dim_len in match_i.shape:
-                if dim_len not in (match_i.size, 1):
-                    msg = "each component of match must be a vector"
-                    raise ValueError(msg)
-
         return match, swap_axes
 
     def __setitem__(self, keys, value):
         match, swap_axes = self.key_to_matched_elements(keys)
         name = self.get_name_for_match(match)
 
-        expected_shape = tuple([int(match_i.size) for match_i in match])
+        expected_shape = tuple()
+        for match_i in match:
+            expected_shape += tuple(match_i.shape)
         if len(expected_shape) == 1:
             value = np.atleast_1d(value).squeeze()
         elif len(expected_shape) == 2:
             value = np.atleast_2d(value)
         symbol_data = get_symbol_data(value)
-        if expected_shape != symbol_data.shape:
+        if np.prod(expected_shape) != np.prod(symbol_data.shape):
             breakpoint()
             msg = "mismatching shape"
             raise ValueError(msg)
@@ -200,7 +198,12 @@ class MultiMatchedField(MatchedField, element_class=MatchedElement):
 
 
 class ExternalSolverModel:
-    """Implementation for External Solver models.
+    """Implementation for External Solver models. Generally used directly when the
+    following two conditions hold:
+      - modeled only with one input and one output field (if anything else is used, it
+        in the domain of the external tool)
+      - a fixed number of derivatives are defined. Eventually support for defining
+        jacobian, hessian, and first and second order forard and reverse.
 
     No :class:`Options` expected.
     """
@@ -225,12 +228,11 @@ class ExternalSolverModel:
 
         self.callback = callables_to_operator(
             wrapper_funcs,
-            self,
+            implementation=self,
             jacobian_of=None,
             input_symbol=self.input,
             output_symbol=self.output,
         )
-        self.callback.construct()
 
     def __call__(self, model_instance):
         use_args = model_instance.input.flatten()
@@ -255,6 +257,7 @@ class ExternalSolverModel:
                 for elem, v in zip(self.model.output, user_out):
                     return_structure[elem.name] = v
                 out = return_structure.flatten()
+
             else:
                 out = user_out
 
