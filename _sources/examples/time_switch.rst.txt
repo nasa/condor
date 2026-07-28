@@ -285,7 +285,7 @@ error over transfer and final times.
 
     /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
-    time to run: 0.2954439749999551
+    time to run: 0.23924312799999825
     [2.99999968] [2.99999216]
      message: Optimization terminated successfully.
      success: True
@@ -389,7 +389,7 @@ Another version of the transfer analysis excluding the switch event.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.663 seconds)
+   **Total running time of the script:** (0 minutes 0.562 seconds)
 
 
 .. _sphx_glr_download_examples_time_switch.py:
