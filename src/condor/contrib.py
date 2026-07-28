@@ -720,7 +720,7 @@ class TrajectoryAnalysis(
         else:
             t_grid = np.arange(t0, tf, dt)
 
-        interp = ResultInterpolant(self._res, max_deg=3)
+        interp = ResultInterpolant(self._res, max_deg=max_deg)
 
         new_e = []
         new_y = []
