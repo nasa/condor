@@ -134,13 +134,6 @@ class TrajectoryAnalysis:
             model.dot, self.simulation_signature, subs=control_sub_expression
         )
 
-        self.state_jacobian_expr = jacobian(state_equation_func.expr, self.x)
-        self.state_dot_jac_func = expression_to_operator(
-            self.simulation_signature,
-            self.state_jacobian_expr,
-            f"{ode_model.__name__}_state_jacobian",
-        )
-
         self.e_exprs = []
         self.h_exprs = []
 
@@ -307,7 +300,7 @@ class TrajectoryAnalysis:
             dim_state=model.state._count,
             initial_state=self.state0,
             dot=state_equation_func,
-            jac=self.state_dot_jac_func,
+            jac=None,
             time_generator=sgm.TimeGeneratorFromSlices(at_time_slices),
             events=expression_to_operator(
                 self.simulation_signature,
@@ -343,6 +336,13 @@ class TrajectoryAnalysis:
         # lamda_jac = self.state_jacobian_expr.T
         model = self.model
         control_sub_expression = self.control_sub_expression
+
+        state_jacobian_expr = jacobian(state_equation_func.expr, self.x)
+        state_dot_jac_func = expression_to_operator(
+            self.simulation_signature,
+            state_jacobian_expr,
+            f"{self.ode_model.__name__}_state_jacobian",
+        )
 
         state_param_jac = jacobian(state_equation_func.expr, self.p)
 
@@ -524,7 +524,7 @@ class TrajectoryAnalysis:
             trajectory_analysis=self.trajectory_analysis_nom,
             dte_dxs=self.dte_dxs,
             dh_dxs=self.dh_dxs,
-            state_jac=self.state_dot_jac_func,
+            state_jac=state_dot_jac_func,
             p_x0_p_params=p_state0_p_p,
             p_dots_p_params=param_dot_jac_func,
             dh_dps=self.dh_dps,
