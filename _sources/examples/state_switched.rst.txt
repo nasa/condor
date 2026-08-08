@@ -136,7 +136,7 @@ Optimal Transfer With State Trigger
 
     /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
-    time to run: 0.1881818090000138
+    time to run: 0.23673482300000614
     [-3.00000001] [1.]
      message: Optimization terminated successfully.
      success: True
@@ -301,7 +301,7 @@ looking near the first event trigger, we see the impact of re-sampling without e
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.771 seconds)
+   **Total running time of the script:** (0 minutes 0.897 seconds)
 
 
 .. _sphx_glr_download_examples_state_switched.py:
