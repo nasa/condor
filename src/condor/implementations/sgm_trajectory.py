@@ -1,4 +1,5 @@
 from enum import Enum
+from functools import cached_property
 
 import numpy as np
 
@@ -132,13 +133,6 @@ class TrajectoryAnalysis:
 
         self.state_equation_func = state_equation_func = get_state_setter(
             model.dot, self.simulation_signature, subs=control_sub_expression
-        )
-
-        self.state_jacobian_expr = jacobian(state_equation_func.expr, self.x)
-        self.state_dot_jac_func = expression_to_operator(
-            self.simulation_signature,
-            self.state_jacobian_expr,
-            f"{ode_model.__name__}_state_jacobian",
         )
 
         self.e_exprs = []
@@ -307,7 +301,7 @@ class TrajectoryAnalysis:
             dim_state=model.state._count,
             initial_state=self.state0,
             dot=state_equation_func,
-            jac=self.state_dot_jac_func,
+            jac=None if solver is not self.Solver.CVODE else self.state_jac_func,
             time_generator=sgm.TimeGeneratorFromSlices(at_time_slices),
             events=expression_to_operator(
                 self.simulation_signature,
@@ -337,6 +331,16 @@ class TrajectoryAnalysis:
             implementation=self,
             jacobian_of=None,
         )
+
+    @cached_property
+    def state_jac_func(self):
+        state_jacobian_expr = jacobian(self.state_equation_func.expr, self.x)
+        state_dot_jac_func = expression_to_operator(
+            self.simulation_signature,
+            state_jacobian_expr,
+            f"{self.ode_model.__name__}_state_jacobian",
+        )
+        return state_dot_jac_func
 
     def generate_sgm_jacobian(self, jacobian_of):
         state_equation_func = self.state_equation_func
@@ -524,7 +528,7 @@ class TrajectoryAnalysis:
             trajectory_analysis=self.trajectory_analysis_nom,
             dte_dxs=self.dte_dxs,
             dh_dxs=self.dh_dxs,
-            state_jac=self.state_dot_jac_func,
+            state_jac=self.state_jac_func,
             p_x0_p_params=p_state0_p_p,
             p_dots_p_params=param_dot_jac_func,
             dh_dps=self.dh_dps,
