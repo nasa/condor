@@ -6,11 +6,35 @@ import numpy as np
 from scipy.interpolate import make_interp_spline
 
 try:
-    from scikits.odes.sundials.cvode import CVODE, StatusEnum
+    from sundials4py.core import (
+        SUN_COMM_NULL,
+        SUN_SUCCESS,
+        N_VGetArrayPointer,
+        N_VNew_Serial,
+        SUNContext_Create,
+        SUNLinSol_SPGMR,
+    )
+    from sundials4py.cvodes import (
+        CV_BDF,
+        CV_HERMITE,
+        CV_NORMAL,
+        CV_SUCCESS,
+        CVode,
+        CVodeAdjInit,
+        CVodeCreate,
+        CVodeF,
+        CVodeInit,
+        CVodeSetLinearSolver,
+        CVodeSetMaxNumSteps,
+        CVodeSStolerances,
+    )
 except ModuleNotFoundError:
     has_cvode = False
 else:
     has_cvode = True
+
+status, sunctx = SUNContext_Create(SUN_COMM_NULL)
+assert status == SUN_SUCCESS
 
 from typing import NamedTuple, Optional
 
@@ -366,28 +390,38 @@ class SolverCVODE(SolverMixin):
     ):
         self.system = system
         self.adaptive_min_steps = adaptive_min_steps
-        self.solver = CVODE(
-            self.dots,
-            jacfn=self.jac,
-            old_api=False,
-            one_step_compute=True,
-            rootfn=self.events,
-            nr_rootfns=system.num_events,
-            max_step_size=max_step_size,
-            atol=atol,
-            rtol=rtol,
-        )
+        self.atol = atol
+        self.rtol = rtol
+
+        self.y = N_VNew_Serial(self.system.dim_state, sunctx)
+        assert self.y is not None
+
+        # should take options for linear solver, CVOde method (CV_BDF, CV_*)
+        # adjoint interp, steps, etc
+
+        # Set linear solver
+        self.ls = SUNLinSol_SPGMR(self.y, 0, 3, sunctx)
+        # 0 maybe correspodns to no preconditioner and krylov basis vectors 3?
+        assert self.ls is not None
 
     def dots(
         self,
         t,
-        x,
-        xdot,
+        x_sd,
+        xdot_sd,
+        _,
     ):  # userdata=None,):
-        xdot[:] = self.system.dots(t, x)
+        x = N_VGetArrayPointer(x_sd)
+        xdot = N_VGetArrayPointer(xdot_sd)
+        xdot[:] = self.system.dots(t, x[:])
+        return 0
 
-    def jac(self, t, x, xdot, jac):
+    def jac(self, t, x_sd, xdot_sd, jac_sd, _):
+        x = N_VGetArrayPointer(x_sd)
+        xdot = N_VGetArrayPointer(xdot_sd)
+        jac = SUNDenseMatrix_Data(jac_sd)
         jac[...] = self.system.jac(t, x)
+        return 0
 
     def events(self, t, x, g):
         g[:] = self.system.events(
@@ -435,9 +469,18 @@ class SolverCVODE(SolverMixin):
         if terminate:
             return
 
-        solver = self.solver
         # each iteration of this loop simulates until next generated time
+
+        # solver = self.solver
+        y = self.y
+        ls = self.ls
+        steps = 5
+
+        yarr = N_VGetArrayPointer(y)
+        yarr[:] = last_x
+
         while True:
+            # contents of loop could be a funciton call?
             next_t = next(time_generator)
             if np.isinf(next_t):
                 break
@@ -449,12 +492,49 @@ class SolverCVODE(SolverMixin):
                 solver.set_options(
                     max_step_size=np.abs(next_t - last_t) / self.adaptive_min_steps
                 )
-            solver.init_step(last_t, last_x)
-            solver.set_options(tstop=next_t)
-            integration_direction = np.sign(next_t - last_t)
+
+            # Create CVODE solver and set up problem
+            cvode = CVodeCreate(CV_BDF, sunctx)
+            assert cvode is not None
+
+            # Initialize CVODE with ODE RHS
+            status = CVodeInit(cvode.get(), self.dots, last_t, y)
+            assert status == CV_SUCCESS
+
+            # Set tolerances
+            status = CVodeSStolerances(cvode.get(), self.rtol, self.atol)
+            assert status == CV_SUCCESS
+
+            # Set max steps
+            status = CVodeSetMaxNumSteps(cvode.get(), 100000)
+            assert status == CV_SUCCESS
+
+            status = CVodeSetLinearSolver(cvode.get(), ls, None)
+            assert status == CV_SUCCESS
+
+            # Enable adjoint sensitivity analysis if desired
+            # need forward sensitivity option as well
+            status = CVodeAdjInit(cvode.get(), steps, CV_HERMITE)
+            assert status == CV_SUCCESS
+
+            # need to setup CVodeRootInit()
+
+            # if one step mode, will need to do single steps to copy all data --
+            # if not one step mode, full step to next_t
+            # status, tret, ncheck = CVodeF(cvode.get(), next_t, y, CV_NORMAL)
+            status, tret = CVode(cvode.get(), next_t, y, CV_NORMAL)
+            assert status == CV_SUCCESS
+
+            # probably can put one-step loop here and it would behave correctly -- break
+            # loop on root found, then handle end-of-segment logic (find root, update,
+            # or terminate)
+
+            self.store_result(tret, np.copy(yarr[:]))
+            # also need to store cvode, etc.
+            last_t = tret
 
             # each iteration of this loop is one step until next event or time stop
-            while True:
+            while False:
                 solver_res = solver.step(next_t)
                 if solver_res.flag < 0:
                     breakpoint()
@@ -570,13 +650,17 @@ class System:
         dim_state,
         initial_state,
         dot,
-        jac,
-        time_generator,
+        # these are related Event objects...
         events,
         updates,
-        num_events,
         terminating,
+        num_events,
+        # processed from Event objects
+        time_generator,
+        jac=None,
         dynamic_output=None,
+        integrand_terms=None,
+        terminal_terms=None,
         **solver_options,
     ):
         """
@@ -601,6 +685,8 @@ class System:
         self._events = events
         #     list of functions for
         self._updates = updates
+        self.terminating = terminating
+
         self.dynamic_output = dynamic_output
 
         #     define initial conditions
@@ -618,7 +704,6 @@ class System:
 
         # list of root indices that are terminating events...
         # any(rootsfound[terminating]) --> terminates simulation
-        self.terminating = terminating
 
         self.dim_state = dim_state
         self.num_events = len(updates)
@@ -719,6 +804,11 @@ class ResultBase:
 @dataclass
 class Result(ResultBase, ResultMixin):
     pass
+
+
+@dataclass
+class CVOdeResult(ResultBase, ResultMixin):
+    cvode_mems: list[CVodeCreate] = field(default_factory=list)
 
 
 class ResultSegmentInterpolant(NamedTuple):
