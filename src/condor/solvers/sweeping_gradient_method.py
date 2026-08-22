@@ -18,7 +18,9 @@ try:
         CV_BDF,
         CV_HERMITE,
         CV_NORMAL,
+        CV_ONE_STEP,
         CV_SUCCESS,
+        CV_TSTOP_RETURN,
         CVode,
         CVodeAdjInit,
         CVodeCreate,
@@ -27,14 +29,18 @@ try:
         CVodeSetLinearSolver,
         CVodeSetMaxNumSteps,
         CVodeSStolerances,
+        CVodeSetStopTime,
+        CVodeSetInterpolateStopTime,
     )
 except ModuleNotFoundError:
     has_cvode = False
 else:
     has_cvode = True
 
-status, sunctx = SUNContext_Create(SUN_COMM_NULL)
-assert status == SUN_SUCCESS
+if has_cvode:
+    status, sunctx = SUNContext_Create(SUN_COMM_NULL)
+    if status != SUN_SUCCESS:
+        raise ValueError
 
 from typing import NamedTuple, Optional
 
@@ -429,7 +435,7 @@ class SolverCVODE(SolverMixin):
             x,
         )
 
-    def simulate(self):
+    def simulate(self, one_step=1):
         """
         expects:
         self.solver is an object with CVODE-like interface to parameterized
@@ -501,6 +507,9 @@ class SolverCVODE(SolverMixin):
             status = CVodeInit(cvode.get(), self.dots, last_t, y)
             assert status == CV_SUCCESS
 
+            status = CVodeSetStopTime(cvode.get(), next_t)
+            status = CVodeSetInterpolateStopTime(cvode.get(), 1)
+
             # Set tolerances
             status = CVodeSStolerances(cvode.get(), self.rtol, self.atol)
             assert status == CV_SUCCESS
@@ -521,9 +530,18 @@ class SolverCVODE(SolverMixin):
 
             # if one step mode, will need to do single steps to copy all data --
             # if not one step mode, full step to next_t
-            # status, tret, ncheck = CVodeF(cvode.get(), next_t, y, CV_NORMAL)
-            status, tret = CVode(cvode.get(), next_t, y, CV_NORMAL)
-            assert status == CV_SUCCESS
+            if one_step:
+                while True:
+                    status, tret = CVode(cvode.get(), next_t, y, CV_ONE_STEP)
+                    if status >= 0:
+                        self.store_result(tret, np.copy(yarr[:]))
+                    if status != CV_SUCCESS:
+                        break
+            else:
+                # status, tret, ncheck = CVodeF(cvode.get(), next_t, y, CV_NORMAL)
+                status, tret = CVode(cvode.get(), next_t, y, CV_NORMAL)
+                if status not in (CV_TSTOP_RETURN, CV_SUCCESS):
+                    breakpoint()
 
             # probably can put one-step loop here and it would behave correctly -- break
             # loop on root found, then handle end-of-segment logic (find root, update,
@@ -534,15 +552,7 @@ class SolverCVODE(SolverMixin):
             last_t = tret
 
             # each iteration of this loop is one step until next event or time stop
-            while False:
-                solver_res = solver.step(next_t)
-                if solver_res.flag < 0:
-                    breakpoint()
-
-                self.store_result(
-                    np.copy(solver_res.values.t), np.copy(solver_res.values.y)
-                )
-
+            if False:
                 if solver_res.flag == StatusEnum.ROOT_RETURN:
                     rootsfound = solver.rootinfo()
 
@@ -745,7 +755,10 @@ class System:
             yield np.array(t).reshape(-1)[0]
 
     def __call__(self, p):
-        self.result = Result(p=p, system=self)
+        if isinstance(self.system_solver, SolverCVODE):
+            self.result = CVodeResult(p=p, system=self)
+        else:
+            self.result = Result(p=p, system=self)
         self.system_solver.simulate()
         result = self.result
         result.t = np.array(result.t)
@@ -807,7 +820,7 @@ class Result(ResultBase, ResultMixin):
 
 
 @dataclass
-class CVOdeResult(ResultBase, ResultMixin):
+class CVodeResult(ResultBase, ResultMixin):
     cvode_mems: list[CVodeCreate] = field(default_factory=list)
 
 
