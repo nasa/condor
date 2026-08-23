@@ -312,6 +312,9 @@ class TrajectoryAnalysis:
             num_events=num_events,
             terminating=terminating,
             dynamic_output=self.dynamic_output_func,
+            dim_output=model.trajectory_output._count,
+            integrand_terms=self.traj_out_integrand_func,
+            terminal_terms=self.traj_out_terminal_term_func,
             **state_options,
         )
         self.state_system.model_instance = self.model_instance

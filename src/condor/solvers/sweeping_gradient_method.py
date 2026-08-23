@@ -25,12 +25,14 @@ try:
         CVodeAdjInit,
         CVodeCreate,
         CVodeF,
+        CVodeGetQuad,
         CVodeInit,
+        CVodeQuadInit,
+        CVodeSetInterpolateStopTime,
         CVodeSetLinearSolver,
         CVodeSetMaxNumSteps,
-        CVodeSStolerances,
         CVodeSetStopTime,
-        CVodeSetInterpolateStopTime,
+        CVodeSStolerances,
     )
 except ModuleNotFoundError:
     has_cvode = False
@@ -402,6 +404,9 @@ class SolverCVODE(SolverMixin):
         self.y = N_VNew_Serial(self.system.dim_state, sunctx)
         assert self.y is not None
 
+        self.Q = N_VNew_Serial(self.system.dim_output, sunctx)
+        assert self.Q is not None
+
         # should take options for linear solver, CVOde method (CV_BDF, CV_*)
         # adjoint interp, steps, etc
 
@@ -427,6 +432,12 @@ class SolverCVODE(SolverMixin):
         xdot = N_VGetArrayPointer(xdot_sd)
         jac = SUNDenseMatrix_Data(jac_sd)
         jac[...] = self.system.jac(t, x)
+        return 0
+
+    def integrand_terms(self, t, x_sd, Qd_sd, _):
+        x = N_VGetArrayPointer(x_sd)
+        Qd = N_VGetArrayPointer(Qd_sd)
+        Qd[:] = self.system.integrand_terms(t, x)
         return 0
 
     def events(self, t, x, g):
@@ -485,6 +496,10 @@ class SolverCVODE(SolverMixin):
         yarr = N_VGetArrayPointer(y)
         yarr[:] = last_x
 
+        Q = self.Q
+        Qarr = N_VGetArrayPointer(Q)
+        Qarr[:] = 0.0
+
         while True:
             # contents of loop could be a funciton call?
             next_t = next(time_generator)
@@ -501,11 +516,16 @@ class SolverCVODE(SolverMixin):
 
             # Create CVODE solver and set up problem
             cvode = CVodeCreate(CV_BDF, sunctx)
+            results.cvode_mems.append(cvode)
             assert cvode is not None
 
             # Initialize CVODE with ODE RHS
             status = CVodeInit(cvode.get(), self.dots, last_t, y)
             assert status == CV_SUCCESS
+
+            if self.system.dim_output:
+                status = CVodeQuadInit(cvode.get(), self.integrand_terms, Q)
+                assert status == CV_SUCCESS
 
             status = CVodeSetStopTime(cvode.get(), next_t)
             status = CVodeSetInterpolateStopTime(cvode.get(), 1)
@@ -543,6 +563,11 @@ class SolverCVODE(SolverMixin):
                 if status not in (CV_TSTOP_RETURN, CV_SUCCESS):
                     breakpoint()
 
+            if self.system.dim_output:
+                status, tret = CVodeGetQuad(cvode.get(), Q)
+                trajectory_output = Qarr[:] + system.terminal_terms(tret, yarr[:])
+                assert status == CV_SUCCESS
+                print("quadrature output:", trajectory_output)
             # probably can put one-step loop here and it would behave correctly -- break
             # loop on root found, then handle end-of-segment logic (find root, update,
             # or terminate)
@@ -660,17 +685,18 @@ class System:
         dim_state,
         initial_state,
         dot,
+        time_generator,
         # these are related Event objects...
         events,
+        # processed from Event objects
         updates,
         terminating,
         num_events,
-        # processed from Event objects
-        time_generator,
+        dim_output,
+        integrand_terms,
+        terminal_terms,
         jac=None,
         dynamic_output=None,
-        integrand_terms=None,
-        terminal_terms=None,
         **solver_options,
     ):
         """
@@ -692,10 +718,15 @@ class System:
         #     for CVODE interface once wrapped
         self._dot = dot
         self._jac = jac
+
+        # these all go together to define events
         self._events = events
-        #     list of functions for
         self._updates = updates
         self.terminating = terminating
+
+        # these go together to to define trajectory output
+        self._integrand_terms = integrand_terms
+        self._terminal_terms = terminal_terms
 
         self.dynamic_output = dynamic_output
 
@@ -716,6 +747,7 @@ class System:
         # any(rootsfound[terminating]) --> terminates simulation
 
         self.dim_state = dim_state
+        self.dim_output = dim_output
         self.num_events = len(updates)
         self.make_solver(
             **solver_options,
@@ -729,6 +761,12 @@ class System:
 
     def initial_state(self):
         return np.array(self._initial_state(self.result.p)).reshape(-1)
+
+    def terminal_terms(self, t, x):
+        return np.array(self._terminal_terms(self.result.p, t, x)).reshape(-1)
+
+    def integrand_terms(self, t, x):
+        return np.array(self._integrand_terms(self.result.p, t, x)).reshape(-1)
 
     def dots(self, t, x):
         return np.array(self._dot(self.result.p, t, x)).reshape(-1)
