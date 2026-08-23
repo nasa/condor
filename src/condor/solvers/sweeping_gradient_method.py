@@ -565,9 +565,8 @@ class SolverCVODE(SolverMixin):
 
             if self.system.dim_output:
                 status, tret = CVodeGetQuad(cvode.get(), Q)
-                trajectory_output = Qarr[:] + system.terminal_terms(tret, yarr[:])
                 assert status == CV_SUCCESS
-                print("quadrature output:", trajectory_output)
+                results.o = Qarr[:] + system.terminal_terms(tret, yarr[:])
             # probably can put one-step loop here and it would behave correctly -- break
             # loop on root found, then handle end-of-segment logic (find root, update,
             # or terminate)
@@ -799,12 +798,29 @@ class System:
             self.result = Result(p=p, system=self)
         self.system_solver.simulate()
         result = self.result
+        self.result = None
+
         result.t = np.array(result.t)
         if self.dim_state == 1:
             result.x = [np.atleast_1d(x) for x in result.x]
         result.x = np.array(result.x)
         result.y = np.array(result.y)
-        self.result = None
+
+        if isinstance(self.system_solver, SolverCVODE):
+            return result
+        # evaluate the trajectory analysis of this result
+        # should this return a dataclass? Or just the vector of results?
+        integral = 0.0
+        integrand_interpolant = ResultInterpolant(
+            result=result, function=self._integrand_terms
+        )
+        for segment in integrand_interpolant:
+            integrand_antideriv = segment.interpolant.antiderivative()
+            integral += integrand_antideriv(segment.t1) - integrand_antideriv(
+                segment.t0
+            )
+        result.o = self._terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
+
         return result
 
 
@@ -816,6 +832,7 @@ class ResultMixin:
 @dataclass
 class ResultBase:
     system: System
+    o: list[float] = field(default_factory=list)
     t: list[float] = field(default_factory=list)
     x: list[list] = field(default_factory=list)
     y: list[list] = field(default_factory=list)
@@ -840,6 +857,7 @@ class ResultBase:
             x=self.x,
             y=self.y,
             p=self.p,
+            o=self.o,
         )
 
     @classmethod
@@ -1236,21 +1254,8 @@ class TrajectoryAnalysis:
         self.cached_p = p
         result = self.res = self.state_system(p)
 
-        # evaluate the trajectory analysis of this result
-        # should this return a dataclass? Or just the vector of results?
-        integral = 0.0
-        integrand_interpolant = ResultInterpolant(
-            result=result, function=self.integrand_terms
-        )
-        for segment in integrand_interpolant:
-            integrand_antideriv = segment.interpolant.antiderivative()
-            integral += integrand_antideriv(segment.t1) - integrand_antideriv(
-                segment.t0
-            )
-        self.cached_output = (
-            self.terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
-        )
-        return self.cached_output
+        self.cached_output = result.o
+        return result.o
 
 
 @dataclass
