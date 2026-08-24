@@ -19,6 +19,7 @@ try:
         CV_HERMITE,
         CV_NORMAL,
         CV_ONE_STEP,
+        CV_ROOT_RETURN,
         CV_SUCCESS,
         CV_TSTOP_RETURN,
         CVode,
@@ -391,12 +392,16 @@ class SolverCVODE(SolverMixin):
     def __init__(
         self,
         system,
+        sen_system=None,
+        adj_system=None,
         atol=1e-12,
         rtol=1e-6,
         adaptive_min_steps=0.0,
         max_step_size=0.0,
     ):
         self.system = system
+        self.sen_system = sen_system
+        self.adj_system = adj_system
         self.adaptive_min_steps = adaptive_min_steps
         self.atol = atol
         self.rtol = rtol
@@ -446,7 +451,7 @@ class SolverCVODE(SolverMixin):
             x,
         )
 
-    def simulate(self, one_step=1):
+    def simulate(self, one_step=0):
         """
         expects:
         self.solver is an object with CVODE-like interface to parameterized
@@ -523,13 +528,6 @@ class SolverCVODE(SolverMixin):
             status = CVodeInit(cvode.get(), self.dots, last_t, y)
             assert status == CV_SUCCESS
 
-            if self.system.dim_output:
-                status = CVodeQuadInit(cvode.get(), self.integrand_terms, Q)
-                assert status == CV_SUCCESS
-
-            status = CVodeSetStopTime(cvode.get(), next_t)
-            status = CVodeSetInterpolateStopTime(cvode.get(), 1)
-
             # Set tolerances
             status = CVodeSStolerances(cvode.get(), self.rtol, self.atol)
             assert status == CV_SUCCESS
@@ -541,9 +539,34 @@ class SolverCVODE(SolverMixin):
             status = CVodeSetLinearSolver(cvode.get(), ls, None)
             assert status == CV_SUCCESS
 
+            if self.system.dim_output:
+                status = CVodeQuadInit(cvode.get(), self.integrand_terms, Q)
+                assert status == CV_SUCCESS
+
+                # options
+
+            if self.sen_system is not None and test_in is not None:
+                status = CVodeSensInit()
+
+                # options
+
+            status = CVodeSetStopTime(cvode.get(), next_t)
+            status = CVodeSetInterpolateStopTime(cvode.get(), 1)
+
             # Enable adjoint sensitivity analysis if desired
             # need forward sensitivity option as well
-            status = CVodeAdjInit(cvode.get(), steps, CV_HERMITE)
+
+            # Ns - number of sensitivities
+            # Na - number of adjoints
+            # both specified, then implementation must parameterize by weighting vector
+            # "test vectors"
+            # of size Ns/Na, if for jacobian, must be eye
+            # or 1 for directional hessian
+            # implementation makes function dependent on test vector,
+            # but also wraps in an if-else to bypass 0'd out channels
+
+            if self.adj_system is not None and test_out is not None:
+                status = CVodeAdjInit(cvode.get(), steps, CV_HERMITE)
             assert status == CV_SUCCESS
 
             # need to setup CVodeRootInit()
@@ -562,64 +585,51 @@ class SolverCVODE(SolverMixin):
                 status, tret = CVode(cvode.get(), next_t, y, CV_NORMAL)
                 if status not in (CV_TSTOP_RETURN, CV_SUCCESS):
                     breakpoint()
+                self.store_result(tret, np.copy(yarr[:]))
 
             if self.system.dim_output:
-                status, tret = CVodeGetQuad(cvode.get(), Q)
-                assert status == CV_SUCCESS
+                quad_status, tret = CVodeGetQuad(cvode.get(), Q)
+                assert quad_status == CV_SUCCESS
                 results.o = Qarr[:] + system.terminal_terms(tret, yarr[:])
             # probably can put one-step loop here and it would behave correctly -- break
             # loop on root found, then handle end-of-segment logic (find root, update,
             # or terminate)
 
-            self.store_result(tret, np.copy(yarr[:]))
-            # also need to store cvode, etc.
+            if status == CV_ROOT_RETURN:
+                rootsfound = solver.rootinfo()
+
+            if status == CV_TSTOP_RETURN:
+                # assume this is associated with an event
+                # does occur on time_switch but not sp_lqr
+                gs = system.events(results.t[-1], results.x[-1])
+                min_e = np.abs(gs).min()
+                rootsfound = (gs == min_e).astype(int)
+                assert next_t == tret
+
+            if status in (CV_TSTOP_RETURN, CV_ROOT_RETURN):
+                idx = len(results.t)
+                results.e.append(Root(idx, rootsfound))
+                next_x = system.update(
+                    results.t[-1],
+                    results.x[-1],
+                    rootsfound,
+                )
+                try:
+                    terminate = np.any(rootsfound[system.terminating] != 0)
+                except Exception as e:
+                    print("Hit exemption:")
+                    print(e)
+                    print("You may try to continue through or exit")
+                    breakpoint()
+                self.store_result(tret, next_x)
+
+                if terminate:
+                    break
+
             last_t = tret
 
-            # each iteration of this loop is one step until next event or time stop
-            if False:
-                if solver_res.flag == StatusEnum.ROOT_RETURN:
-                    rootsfound = solver.rootinfo()
-
-                if solver_res.flag == StatusEnum.TSTOP_RETURN:
-                    # assume this is associated with an event
-                    # does occur on time_switch but not sp_lqr
-                    gs = system.events(results.t[-1], results.x[-1])
-                    min_e = np.abs(gs).min()
-                    rootsfound = (gs == min_e).astype(int)
-
-                if solver_res.flag in (StatusEnum.TSTOP_RETURN, StatusEnum.ROOT_RETURN):
-                    idx = len(results.t)
-                    results.e.append(Root(idx, rootsfound))
-                    next_x = system.update(
-                        results.t[-1],
-                        results.x[-1],
-                        rootsfound,
-                    )
-                    try:
-                        terminate = np.any(rootsfound[system.terminating] != 0)
-                    except Exception as e:
-                        print("Hit exemption:")
-                        print(e)
-                        print("You may try to continue through or exit")
-                        breakpoint()
-                    self.store_result(np.copy(solver_res.values.t), next_x)
-
-                    if terminate:
-                        self.store_result(np.copy(solver_res.values.t), next_x)
-                        return
-
-                    solver.init_step(solver_res.values.t, next_x)
-                    last_x = next_x
-
-                if (integration_direction * solver_res.values.t) >= (
-                    integration_direction * next_t
-                ):
-                    break
-                if solver_res.flag == StatusEnum.TSTOP_RETURN:
-                    # does occur on time_switch but not sp_lqr
-                    break
-
-            last_t = next_t
+        if self.adj_system is not None and test_out is not None:
+            pass
 
 
 class Root(NamedTuple):
@@ -791,12 +801,13 @@ class System:
         for t in self._time_generator(self.result.p):
             yield np.array(t).reshape(-1)[0]
 
-    def __call__(self, p):
+    def __call__(self, p, from_implementation=False):
         if isinstance(self.system_solver, SolverCVODE):
             self.result = CVodeResult(p=p, system=self)
+            self.system_solver.simulate(one_step=from_implementation)
         else:
             self.result = Result(p=p, system=self)
-        self.system_solver.simulate()
+            self.system_solver.simulate()
         result = self.result
         self.result = None
 
@@ -1252,7 +1263,7 @@ class TrajectoryAnalysis:
         if self.cached_p is not None and np.all(self.cached_p == p):
             return self.cached_output
         self.cached_p = p
-        result = self.res = self.state_system(p)
+        result = self.res = self.state_system(p, self.from_implementation)
 
         self.cached_output = result.o
         return result.o

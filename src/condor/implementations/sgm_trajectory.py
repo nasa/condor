@@ -584,10 +584,11 @@ class TrajectoryAnalysis:
             model_instance._res.save(filename)
 
     def __call__(self, model_instance):
-        self.callback.from_implementation = True
+        self.callback.function.from_implementation = True
+        # self.callback.function.from_implementation = False
         self.args = model_instance.parameter.flatten()
         self.out = self.callback(self.args)
-        self.callback.from_implementation = False
+        self.callback.function.from_implementation = False
 
         if hasattr(self.trajectory_analysis_nom, "res"):
             res = self.trajectory_analysis_nom.res
