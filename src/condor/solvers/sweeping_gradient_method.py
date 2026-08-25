@@ -660,7 +660,7 @@ class System:
             yield np.array(t).reshape(-1)[0]
 
     def __call__(self, p):
-        self.result = Result(p=p, system=self)
+        self.result = Result(p=np.array(p), system=self)
         self.system_solver.simulate()
         result = self.result
         result.t = np.array(result.t)
