@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Linear Covariance Analysis" href="orbital_1.html"><link rel="prev" title="Continuous Time LQR" href="ct_lqr.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Custom Model Template - Condor 0.3.4.dev3+gacce87777 documentation</title>
+        <title>Custom Model Template - Condor 0.3.4.dev4+g30718f32d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev3+gacce87777 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev3+gacce87777 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -285,7 +285,7 @@ CustomMetaprogrammedType.processs_placeholders for &lt;CustomMetaprogrammed: MyM
 CustomMetaprogrammedType.__prepare__ with new_kwarg=handle a string
 CustomMetaprogrammedType.__new__ with new_kwarg=handle a string
 CustomMetaprogrammedType.processs_placeholders for &lt;CustomMetaprogrammed: MyModel1&gt; is a good place for manipulating substitutions
-Use for something like ReferenceFrame, it&#39;s also possible to modify the kwargs
+Use for something like ReferenceFrame, it's also possible to modify the kwargs
 
 &lt;ModelsCouldAlwaysTakeNonCondorInputs: x=1.2&gt;
 </pre></div>
@@ -300,13 +300,13 @@ Use for something like ReferenceFrame, it&#39;s also possible to modify the kwar
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">process_placeholders</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_cls</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;CustomMetaprogrammedType.processs_placeholders for </span><span class="si">{</span><span class="n">new_cls</span><span class="si">}</span><span class="s2"> is a good &quot;</span>
-            <span class="s2">&quot;place for manipulating substitutions&quot;</span>
+            <span class="sa">f</span><span class="s2">"CustomMetaprogrammedType.processs_placeholders for </span><span class="si">{</span><span class="n">new_cls</span><span class="si">}</span><span class="s2"> is a good "</span>
+            <span class="s2">"place for manipulating substitutions"</span>
         <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__prepare__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        custom processing behavior use cases:</span>
 <span class="sd">        - condor-flight cross-substitution of vehicle state to environment models</span>
 <span class="sd">        (atmosphere/wind/gravity/etc)</span>
@@ -316,9 +316,9 @@ Use for something like ReferenceFrame, it&#39;s also possible to modify the kwar
 
 <span class="sd">        catching custom metaclass arguments use cases:</span>
 <span class="sd">        big gascon: component inputs and sub-assembly declaration (like a primary model)</span>
-<span class="sd">        then singleton submodels for &quot;outputs&quot;, but these are not condor built-in</span>
+<span class="sd">        then singleton submodels for "outputs", but these are not condor built-in</span>
 <span class="sd">        submodels, gascon will define a template for each:</span>
-<span class="sd">         - weight with &quot;subtotal&quot; placheolder</span>
+<span class="sd">         - weight with "subtotal" placheolder</span>
 <span class="sd">         - aero with lift-curve slope, equivalent wetted area, etc, placeholder +</span>
 <span class="sd">           potentially dynamic inputs?</span>
 <span class="sd">         - propulsion with dynamic inputs (maybe base aircraft provides all the core</span>
@@ -360,7 +360,7 @@ Use for something like ReferenceFrame, it&#39;s also possible to modify the kwar
 <span class="sd">        class EngineOutDrag(Turbofan):</span>
 <span class="sd">            drag_lbf = ...</span>
 
-<span class="sd">        # I kinda like this syntax, use the name of the &quot;subclass&quot; to figure out which</span>
+<span class="sd">        # I kinda like this syntax, use the name of the "subclass" to figure out which</span>
 <span class="sd">        # template to use?</span>
 
 
@@ -368,12 +368,12 @@ Use for something like ReferenceFrame, it&#39;s also possible to modify the kwar
 
 
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CustomMetaprogrammedType.__prepare__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CustomMetaprogrammedType.__prepare__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__prepare__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CustomMetaprogrammedType.__new__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CustomMetaprogrammedType.__new__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">new_cls</span>
 
@@ -386,7 +386,7 @@ Use for something like ReferenceFrame, it&#39;s also possible to modify the kwar
     <span class="k">pass</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">MyModel1</span><span class="p">(</span><span class="n">CustomMetaprogrammed</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="s2">&quot;handle a string&quot;</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyModel1</span><span class="p">(</span><span class="n">CustomMetaprogrammed</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="s2">"handle a string"</span><span class="p">):</span>
     <span class="k">pass</span>
 
 
@@ -396,16 +396,16 @@ Use for something like ReferenceFrame, it&#39;s also possible to modify the kwar
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">my_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Use for something like ReferenceFrame, it&#39;s also possible to modify the &quot;</span>
-            <span class="s2">&quot;kwargs&quot;</span>
+            <span class="s2">"Use for something like ReferenceFrame, it's also possible to modify the "</span>
+            <span class="s2">"kwargs"</span>
         <span class="p">)</span>
         <span class="c1"># store frame state as condor elements, then can use normal python type logic to</span>
         <span class="c1"># compose bigger expressions like finding path from arbitrary frames -- but</span>
         <span class="c1"># would need to do something to make sure that the extra kwargs were saved and</span>
-        <span class="c1"># re-bound as needed... or maybe it&#39;s okay if they&#39;re not? the final expression</span>
+        <span class="c1"># re-bound as needed... or maybe it's okay if they're not? the final expression</span>
         <span class="c1"># which will get used with the bound thing will be right? not sure.</span>
 
-        <span class="c1"># it&#39;s also possible to manipulate the (k)wargs that get passed to super based</span>
+        <span class="c1"># it's also possible to manipulate the (k)wargs that get passed to super based</span>
         <span class="c1"># on my_kwarg -- is that a way this could work?</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
@@ -477,7 +477,7 @@ Use for something like ReferenceFrame, it&#39;s also possible to modify the kwar
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=ae3cf199"></script>
+</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

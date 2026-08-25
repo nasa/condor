@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Discrete Time LQR" href="sp_lqr.html"><link rel="prev" title="Linear Covariance Analysis" href="orbital_1.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Warm Starting in Iterative Solvers - Condor 0.3.4.dev3+gacce87777 documentation</title>
+        <title>Warm Starting in Iterative Solvers - Condor 0.3.4.dev4+g30718f32d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev3+gacce87777 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev3+gacce87777 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -310,7 +310,7 @@ history with an <code class="docutils literal notranslate"><span class="pre">ite
 
         <span class="nd">@staticmethod</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">iter_callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  inner </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  inner </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Calling the model twice without warm starting gives the same number of iterations each
@@ -394,11 +394,11 @@ inner  1: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== with warm_start =&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== with warm_start ="</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a><span class="p">)</span>
     <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a>
     <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=== Embed within optimization over disk radius&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== Embed within optimization over disk radius"</span><span class="p">)</span>
 
     <span class="k">class</span><span class="w"> </span><span class="nc">Outer</span><span class="p">(</span><span class="n">condor</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
         <span class="c1"># r = variable(initializer=2+(5/16)+(1/64))</span>
@@ -419,7 +419,7 @@ inner  1: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.
 
             <span class="nd">@staticmethod</span>
             <span class="k">def</span><span class="w"> </span><span class="nf">iter_callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;outer </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"outer </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">out</span> <span class="o">=</span> <span class="n">Outer</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">r</span></a><span class="p">)</span>
@@ -432,6 +432,26 @@ inner  1: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.
   inner  2: variable=RosenbrockOnCircleVariable(x=array([1.04114549]), y=array([1.08192418]))
   inner  3: variable=RosenbrockOnCircleVariable(x=array([1.03973705]), y=array([1.08117964]))
   inner  4: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
+/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning:
+casadi: a numpy function was called on a casadi value (issue #2959).
+This used legacy casadi 3.7.2 behaviour, where the result type follows
+the input:
+  - a numeric input (DM)       -&gt; a plain numpy array
+  - a symbolic input (SX / MX) -&gt; a casadi value, or an error if the
+                                  function has no casadi equivalent
+
+For a shape-correct, type-preserving result, opt in to the
+casadi-aware numpy support:
+
+    try:
+        ca.GlobalOptions.setNumpyMode(1)
+    except AttributeError:
+        pass
+
+Or use setNumpyMode(-1) to keep legacy behaviour silently.
+Shown once; run python with -W always to see every occurrence.
+
+  _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
   inner  5: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
   inner  6: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
   inner  7: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
@@ -527,7 +547,7 @@ outer  5: variable=OuterVariable(r=array([1.41421356]))
 [1.41421356]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.201 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.180 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-rosenbrock-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/723d4855ff15fef0afdff48f86f7207f/rosenbrock.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">rosenbrock.ipynb</span></code></a></p>
@@ -591,7 +611,7 @@ outer  5: variable=OuterVariable(r=array([1.41421356]))
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=ae3cf199"></script>
+</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

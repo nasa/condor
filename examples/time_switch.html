@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="prev" title="Creating Model Templates" href="templating.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Optimal Transfer With Time Trigger - Condor 0.3.4.dev3+gacce87777 documentation</title>
+        <title>Optimal Transfer With Time Trigger - Condor 0.3.4.dev4+g30718f32d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev3+gacce87777 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev3+gacce87777 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -374,7 +374,7 @@ error over transfer and final times.</p>
         <span class="n">__implementation__</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">implementations</span><span class="o">.</span><span class="n">ScipyCG</span>
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">old:</span>
 <span class="sd">eval jacobian for jac_Transfer</span>
 <span class="sd">args [DM([1, 4]), DM(00)]</span>
@@ -383,10 +383,10 @@ error over transfer and final times.</p>
 
 
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;\nold:\neval jacobian for jac_Transfer\nargs [DM([1, 4]), DM(00)]\np=[1, 4]\n[[-56.9839, 0]]\n\n\n\n&#39;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>'\nold:\neval jacobian for jac_Transfer\nargs [DM([1, 4]), DM(00)]\np=[1, 4]\n[[-56.9839, 0]]\n\n\n\n'
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">MinimumTime</span><span class="o">.</span><span class="n">set_initial</span><span class="p">(</span><span class="n">t1</span><span class="o">=</span><span class="mf">2.163165480675697</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="mf">4.361971866705403</span><span class="p">)</span>
@@ -395,15 +395,35 @@ error over transfer and final times.</p>
 <span class="n">opt</span> <span class="o">=</span> <span class="n">MinimumTime</span><span class="p">()</span>
 <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">perf_counter</span></a><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time to run:&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_start</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"time to run:"</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_start</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">t1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">t2</span></a><span class="p">)</span>
 <span class="c1"># print(jac)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult" title="scipy.optimize.OptimizeResult" class="sphx-glr-backref-module-scipy-optimize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">_stats</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
   min_out = minimize(
-time to run: 0.3005315229999894
+/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning:
+casadi: a numpy function was called on a casadi value (issue #2959).
+This used legacy casadi 3.7.2 behaviour, where the result type follows
+the input:
+  - a numeric input (DM)       -&gt; a plain numpy array
+  - a symbolic input (SX / MX) -&gt; a casadi value, or an error if the
+                                  function has no casadi equivalent
+
+For a shape-correct, type-preserving result, opt in to the
+casadi-aware numpy support:
+
+    try:
+        ca.GlobalOptions.setNumpyMode(1)
+    except AttributeError:
+        pass
+
+Or use setNumpyMode(-1) to keep legacy behaviour silently.
+Shown once; run python with -W always to see every occurrence.
+
+  _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
+time to run: 0.34148946300001626
 [2.99999968] [2.99999216]
  message: Optimization terminated successfully.
  success: True
@@ -447,7 +467,7 @@ time to run: 0.3005315229999894
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.664 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.693 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-time-switch-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/1f4d8c0290aaa36ac7ba257f36664b93/time_switch.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">time_switch.ipynb</span></code></a></p>
@@ -503,7 +523,7 @@ time to run: 0.3005315229999894
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=ae3cf199"></script>
+</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

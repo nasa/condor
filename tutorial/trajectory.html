@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="How-To Guide" href="../howto/index.html"><link rel="prev" title="Polar Transformation" href="polar_transform.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Working with trajectories - Condor 0.3.4.dev3+gacce87777 documentation</title>
+        <title>Working with trajectories - Condor 0.3.4.dev4+g30718f32d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev3+gacce87777 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev3+gacce87777 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -370,10 +370,10 @@ accessed for plotting. For example, we can plot time histories</p>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">first_sim</span><span class="o">.</span><span class="n">t</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">state_hist</span></a><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">state_name</span></a><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"t"</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_001.png" srcset="../_images/sphx_glr_trajectory_001.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 18.055888888888887, &#39;t&#39;)
+<img src="../_images/sphx_glr_trajectory_001.png" srcset="../_images/sphx_glr_trajectory_001.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 18.055888888888887, 't')
 </pre></div>
 </div>
 <p>and the flight path</p>
@@ -382,15 +382,15 @@ accessed for plotting. For example, we can plot time histories</p>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">flight_path_plot</span><span class="p">(</span><span class="n">sims</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">):</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">6.4</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"altitude"</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"range"</span><span class="p">)</span>
     <span class="c1"># reverse zorders to show progression of sims more nicely</span>
     <span class="n">zorders</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mf">2.1</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sims</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">marker</span> <span class="o">=</span> <span class="n">plot_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;marker&quot;</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">)</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="n">plot_kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"marker"</span><span class="p">,</span> <span class="s2">"o"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">sim</span><span class="p">,</span> <span class="n">zorder</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sims</span><span class="p">,</span> <span class="n">zorders</span><span class="p">):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="n">zorder</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_kwargs</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ax</span>
@@ -399,7 +399,7 @@ accessed for plotting. For example, we can plot time histories</p>
 <span class="n">flight_path_plot</span><span class="p">([</span><span class="n">first_sim</span><span class="p">])</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_002.png" srcset="../_images/sphx_glr_trajectory_002.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;range&#39;, ylabel=&#39;altitude&#39;&gt;
+<img src="../_images/sphx_glr_trajectory_002.png" srcset="../_images/sphx_glr_trajectory_002.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel='range', ylabel='altitude'&gt;
 </pre></div>
 </div>
 </section>
@@ -425,10 +425,10 @@ event).</p>
 <span class="n">bounce_sim</span> <span class="o">=</span> <span class="n">BounceSim</span><span class="p">(</span><span class="o">**</span><span class="n">first_sim</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">asdict</span><span class="p">(),</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
 
 <span class="n">flight_path_plot</span><span class="p">([</span><span class="n">first_sim</span><span class="p">,</span> <span class="n">bounce_sim</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;original sim&quot;</span><span class="p">,</span> <span class="s2">&quot;with bounce&quot;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">"original sim"</span><span class="p">,</span> <span class="s2">"with bounce"</span><span class="p">])</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_003.png" srcset="../_images/sphx_glr_trajectory_003.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fe5f8135490&gt;
+<img src="../_images/sphx_glr_trajectory_003.png" srcset="../_images/sphx_glr_trajectory_003.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa2fcd36120&gt;
 </pre></div>
 </div>
 </section>
@@ -462,10 +462,10 @@ detect the switch from ascent to descent and perform a state update.</p>
 <span class="n">alpha_sim</span> <span class="o">=</span> <span class="n">AlphaSim</span><span class="p">(</span><span class="o">**</span><span class="n">bounce_sim</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">asdict</span><span class="p">(),</span> <span class="n">hold_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">flight_path_plot</span><span class="p">([</span><span class="n">first_sim</span><span class="p">,</span> <span class="n">bounce_sim</span><span class="p">,</span> <span class="n">alpha_sim</span><span class="p">])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;original sim&quot;</span><span class="p">,</span> <span class="s2">&quot;with bounce&quot;</span><span class="p">,</span> <span class="s2">&quot;gradual descent&quot;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">"original sim"</span><span class="p">,</span> <span class="s2">"with bounce"</span><span class="p">,</span> <span class="s2">"gradual descent"</span><span class="p">])</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_004.png" srcset="../_images/sphx_glr_trajectory_004.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fe5f3b98260&gt;
+<img src="../_images/sphx_glr_trajectory_004.png" srcset="../_images/sphx_glr_trajectory_004.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa2fd97bb30&gt;
 </pre></div>
 </div>
 </section>
@@ -519,12 +519,12 @@ max altitude state we added with the <code class="docutils literal notranslate">
 <p>Then we can compare areas with different hold angles of attack:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">params</span></a> <span class="o">=</span> <span class="n">bounce_sim</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">asdict</span><span class="p">()</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">results</span></a> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;alpha = +0.5 deg&quot;</span><span class="p">:</span> <span class="n">AlphaSim</span><span class="p">(</span><span class="o">**</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">params</span></a><span class="p">,</span> <span class="n">hold_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
-    <span class="s2">&quot;alpha = 0.0 deg&quot;</span><span class="p">:</span> <span class="n">AlphaSim</span><span class="p">(</span><span class="o">**</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">params</span></a><span class="p">,</span> <span class="n">hold_alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span>
-    <span class="s2">&quot;alpha = -0.5 deg&quot;</span><span class="p">:</span> <span class="n">AlphaSim</span><span class="p">(</span><span class="o">**</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">params</span></a><span class="p">,</span> <span class="n">hold_alpha</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="s2">"alpha = +0.5 deg"</span><span class="p">:</span> <span class="n">AlphaSim</span><span class="p">(</span><span class="o">**</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">params</span></a><span class="p">,</span> <span class="n">hold_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+    <span class="s2">"alpha = 0.0 deg"</span><span class="p">:</span> <span class="n">AlphaSim</span><span class="p">(</span><span class="o">**</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">params</span></a><span class="p">,</span> <span class="n">hold_alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span>
+    <span class="s2">"alpha = -0.5 deg"</span><span class="p">:</span> <span class="n">AlphaSim</span><span class="p">(</span><span class="o">**</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">params</span></a><span class="p">,</span> <span class="n">hold_alpha</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">),</span>
 <span class="p">}</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">area</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">results</span></a><span class="o">.</span><span class="n">items</span><span class="p">()],</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">area</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">results</span></a><span class="o">.</span><span class="n">items</span><span class="p">()],</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>alpha = +0.5 deg: [1459.42002699]
@@ -533,10 +533,10 @@ alpha = -0.5 deg: [214.23621474]
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">flight_path_plot</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">results</span></a><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;alpha&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\alpha$&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">results</span></a><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"alpha"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"$\alpha$"</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">results</span></a><span class="p">])</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_005.png" srcset="../_images/sphx_glr_trajectory_005.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fe5f3bfd790&gt;
+<img src="../_images/sphx_glr_trajectory_005.png" srcset="../_images/sphx_glr_trajectory_005.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa2fc22c290&gt;
 </pre></div>
 </div>
 </section>
@@ -568,12 +568,33 @@ and flown range.</p>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">flight_path_plot</span><span class="p">([</span><span class="n">opt_range</span><span class="o">.</span><span class="n">sim</span><span class="p">])</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
     <span class="o">*</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.92</span><span class="p">),</span>
-    <span class="sa">f</span><span class="s2">&quot;max range: </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt_range</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">max_r</span></a><span class="si">}</span><span class="s2"> ($</span><span class="se">\\</span><span class="s2">alpha=</span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt_range</span><span class="o">.</span><span class="n">alpha</span></a><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">"max range: </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt_range</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">max_r</span></a><span class="si">}</span><span class="s2"> ($</span><span class="se">\\</span><span class="s2">alpha=</span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt_range</span><span class="o">.</span><span class="n">alpha</span></a><span class="si">}</span><span class="s2">$"</span><span class="p">,</span>
     <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_trajectory_006.png" srcset="../_images/sphx_glr_trajectory_006.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.05, 0.92, &#39;max range: [81.82500377] ($\\alpha=[0.22725794]$&#39;)
+<img src="../_images/sphx_glr_trajectory_006.png" srcset="../_images/sphx_glr_trajectory_006.png" alt="trajectory" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning:
+casadi: a numpy function was called on a casadi value (issue #2959).
+This used legacy casadi 3.7.2 behaviour, where the result type follows
+the input:
+  - a numeric input (DM)       -&gt; a plain numpy array
+  - a symbolic input (SX / MX) -&gt; a casadi value, or an error if the
+                                  function has no casadi equivalent
+
+For a shape-correct, type-preserving result, opt in to the
+casadi-aware numpy support:
+
+    try:
+        ca.GlobalOptions.setNumpyMode(1)
+    except AttributeError:
+        pass
+
+Or use setNumpyMode(-1) to keep legacy behaviour silently.
+Shown once; run python with -W always to see every occurrence.
+
+  _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
+
+Text(0.05, 0.92, 'max range: [81.82500377] ($\\alpha=[0.22725794]$')
 </pre></div>
 </div>
 <p>We can store the iteration history using <code class="xref py py-attr docutils literal notranslate"><span class="pre">iter_callback</span></code> option on
@@ -605,15 +626,15 @@ of the analysis with the simulation outputs bound to the <code class="docutils l
 <span class="n">opt_alt</span> <span class="o">=</span> <span class="n">GlideOpt</span><span class="p">(</span><span class="n">trade_off</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">flight_path_plot</span><span class="p">([</span><span class="n">it</span><span class="o">.</span><span class="n">sim</span> <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hist</span><span class="o">.</span><span class="n">iters</span></a><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;iter </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">, alpha=</span><span class="si">{</span><span class="n">sim</span><span class="o">.</span><span class="n">alpha</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hist</span><span class="o">.</span><span class="n">iters</span></a><span class="p">)])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;max altitude iterations&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="sa">f</span><span class="s2">"iter </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">, alpha=</span><span class="si">{</span><span class="n">sim</span><span class="o">.</span><span class="n">alpha</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">sim</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hist</span><span class="o">.</span><span class="n">iters</span></a><span class="p">)])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"max altitude iterations"</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_trajectory_007.png" srcset="../_images/sphx_glr_trajectory_007.png" alt="max altitude iterations" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(-3.0, 45.0)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.578 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 32.236 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-trajectory-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c798b650080c665ed6e5e3ce733d7166/trajectory.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">trajectory.ipynb</span></code></a></p>
@@ -701,7 +722,7 @@ of the analysis with the simulation outputs bound to the <code class="docutils l
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=ae3cf199"></script>
+</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

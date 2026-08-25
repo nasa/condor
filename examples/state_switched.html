@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Creating Model Templates" href="templating.html"><link rel="prev" title="Discrete Time LQR" href="sp_lqr.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Optimal Transfer With State Trigger - Condor 0.3.4.dev3+gacce87777 documentation</title>
+        <title>Optimal Transfer With State Trigger - Condor 0.3.4.dev4+g30718f32d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev3+gacce87777 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev3+gacce87777 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -363,14 +363,34 @@ to download the full example code.</p>
 <span class="n">opt</span> <span class="o">=</span> <span class="n">MinimumTime</span><span class="p">()</span>
 <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">perf_counter</span></a><span class="p">()</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time to run:&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_start</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"time to run:"</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_start</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">p1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">p2</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult" title="scipy.optimize.OptimizeResult" class="sphx-glr-backref-module-scipy-optimize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">_stats</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
   min_out = minimize(
-time to run: 0.23673482300000614
+/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning:
+casadi: a numpy function was called on a casadi value (issue #2959).
+This used legacy casadi 3.7.2 behaviour, where the result type follows
+the input:
+  - a numeric input (DM)       -&gt; a plain numpy array
+  - a symbolic input (SX / MX) -&gt; a casadi value, or an error if the
+                                  function has no casadi equivalent
+
+For a shape-correct, type-preserving result, opt in to the
+casadi-aware numpy support:
+
+    try:
+        ca.GlobalOptions.setNumpyMode(1)
+    except AttributeError:
+        pass
+
+Or use setNumpyMode(-1) to keep legacy behaviour silently.
+Shown once; run python with -W always to see every occurrence.
+
+  _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
+time to run: 0.2581730120000145
 [-3.00000001] [1.]
  message: Optimization terminated successfully.
  success: True
@@ -404,7 +424,7 @@ time to run: 0.23673482300000614
 <p>plotting utilities</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_x</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <span class="n">sim</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sim</span><span class="o">.</span><span class="n">x</span></a><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sim</span><span class="o">.</span><span class="n">t</span></a><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sim</span><span class="o">.</span><span class="n">t</span></a><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">make_figure</span><span class="p">():</span>
@@ -412,9 +432,9 @@ time to run: 0.23673482300000614
     <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">:</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">plot_x</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <span class="n">opt</span><span class="o">.</span><span class="n">sim</span><span class="p">,</span> <span class="s2">&quot;original&quot;</span><span class="p">)</span>
-    <span class="n">plot_x</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <span class="n">sim_1</span><span class="p">,</span> <span class="s2">&quot;resample with events&quot;</span><span class="p">)</span>
-    <span class="n">plot_x</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <span class="n">sim_2</span><span class="p">,</span> <span class="s2">&quot;resample without events&quot;</span><span class="p">)</span>
+    <span class="n">plot_x</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <span class="n">opt</span><span class="o">.</span><span class="n">sim</span><span class="p">,</span> <span class="s2">"original"</span><span class="p">)</span>
+    <span class="n">plot_x</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <span class="n">sim_1</span><span class="p">,</span> <span class="s2">"resample with events"</span><span class="p">)</span>
+    <span class="n">plot_x</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">,</span> <span class="n">sim_2</span><span class="p">,</span> <span class="s2">"resample without events"</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="k">return</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a>
 </pre></div>
@@ -431,7 +451,7 @@ time to run: 0.23673482300000614
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_state_switched_005.png" srcset="../_images/sphx_glr_state_switched_005.png" alt="state switched" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.897 seconds)</p>
+<img src="../_images/sphx_glr_state_switched_005.png" srcset="../_images/sphx_glr_state_switched_005.png" alt="state switched" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.891 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-state-switched-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/01e60acd6b04d3dbceb7929466596e9a/state_switched.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">state_switched.ipynb</span></code></a></p>
@@ -495,7 +515,7 @@ time to run: 0.23673482300000614
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=ae3cf199"></script>
+</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

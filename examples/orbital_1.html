@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Warm Starting in Iterative Solvers" href="rosenbrock.html"><link rel="prev" title="Custom Model Template" href="custom_model_template_with_metaprogramming.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Linear Covariance Analysis - Condor 0.3.4.dev3+gacce87777 documentation</title>
+        <title>Linear Covariance Analysis - Condor 0.3.4.dev4+g30718f32d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev3+gacce87777 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev3+gacce87777 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -309,8 +309,8 @@ the CW equations.</p>
     <span class="n">x</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
     <span class="n">C</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">symmetric</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;initial_x&quot;</span><span class="p">)</span>
-    <span class="n">initial</span><span class="p">[</span><span class="n">C</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;initial_C&quot;</span><span class="p">)</span>
+    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"initial_x"</span><span class="p">)</span>
+    <span class="n">initial</span><span class="p">[</span><span class="n">C</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"initial_C"</span><span class="p">)</span>
 
     <span class="c1"># [0, 0, 0,            1, 0, 0],</span>
     <span class="c1"># [0, 0, 0,            0, 1, 0],</span>
@@ -466,24 +466,24 @@ instantaneously updates the relative velocity as well as the augmented covarianc
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_traj</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">x_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_idx</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create relative motion plot in the vertical plane&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""create relative motion plot in the vertical plane"""</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">invert_xaxis</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;V-bar (m)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"V-bar (m)"</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;R-bar (m)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"R-bar (m)"</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">"equal"</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="o">-</span><span class="mi">2500</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">1500</span><span class="p">,</span> <span class="o">-</span><span class="mi">500</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mf">7.4</span><span class="p">,</span> <span class="mf">4.2</span><span class="p">)</span>
 
-    <span class="n">sim_color</span> <span class="o">=</span> <span class="s2">&quot;C0&quot;</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="s2">&quot;ok&quot;</span><span class="p">)</span>
+    <span class="n">sim_color</span> <span class="o">=</span> <span class="s2">"C0"</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="s2">"ok"</span><span class="p">)</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">x_idx</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="n">ys</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">y_idx</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">sim_color</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;og&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">sim_color</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"og"</span><span class="p">)</span>
 
     <span class="n">n_std</span> <span class="o">=</span> <span class="mi">3</span>
 
@@ -499,7 +499,7 @@ instantaneously updates the relative velocity as well as the augmented covarianc
             <span class="n">height</span><span class="o">=</span><span class="n">lambda_</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">n_std</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
             <span class="n">angle</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">degrees</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span></a><span class="p">(</span><span class="o">*</span><span class="n">v</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">])),</span>
             <span class="n">edgecolor</span><span class="o">=</span><span class="n">sim_color</span><span class="p">,</span>
-            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">"none"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">ellipse</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ax</span>
@@ -512,15 +512,15 @@ instantaneously updates the relative velocity as well as the augmented covarianc
 <span class="c1"># tig_idx = Sim.parameter.flat_index(Sim.tig)</span>
 <span class="c1"># tem_idx = Sim.parameter.flat_index(Sim.tem)</span>
 <span class="c1"># init_jac = Sim.implementation.callback.jac_callback(Sim.implementation.callback.p, [])</span>
-<span class="c1"># print(&quot;init grad  wrt tig&quot;, init_jac[DV_idx, tig_idx])</span>
-<span class="c1"># print(&quot;init grad  wrt tem&quot;, init_jac[DV_idx, tem_idx])</span>
-<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># print("init grad  wrt tig", init_jac[DV_idx, tig_idx])</span>
+<span class="c1"># print("init grad  wrt tem", init_jac[DV_idx, tem_idx])</span>
+<span class="c1"># """</span>
 <span class="c1"># init grad  wrt tig 0.0209833</span>
 <span class="c1"># init grad  wrt tem -0.0260249</span>
-<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># """</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_orbital_1_001.png" srcset="../_images/sphx_glr_orbital_1_001.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;V-bar (m)&#39;, ylabel=&#39;R-bar (m)&#39;&gt;
+<img src="../_images/sphx_glr_orbital_1_001.png" srcset="../_images/sphx_glr_orbital_1_001.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel='V-bar (m)', ylabel='R-bar (m)'&gt;
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Hohmann</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
@@ -551,20 +551,40 @@ instantaneously updates the relative velocity as well as the augmented covarianc
 
 <span class="c1"># TODO</span>
 <span class="c1"># opt_jac = Sim.implementation.callback.jac_callback(Sim.implementation.callback.p, [])</span>
-<span class="c1"># print(&quot;opt grad  wrt tig&quot;, opt_jac[DV_idx, tig_idx])</span>
-<span class="c1"># print(&quot;opt grad  wrt tem&quot;, opt_jac[DV_idx, tem_idx])</span>
-<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># print("opt grad  wrt tig", opt_jac[DV_idx, tig_idx])</span>
+<span class="c1"># print("opt grad  wrt tem", opt_jac[DV_idx, tem_idx])</span>
+<span class="c1"># """</span>
 <span class="c1"># opt grad  wrt tig -4.48258e-09</span>
 <span class="c1"># opt grad  wrt tem -1.47125e-09</span>
-<span class="c1"># &quot;&quot;&quot;</span>
+<span class="c1"># """</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>This is Ipopt version 3.14.11, running with linear solver MUMPS 5.4.1.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>This is Ipopt version 3.14.19, running with linear solver MUMPS 5.8.2.
 
 Number of nonzeros in equality constraint Jacobian...:        0
 Number of nonzeros in inequality constraint Jacobian.:        3
 Number of nonzeros in Lagrangian Hessian.............:        0
 
+/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning:
+casadi: a numpy function was called on a casadi value (issue #2959).
+This used legacy casadi 3.7.2 behaviour, where the result type follows
+the input:
+  - a numeric input (DM)       -&gt; a plain numpy array
+  - a symbolic input (SX / MX) -&gt; a casadi value, or an error if the
+                                  function has no casadi equivalent
+
+For a shape-correct, type-preserving result, opt in to the
+casadi-aware numpy support:
+
+    try:
+        ca.GlobalOptions.setNumpyMode(1)
+    except AttributeError:
+        pass
+
+Or use setNumpyMode(-1) to keep legacy behaviour silently.
+Shown once; run python with -W always to see every occurrence.
+
+  _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
 Total number of variables............................:        2
                      variables with only lower bounds:        0
                 variables with lower and upper bounds:        0
@@ -593,17 +613,17 @@ iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
   13  2.8500540e-01 0.00e+00 7.76e-07  -9.4 3.64e+01    -  1.00e+00 1.00e+00f  1
   14  2.8500011e-01 0.00e+00 1.72e-07 -11.0 8.69e+00    -  1.00e+00 1.00e+00f  1
   15  2.8500003e-01 0.00e+00 9.59e-08 -11.0 7.39e-01    -  1.00e+00 1.00e+00f  1
-  16  2.8500000e-01 0.00e+00 5.46e-11 -11.0 2.81e-01    -  1.00e+00 1.00e+00h  1
+  16  2.8500000e-01 0.00e+00 5.46e-11 -11.0 2.81e-01    -  1.00e+00 1.00e+00f  1
 
 Number of Iterations....: 16
 
                                    (scaled)                 (unscaled)
-Objective...............:   2.8500000000002523e-01    2.8500000000002523e-01
-Dual infeasibility......:   5.4600501196373501e-11    5.4600501196373501e-11
+Objective...............:   2.8500000000002501e-01    2.8500000000002501e-01
+Dual infeasibility......:   5.4600501671383738e-11    5.4600501671383738e-11
 Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00
 Variable bound violation:   0.0000000000000000e+00    0.0000000000000000e+00
-Complementarity.........:   9.9999999167391752e-12    9.9999999167391752e-12
-Overall NLP error.......:   5.4600501196373501e-11    5.4600501196373501e-11
+Complementarity.........:   9.9999999167391719e-12    9.9999999167391719e-12
+Overall NLP error.......:   5.4600501671383738e-11    5.4600501671383738e-11
 
 
 Number of objective function evaluations             = 17
@@ -613,10 +633,10 @@ Number of inequality constraint evaluations          = 17
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 17
 Number of Lagrangian Hessian evaluations             = 0
-Total seconds in IPOPT                               = 3.607
+Total seconds in IPOPT                               = 3.639
 
 EXIT: Optimal Solution Found.
-{&#39;iter_count&#39;: 16, &#39;iterations&#39;: {&#39;alpha_du&#39;: [0.0, 0.9898285295685858, 0.9842402293560555, 1.0, 1.0, 1.0, 1.0, 0.004140027452292917, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], &#39;alpha_pr&#39;: [0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.7149778955287908, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], &#39;d_norm&#39;: [0.0, 0.04700771427236512, 147.0343393040177, 115.44642648212835, 186.41902166571953, 221.9326066411802, 292.9552687947239, 399.49156752841947, 413.03084327256175, 291.56535502963817, 244.33777326276436, 308.7385371689279, 95.41495081615221, 36.41536802920983, 8.690722845600636, 0.7389692851209383, 0.28148098240986763], &#39;inf_du&#39;: [0.026024879059342105, 0.014605956528173522, 0.006505450906661856, 0.0040476207149814, 0.00220898995347599, 0.0013759448721080239, 0.0009482486871725277, 0.0004911213979005004, 0.00020364975153507164, 7.418601739019045e-05, 4.1238876684231294e-05, 1.6056230256091602e-05, 4.606922850215797e-06, 7.761787402831366e-07, 1.719536451262994e-07, 9.587813839220988e-08, 5.46005011963735e-11], &#39;inf_pr&#39;: [0.0, 0.0, 5.684341886080802e-14, 1.1368683772161603e-13, 1.1368683772161603e-13, 0.0, 0.0, 2.2737367544323206e-13, 2.2737367544323206e-13, 4.547473508864641e-13, 4.547473508864641e-13, 0.0, 4.547473508864641e-13, 4.547473508864641e-13, 0.0, 4.547473508864641e-13, 4.547473508864641e-13], &#39;mu&#39;: [1.0, 2.3495000001000001e-07, 0.0014545402508683457, 1.5658669865842725e-05, 2.093876447410522e-06, 3.1758246357022486e-07, 9.878583835498034e-08, 1.0564209597778857e-06, 2.5408339995710536e-07, 2.3511341809476054e-07, 2.6468653562476205e-08, 1e-11, 3.773980300584271e-09, 3.898525625933994e-10, 1e-11, 1e-11, 1e-11], &#39;obj&#39;: [6.493639138134979, 6.492521733862819, 4.1522436029850045, 3.174870894093014, 2.2263548730449343, 1.548450524063878, 1.1046690573928997, 0.6185159065573307, 0.38428263659915207, 0.3227904451096955, 0.2992315271794575, 0.2866798222756138, 0.28516473560253824, 0.28500540412278463, 0.2850001073857912, 0.2850000346414181, 0.28500000000002523], &#39;regularization_size&#39;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, &#39;n_call_callback_fun&#39;: 0, &#39;n_call_nlp_f&#39;: 17, &#39;n_call_nlp_g&#39;: 17, &#39;n_call_nlp_grad&#39;: 0, &#39;n_call_nlp_grad_f&#39;: 18, &#39;n_call_nlp_jac_g&#39;: 18, &#39;return_status&#39;: &#39;Solve_Succeeded&#39;, &#39;success&#39;: True, &#39;t_proc_callback_fun&#39;: 0.0, &#39;t_proc_nlp_f&#39;: 0.939441, &#39;t_proc_nlp_g&#39;: 0.00015500000000000003, &#39;t_proc_nlp_grad&#39;: 0.0, &#39;t_proc_nlp_grad_f&#39;: 6.917180000000001, &#39;t_proc_nlp_jac_g&#39;: 0.0022230000000000006, &#39;t_wall_callback_fun&#39;: 0.0, &#39;t_wall_nlp_f&#39;: 0.5002011190000001, &#39;t_wall_nlp_g&#39;: 0.000142526, &#39;t_wall_nlp_grad&#39;: 0.0, &#39;t_wall_nlp_grad_f&#39;: 3.073106029, &#39;t_wall_nlp_jac_g&#39;: 0.00021722300000000003, &#39;unified_return_status&#39;: &#39;SOLVER_RET_SUCCESS&#39;}
+{'iter_count': 16, 'iterations': {'alpha_du': [0.0, 0.9898285295685858, 0.9842402293561233, 1.0, 1.0, 1.0, 1.0, 0.00414002745213544, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], 'alpha_pr': [0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.7149778955620181, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], 'd_norm': [0.0, 0.04700771427236512, 147.03433930399902, 115.44642648213193, 186.41902166570998, 221.93260664117753, 292.95526879472163, 399.49156752563357, 413.03084327323984, 291.5653550257215, 244.33777326584067, 308.738537162242, 95.41495081529179, 36.415368027850974, 8.690722844633838, 0.7389692848732106, 0.28148098240419656], 'inf_du': [0.026024879059342105, 0.014605956528173522, 0.006505450906662369, 0.0040476207149815705, 0.0022089899534760834, 0.0013759448721080419, 0.0009482486871570577, 0.0004911213978947128, 0.00020364975153085266, 7.418601738923527e-05, 4.1238876683025756e-05, 1.6056230255729255e-05, 4.606922849928806e-06, 7.761787402380683e-07, 1.7195364506085692e-07, 9.587813836217483e-08, 5.460050167138374e-11], 'inf_pr': [0.0, 0.0, 0.0, 1.1368683772161603e-13, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.547473508864641e-13, 0.0, 0.0, 0.0, 0.0, 0.0, 4.547473508864641e-13], 'mu': [1.0, 2.3495000001000001e-07, 0.0014545402508683457, 1.5658669865843416e-05, 2.0938764474102797e-06, 3.1758246357024413e-07, 9.878583835826242e-08, 1.0564209599780559e-06, 2.5408340001332855e-07, 2.3511342127622884e-07, 2.6468653324647544e-08, 1e-11, 3.773980096222553e-09, 3.8985254757066545e-10, 1e-11, 1.0000000000000001e-11, 1e-11], 'obj': [6.493639138134979, 6.492521733862819, 4.152243602985165, 3.174870894093058, 2.226354873044947, 1.5484505240638509, 1.104669057376198, 0.6185159065516346, 0.38428263659658557, 0.32279044510894067, 0.29923152717882334, 0.28667982227554517, 0.2851647356025202, 0.28500540412278297, 0.2850001073857901, 0.2850000346414185, 0.285000000000025], 'regularization_size': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, 'n_call_callback_fun': 0, 'n_call_nlp_f': 17, 'n_call_nlp_g': 17, 'n_call_nlp_grad': 0, 'n_call_nlp_grad_f': 18, 'n_call_nlp_jac_g': 18, 'return_status': 'Solve_Succeeded', 'success': True, 't_proc_callback_fun': 0.0, 't_proc_nlp_f': 1.1571200000000001, 't_proc_nlp_g': 0.00013700000000000002, 't_proc_nlp_grad': 0.0, 't_proc_nlp_grad_f': 6.70151, 't_proc_nlp_jac_g': 0.000177, 't_wall_callback_fun': 0.0, 't_wall_nlp_f': 0.5963384899999999, 't_wall_nlp_g': 0.000123473, 't_wall_nlp_grad': 0.0, 't_wall_nlp_grad_f': 3.026253251, 't_wall_nlp_jac_g': 0.00017421899999999998, 'unified_return_status': 'SOLVER_RET_SUCCESS'}
 [179.99997662]
 </pre></div>
 </div>
@@ -624,19 +644,19 @@ EXIT: Optimal Solution Found.
 <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hohmann_sim</span><span class="o">.</span><span class="n">tot_Delta_v_disp</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hohmann_sim</span><span class="o">.</span><span class="n">final_pos_disp</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hohmann</span><span class="o">.</span><span class="n">tig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hohmann</span><span class="o">.</span><span class="n">tem</span></a><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time:&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hoh_stop</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hoh_start</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"time:"</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hoh_stop</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hoh_start</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[93543.09121237]
-[42980.59515077]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[93543.09060165]
+[42980.59494175]
 [84.09660115] [2839.87927261]
-time: 3.642613377999993
+time: 3.671997637000004
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_traj</span><span class="p">(</span><span class="n">hohmann_sim</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_orbital_1_002.png" srcset="../_images/sphx_glr_orbital_1_002.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;V-bar (m)&#39;, ylabel=&#39;R-bar (m)&#39;&gt;
+<img src="../_images/sphx_glr_orbital_1_002.png" srcset="../_images/sphx_glr_orbital_1_002.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel='V-bar (m)', ylabel='R-bar (m)'&gt;
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TotalDeltaV</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
@@ -664,7 +684,7 @@ time: 3.642613377999993
 <span class="n">total_delta_v</span> <span class="o">=</span> <span class="n">TotalDeltaV</span><span class="p">(</span><span class="n">pos_disp_max</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>This is Ipopt version 3.14.11, running with linear solver MUMPS 5.4.1.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>This is Ipopt version 3.14.19, running with linear solver MUMPS 5.8.2.
 
 Number of nonzeros in equality constraint Jacobian...:        0
 Number of nonzeros in inequality constraint Jacobian.:        5
@@ -700,12 +720,12 @@ iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
 Number of Iterations....: 13
 
                                    (scaled)                 (unscaled)
-Objective...............:   5.9200749529483088e-01    5.9200749529483088e-01
-Dual infeasibility......:   4.3674765216242987e-09    4.3674765216242987e-09
+Objective...............:   5.9200749529483099e-01    5.9200749529483099e-01
+Dual infeasibility......:   4.3674765273095838e-09    4.3674765273095838e-09
 Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00
 Variable bound violation:   0.0000000000000000e+00    0.0000000000000000e+00
-Complementarity.........:   1.0003863375195823e-11    1.0003863375195823e-11
-Overall NLP error.......:   4.3674765216242987e-09    4.3674765216242987e-09
+Complementarity.........:   1.0003863375196739e-11    1.0003863375196739e-11
+Overall NLP error.......:   4.3674765273095838e-09    4.3674765273095838e-09
 
 
 Number of objective function evaluations             = 14
@@ -715,7 +735,7 @@ Number of inequality constraint evaluations          = 14
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 14
 Number of Lagrangian Hessian evaluations             = 0
-Total seconds in IPOPT                               = 5.237
+Total seconds in IPOPT                               = 4.451
 
 EXIT: Optimal Solution Found.
 </pre></div>
@@ -724,13 +744,13 @@ EXIT: Optimal Solution Found.
 <span class="n">plot_traj</span><span class="p">(</span><span class="n">tot_delta_v_sim</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_orbital_1_003.png" srcset="../_images/sphx_glr_orbital_1_003.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;V-bar (m)&#39;, ylabel=&#39;R-bar (m)&#39;&gt;
+<img src="../_images/sphx_glr_orbital_1_003.png" srcset="../_images/sphx_glr_orbital_1_003.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel='V-bar (m)', ylabel='R-bar (m)'&gt;
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">total_delta_v_constrained</span> <span class="o">=</span> <span class="n">TotalDeltaV</span><span class="p">(</span><span class="n">pos_disp_max</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>This is Ipopt version 3.14.11, running with linear solver MUMPS 5.4.1.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>This is Ipopt version 3.14.19, running with linear solver MUMPS 5.8.2.
 
 Number of nonzeros in equality constraint Jacobian...:        0
 Number of nonzeros in inequality constraint Jacobian.:        5
@@ -755,22 +775,22 @@ iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls
    5  1.8655032e+00 9.04e-05 2.26e-04  -3.7 8.88e-01    -  1.00e+00 9.83e-01h  1
    6  1.8653259e+00 0.00e+00 4.41e-07  -9.8 1.48e-01    -  1.00e+00 1.00e+00h  1
 Traceback (most recent call last):
-  File &quot;/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/backends/casadi/__init__.py&quot;, line 539, in eval
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/backends/casadi/__init__.py", line 539, in eval
     out = self.function(args[0])
           ^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/solvers/sweeping_gradient_method.py&quot;, line 1334, in __call__
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/solvers/sweeping_gradient_method.py", line 1334, in __call__
     return self.sweeping_gradient_method(self.trajectory_analysis.res)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File &quot;/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/solvers/sweeping_gradient_method.py&quot;, line 1215, in __call__
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/solvers/sweeping_gradient_method.py", line 1215, in __call__
     integrand_interp = make_interp_spline(
                        ^^^^^^^^^^^^^^^^^^^
-  File &quot;/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/scipy/interpolate/_bsplines.py&quot;, line 1869, in make_interp_spline
-    raise ValueError(&quot;The number of derivatives at boundaries does not &quot;
+  File "/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/scipy/interpolate/_bsplines.py", line 1869, in make_interp_spline
+    raise ValueError("The number of derivatives at boundaries does not "
 ValueError: The number of derivatives at boundaries does not match: expected 2, got 0+0
-Function jac_Sim_placeholder (0x56441bd34e70)
+Function jac_Sim_placeholder (0x562c970ceb10)
 Input 0 (i0): [0.00114, 0, 0, 0, 4.8e-10, 4.8e-10, 4.8e-10, -2000, 0, 1000, 1.71, 0, 0, 1111.11, 0, 0, 0, 0, 0, 1111.11, 0, 0, 0, 0, 0, 0, 1111.11, 0, 0, 0, 0, 0, 1111.11, 0, 0, 0, 0, 0, 0, 1111.11, 1.1, 0, 0, 0, 0, 1111.11, 1.1, 0, 0, 0, 0, 1.1, 0.00134444, 0, 0, 0, 0, 1.1, 0.00134444, 0, 0, 0, 0, 0, 0, 0.00134444, 0, 0, 0, 0, 0, 0.00134444, 0, 0, 0, 0, 0, 0, 0.00134444, 0, 0, 0, 0, 0, 0.00134444, 1111.11, 0, 0, 0, 0, 0, 1122.22, 0, 0, 0, 0, 0, 0, 1111.11, 0, 0, 0, 0, 0, 1122.22, 0, 0, 0, 0, 0, 0, 1111.11, 1.1, 0, 0, 0, 0, 1122.22, 1.111, 0, 0, 0, 0, 1.1, 0.00134444, 0, 0, 0, 0, 1.111, 0.00135789, 0, 0, 0, 0, 0, 0, 0.00134444, 0, 0, 0, 0, 0, 0.00135789, 0, 0, 0, 0, 0, 0, 0.00134444, 0, 0, 0, 0, 0, 0.00135789, 500, 0, 0, -9.91538e-09, 954.339, 2.5e-07, 2.5e-07, 2.5e-07]
 Input 1 (i1): [00, 00, 00]
-Function fwd2_TotalDeltaV_constraint (0x56441c921de0)
+Function fwd2_TotalDeltaV_constraint (0x562c971aff00)
 Input 0 (i0): [-9.91538e-09, 954.339]
 Input 1 (i1): 10
 Input 2 (out_o0): [00, 00, 00]
@@ -778,15 +798,15 @@ Input 3 (fwd_i0):
 [[1, 0],
  [0, 1]]
 Input 4 (fwd_i1): [[0, 0]]
-Function nlp_jac_g (0x56441c91d440)
+Function nlp_jac_g (0x562c971ab3b0)
 Input 0 (x): [-9.91538e-09, 954.339]
 Input 1 (p): 10
-CasADi - 2026-08-08 18:48:00 WARNING(&quot;IpoptUserClass::eval_jac_g failed:.../casadi/core/oracle_function.cpp:367: Error in TotalDeltaV_optimizer:nlp_jac_g:Error in Function::operator() for &#39;nlp_jac_g&#39; [MXFunction] at .../casadi/core/function.cpp:1547:
-Error in Function::operator() for &#39;fwd2_TotalDeltaV_constraint&#39; [MXFunction] at .../casadi/core/function.cpp:1547:
-Error in Function::operator() for &#39;jac_Sim_placeholder&#39; [CallbackInternal] at .../casadi/core/function.cpp:1547:
-.../casadi/core/function_internal.cpp:3807: Failed to evaluate &#39;eval_dm&#39; for jac_Sim_placeholder:
-.../casadi/core/callback_internal.cpp:116: Error calling &quot;eval&quot; for object jac_Sim_placeholder:
-/work/swig/python/target3/source/casadiPYTHON_wrap_gil_release.cxx:3856: The number of derivatives at boundaries does not match: expected 2, got 0+0&quot;) [.../casadi/interfaces/ipopt/ipopt_nlp.cpp:159]
+CasADi - 2026-08-25 18:26:02 WARNING("IpoptUserClass::eval_jac_g failed:.../casadi/core/oracle_function.cpp:367: Error in TotalDeltaV_optimizer:nlp_jac_g:Error in Function::operator() for 'nlp_jac_g' [MXFunction] at .../casadi/core/function.cpp:1736:
+Error in Function::operator() for 'fwd2_TotalDeltaV_constraint' [MXFunction] at .../casadi/core/function.cpp:1736:
+Error in Function::operator() for 'jac_Sim_placeholder' [CallbackInternal] at .../casadi/core/function.cpp:1736:
+.../casadi/core/function_internal.cpp:4010: Failed to evaluate 'eval_dm' for jac_Sim_placeholder:
+.../casadi/core/callback_internal.cpp:116: Error calling "eval" for object jac_Sim_placeholder:
+/work/swig/python/target3/source/casadiPYTHON_wrap_gil_release.cxx:4448: The number of derivatives at boundaries does not match: expected 2, got 0+0") [.../casadi/interfaces/ipopt/ipopt_nlp.cpp:159]
 
 Number of Iterations....: 6
 
@@ -797,7 +817,7 @@ Number of inequality constraint evaluations          = 8
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 8
 Number of Lagrangian Hessian evaluations             = 0
-Total seconds in IPOPT                               = 2.883
+Total seconds in IPOPT                               = 2.492
 
 EXIT: Invalid number in NLP function or derivative detected.
 </pre></div>
@@ -808,15 +828,15 @@ EXIT: Invalid number in NLP function or derivative detected.
 <span class="n">plot_traj</span><span class="p">(</span><span class="n">tot_delta_v_constrained_sim</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_orbital_1_004.png" srcset="../_images/sphx_glr_orbital_1_004.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel=&#39;V-bar (m)&#39;, ylabel=&#39;R-bar (m)&#39;&gt;
+<img src="../_images/sphx_glr_orbital_1_004.png" srcset="../_images/sphx_glr_orbital_1_004.png" alt="orbital 1" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Axes: xlabel='V-bar (m)', ylabel='R-bar (m)'&gt;
 </pre></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;unconstrained Delta v&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"unconstrained Delta v"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">total_delta_v</span><span class="o">.</span><span class="n">_stats</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">total_delta_v</span><span class="o">.</span><span class="n">tem</span></a> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">total_delta_v</span><span class="o">.</span><span class="n">tig</span></a><span class="p">)</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">total_delta_v</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">omega</span></a> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">pi</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tot_delta_v_sim</span><span class="o">.</span><span class="n">final_pos_disp</span></a><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;constrained Delta v&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"constrained Delta v"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">total_delta_v_constrained</span><span class="o">.</span><span class="n">_stats</span></a><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span>
     <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">total_delta_v_constrained</span><span class="o">.</span><span class="n">tem</span></a> <span class="o">-</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">total_delta_v_constrained</span><span class="o">.</span><span class="n">tig</span></a><span class="p">)</span>
@@ -831,13 +851,13 @@ EXIT: Invalid number in NLP function or derivative detected.
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span> unconstrained Delta v
-{&#39;iter_count&#39;: 13, &#39;iterations&#39;: {&#39;alpha_du&#39;: [0.0, 0.9898141549346541, 0.9989278174798525, 0.9990960213085416, 1.0, 1.0, 0.7648596964406856, 0.5862474784081099, 1.0, 0.9697500890827727, 1.0, 0.9992803183413812, 0.999730792435811, 1.0], &#39;alpha_pr&#39;: [0.0, 1.0, 1.0, 1.0, 1.0, 0.5339668186920494, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], &#39;d_norm&#39;: [0.0, 0.05118226403964429, 147.31055370906319, 115.9030963785144, 187.7307422406854, 222.85632685767274, 289.9825004267278, 338.1023341474204, 410.30625790258506, 272.9966005936474, 86.7514026881369, 13.026263618110319, 2.1579846814235597, 1.0512703158552346], &#39;inf_du&#39;: [0.02790119311111404, 0.015815194559341193, 0.012774754882013146, 0.008137855209943404, 0.004635016915627543, 0.00346838177267059, 0.001865019991076233, 0.0009862330287145002, 0.0003968806797413072, 9.334584411958396e-05, 2.4910941790117898e-05, 2.460104947922069e-06, 8.583286196174579e-07, 4.367476521624299e-09], &#39;inf_pr&#39;: [0.0, 4.360686034488026e-09, 0.03827253453391677, 0.028469932938151032, 0.0916000178693821, 0.09143869225079015, 0.504690568855608, 0.654219996834172, 0.816749143628158, 0.26204794649061114, 0.014750287883089186, 7.302732888092578e-05, 1.0747301985247759e-05, 2.520303382880229e-06], &#39;mu&#39;: [1.0, 4.877296677568146e-07, 0.0014972410914916795, 1.3109105651092832e-05, 9.418225541706091e-07, 0.0024587055752338387, 0.00012123606688100062, 2.4710280014104476e-10, 8.115076356398707e-05, 1.005939225662401e-05, 7.416463910006809e-08, 1.7263629772068547e-07, 1e-11, 1e-11], &#39;obj&#39;: [7.17211796170742, 7.170797695051909, 4.631494345636032, 3.57481241849663, 2.5573171734478692, 2.13038750389673, 1.3896162137529395, 0.9234320342547346, 0.6588008797889437, 0.5955626221096694, 0.5921443437405733, 0.5920133330973244, 0.5920080922567432, 0.5920074952948309], &#39;regularization_size&#39;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, &#39;n_call_callback_fun&#39;: 0, &#39;n_call_nlp_f&#39;: 14, &#39;n_call_nlp_g&#39;: 14, &#39;n_call_nlp_grad&#39;: 0, &#39;n_call_nlp_grad_f&#39;: 15, &#39;n_call_nlp_jac_g&#39;: 15, &#39;return_status&#39;: &#39;Solve_Succeeded&#39;, &#39;success&#39;: True, &#39;t_proc_callback_fun&#39;: 0.0, &#39;t_proc_nlp_f&#39;: 0.005443999999999999, &#39;t_proc_nlp_g&#39;: 0.870964, &#39;t_proc_nlp_grad&#39;: 0.0, &#39;t_proc_nlp_grad_f&#39;: 5.4837359999999995, &#39;t_proc_nlp_jac_g&#39;: 5.925552, &#39;t_wall_callback_fun&#39;: 0.0, &#39;t_wall_nlp_f&#39;: 0.0016215259999999997, &#39;t_wall_nlp_g&#39;: 0.39663996900000004, &#39;t_wall_nlp_grad&#39;: 0.0, &#39;t_wall_nlp_grad_f&#39;: 2.3896467899999996, &#39;t_wall_nlp_jac_g&#39;: 2.42424317, &#39;unified_return_status&#39;: &#39;SOLVER_RET_SUCCESS&#39;}
+{'iter_count': 13, 'iterations': {'alpha_du': [0.0, 0.9898141549346541, 0.9989278174798406, 0.9990960213085411, 1.0, 1.0, 0.764859696440671, 0.5862474784081376, 1.0, 0.9697500890809372, 1.0, 0.9992803183405823, 0.9997307924358011, 1.0], 'alpha_pr': [0.0, 1.0, 1.0, 1.0, 1.0, 0.5339668186918952, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], 'd_norm': [0.0, 0.05118226403964431, 147.31055370906643, 115.90309637851425, 187.7307422406867, 222.85632685767234, 289.9825004267386, 338.1023341473806, 410.306257902587, 272.99660059369467, 86.75140268815748, 13.026263618109919, 2.1579846814226635, 1.0512703158589183], 'inf_du': [0.02790119311111404, 0.01581519455934119, 0.012774754882012997, 0.008137855209943333, 0.004635016915627503, 0.003468381772670841, 0.0018650199910763012, 0.0009862330287146099, 0.00039688067974137685, 9.334584411960278e-05, 2.49109417901164e-05, 2.4601049479227312e-06, 8.583286196168886e-07, 4.367476527309584e-09], 'inf_pr': [0.0, 4.360686034488026e-09, 0.03827253453391677, 0.028469932938492093, 0.09160001786904104, 0.09143869225101753, 0.5046905688559491, 0.6542199968343994, 0.816749143628499, 0.26204794648981533, 0.014750287880588075, 7.302733024516783e-05, 1.0747302781055623e-05, 2.5203039513144176e-06], 'mu': [1.0, 4.877296677568146e-07, 0.0014972410914916795, 1.3109105651093222e-05, 9.418225541706308e-07, 0.0024587055752336097, 0.00012123606688098666, 2.471028001410016e-10, 8.115076356397787e-05, 1.0059392256430777e-05, 7.41646391065408e-08, 1.7263629774743278e-07, 1e-11, 1e-11], 'obj': [7.17211796170742, 7.170797695051909, 4.631494345636004, 3.5748124184966157, 2.5573171734478604, 2.130387503896834, 1.3896162137529753, 0.923432034254794, 0.6588008797889643, 0.59556262210967, 0.5921443437405741, 0.5920133330973234, 0.5920080922567437, 0.592007495294831], 'regularization_size': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, 'n_call_callback_fun': 0, 'n_call_nlp_f': 14, 'n_call_nlp_g': 14, 'n_call_nlp_grad': 0, 'n_call_nlp_grad_f': 15, 'n_call_nlp_jac_g': 15, 'return_status': 'Solve_Succeeded', 'success': True, 't_proc_callback_fun': 0.0, 't_proc_nlp_f': 0.0011279999999999999, 't_proc_nlp_g': 1.185287, 't_proc_nlp_grad': 0.0, 't_proc_nlp_grad_f': 4.732149, 't_proc_nlp_jac_g': 5.421777999999999, 't_wall_callback_fun': 0.0, 't_wall_nlp_f': 0.0011347969999999999, 't_wall_nlp_g': 0.41422052800000003, 't_wall_nlp_grad': 0.0, 't_wall_nlp_grad_f': 2.028419377, 't_wall_nlp_jac_g': 1.9971898170000002, 'unified_return_status': 'SOLVER_RET_SUCCESS'}
 [141.41273551]
 [31.59576929]
 
 
  constrained Delta v
-{&#39;iter_count&#39;: 6, &#39;iterations&#39;: {&#39;alpha_du&#39;: [0.0, 0.9900018897466567, 1.0, 1.0, 1.0, 1.0, 0.9996268012042545], &#39;alpha_pr&#39;: [0.0, 0.0004582329793298304, 1.0, 1.0, 0.9994936327994016, 0.9830114834329401, 1.0], &#39;d_norm&#39;: [0.0, 21.60473044624338, 987.2174903416433, 270.604063877841, 43.784350825985435, 0.88782206324506, 0.1475963083607423], &#39;inf_du&#39;: [0.001, 2.137965788523227, 0.0007916274745348199, 0.0010007425567115336, 0.00014046987840786538, 0.00022595345100623332, 4.4122064773543905e-07], &#39;inf_pr&#39;: [21.605769282246474, 21.595868806222196, 3.6514809624529843, 0.42851534272920383, 0.01171158463192223, 0.00020366313871320388, 1.2360041218611366e-07], &#39;mu&#39;: [1.0, 7.416902494414024e-07, 0.07074735738619545, 0.003465881807236856, 0.003538173208019528, 0.00020039387938700507, 1.44963112998512e-10], &#39;obj&#39;: [0.5920074952948309, 0.5920074952949033, 1.222822205246997, 1.756126803238427, 1.8678722024772674, 1.8655031920393472, 1.8653259329125786], &#39;regularization_size&#39;: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, &#39;n_call_callback_fun&#39;: 0, &#39;n_call_nlp_f&#39;: 8, &#39;n_call_nlp_g&#39;: 8, &#39;n_call_nlp_grad&#39;: 0, &#39;n_call_nlp_grad_f&#39;: 8, &#39;n_call_nlp_jac_g&#39;: 9, &#39;return_status&#39;: &#39;Invalid_Number_Detected&#39;, &#39;success&#39;: False, &#39;t_proc_callback_fun&#39;: 0.0, &#39;t_proc_nlp_f&#39;: 0.0029029999999999998, &#39;t_proc_nlp_g&#39;: 0.471615, &#39;t_proc_nlp_grad&#39;: 0.0, &#39;t_proc_nlp_grad_f&#39;: 2.957208, &#39;t_proc_nlp_jac_g&#39;: 3.3068009999999997, &#39;t_wall_callback_fun&#39;: 0.0, &#39;t_wall_nlp_f&#39;: 0.0009052200000000001, &#39;t_wall_nlp_g&#39;: 0.194711523, &#39;t_wall_nlp_grad&#39;: 0.0, &#39;t_wall_nlp_grad_f&#39;: 1.286093545, &#39;t_wall_nlp_jac_g&#39;: 1.389205046, &#39;unified_return_status&#39;: &#39;SOLVER_RET_UNKNOWN&#39;}
+{'iter_count': 6, 'iterations': {'alpha_du': [0.0, 0.9900018897466567, 1.0, 1.0, 1.0, 1.0, 0.999626801324771], 'alpha_pr': [0.0, 0.00045823297932979596, 1.0, 1.0, 0.9994939097396214, 0.9830114661836095, 1.0], 'd_norm': [0.0, 21.604730446245004, 987.217490713779, 270.6040624438334, 43.78435212260434, 0.8878344783499733, 0.14759632249447122], 'inf_du': [0.001, 2.137965788523387, 0.0007916273282377698, 0.0010007425505620463, 0.00014046967836967494, 0.00022595313033768605, 4.4122131478366994e-07], 'inf_pr': [21.605769282248097, 21.595868806220935, 3.6514809612995154, 0.4285153390118931, 0.011711473029754851, 0.00020366157085676545, 1.2360222313369154e-07], 'mu': [1.0, 7.416902494414036e-07, 0.07074735738619559, 0.003465880626531299, 0.003538171854825831, 0.0002003938970854395, 1.4496311779105657e-10], 'obj': [0.592007495294831, 0.5920074952949033, 1.2228221875157421, 1.7561267951797406, 1.8678722377365484, 1.8655031925456118, 1.8653259329111678], 'regularization_size': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}, 'n_call_callback_fun': 0, 'n_call_nlp_f': 8, 'n_call_nlp_g': 8, 'n_call_nlp_grad': 0, 'n_call_nlp_grad_f': 8, 'n_call_nlp_jac_g': 9, 'return_status': 'Invalid_Number_Detected', 'success': False, 't_proc_callback_fun': 0.0, 't_proc_nlp_f': 0.000688, 't_proc_nlp_g': 0.584748, 't_proc_nlp_grad': 0.0, 't_proc_nlp_grad_f': 2.619992, 't_proc_nlp_jac_g': 3.1024349999999994, 't_wall_callback_fun': 0.0, 't_wall_nlp_f': 0.000691267, 't_wall_nlp_g': 0.199151792, 't_wall_nlp_grad': 0.0, 't_wall_nlp_grad_f': 1.106490993, 't_wall_nlp_jac_g': 1.179939249, 'unified_return_status': 'SOLVER_RET_UNKNOWN'}
 [62.33473822]
 [10.00000019]
 </pre></div>
@@ -851,7 +871,7 @@ Analysis and Autonomous Onboard Mission Planning,” Journal of Guidance, Contro
 and Dynamics, Vol. 29, No. 6, 2006, pp. 1404–1414. <a class="reference external" href="https://doi.org/10.2514/1.19447">https://doi.org/10.2514/1.19447</a></p>
 </aside>
 </aside>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.719 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 11.560 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-orbital-1-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/72b190532140cd866987fef456bbc5ed/orbital_1.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">orbital_1.ipynb</span></code></a></p>
@@ -915,7 +935,7 @@ and Dynamics, Vol. 29, No. 6, 2006, pp. 1404–1414. <a class="reference externa
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=ae3cf199"></script>
+</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

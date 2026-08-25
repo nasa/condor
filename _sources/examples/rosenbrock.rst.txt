@@ -274,6 +274,26 @@ the next call.
       inner  2: variable=RosenbrockOnCircleVariable(x=array([1.04114549]), y=array([1.08192418]))
       inner  3: variable=RosenbrockOnCircleVariable(x=array([1.03973705]), y=array([1.08117964]))
       inner  4: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
+    /opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning: 
+    casadi: a numpy function was called on a casadi value (issue #2959).
+    This used legacy casadi 3.7.2 behaviour, where the result type follows
+    the input:
+      - a numeric input (DM)       -> a plain numpy array
+      - a symbolic input (SX / MX) -> a casadi value, or an error if the
+                                      function has no casadi equivalent
+
+    For a shape-correct, type-preserving result, opt in to the
+    casadi-aware numpy support:
+
+        try:
+            ca.GlobalOptions.setNumpyMode(1)
+        except AttributeError:
+            pass
+
+    Or use setNumpyMode(-1) to keep legacy behaviour silently.
+    Shown once; run python with -W always to see every occurrence.
+
+      _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
       inner  5: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
       inner  6: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
       inner  7: variable=RosenbrockOnCircleVariable(x=array([1.0397353]), y=array([1.08118015]))
@@ -374,7 +394,7 @@ the next call.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.201 seconds)
+   **Total running time of the script:** (0 minutes 0.180 seconds)
 
 
 .. _sphx_glr_download_examples_rosenbrock.py:

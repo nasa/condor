@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Optimal Transfer With Time Trigger" href="time_switch.html"><link rel="prev" title="Optimal Transfer With State Trigger" href="state_switched.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Creating Model Templates - Condor 0.3.4.dev3+gacce87777 documentation</title>
+        <title>Creating Model Templates - Condor 0.3.4.dev4+g30718f32d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev3+gacce87777 documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev3+gacce87777 documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,12 +279,12 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="creating-model-templates">
 <span id="sphx-glr-examples-templating-py"></span><h1>Creating Model Templates<a class="headerlink" href="#creating-model-templates" title="Link to this heading">¶</a></h1>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>creating wrapper with func &lt;function Class.test at 0x7fe5f3b59d00&gt; on &lt;__main__.instancemethod object at 0x7fe6016de270&gt;
-returning self &lt;__main__.instancemethod object at 0x7fe6016de270&gt;  with &lt;function Class.test at 0x7fe5f3b59d00&gt; &lt;__main__.Class object at 0x7fe6016a2540&gt; &lt;class &#39;__main__.Class&#39;&gt;
-calling self &lt;__main__.instancemethod object at 0x7fe6016de270&gt;  with &lt;function Class.test at 0x7fe5f3b59d00&gt; &lt;__main__.Class object at 0x7fe6016a2540&gt; 3.0
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>creating wrapper with func &lt;function Class.test at 0x7fa2f6fc0860&gt; on &lt;__main__.instancemethod object at 0x7fa306d20b00&gt;
+returning self &lt;__main__.instancemethod object at 0x7fa306d20b00&gt;  with &lt;function Class.test at 0x7fa2f6fc0860&gt; &lt;__main__.Class object at 0x7fa306d20dd0&gt; &lt;class '__main__.Class'&gt;
+calling self &lt;__main__.instancemethod object at 0x7fa306d20b00&gt;  with &lt;function Class.test at 0x7fa2f6fc0860&gt; &lt;__main__.Class object at 0x7fa306d20dd0&gt; 3.0
 5.0
 &lt;Sys: x=1.2, y=3.4&gt; SysOutput(w=array([13.]), z=array([4.84]))
-This is Ipopt version 3.14.11, running with linear solver MUMPS 5.4.1.
+This is Ipopt version 3.14.19, running with linear solver MUMPS 5.8.2.
 
 Number of nonzeros in equality constraint Jacobian...:        0
 Number of nonzeros in inequality constraint Jacobian.:        0
@@ -330,7 +330,7 @@ Number of inequality constraint evaluations          = 0
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 0
 Number of Lagrangian Hessian evaluations             = 9
-Total seconds in IPOPT                               = 0.004
+Total seconds in IPOPT                               = 0.003
 
 EXIT: Optimal Solution Found.
 </pre></div>
@@ -349,18 +349,18 @@ EXIT: Optimal Solution Found.
 
 <span class="k">class</span><span class="w"> </span><span class="nc">instancemethod</span><span class="p">:</span>  <span class="c1"># noqa: N801</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;creating wrapper with func&quot;</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="s2">&quot;on&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"creating wrapper with func"</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="s2">"on"</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;returning self&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot; with&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"returning self"</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">" with"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <a href="https://docs.python.org/3/library/functools.html#functools.partial" title="functools.partial" class="sphx-glr-backref-module-functools sphx-glr-backref-type-py-function"><span class="n">functools</span><span class="o">.</span><span class="n">partial</span></a><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;calling self&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot; with&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"calling self"</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="s2">" with"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
@@ -378,7 +378,7 @@ EXIT: Optimal Solution Found.
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">ComponentRaw</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">ModelTemplate</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raw Component base&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Raw Component base"""</span>
 
     <span class="nb">input</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">FreeField</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">input</span><span class="p">)</span>
     <span class="n">output</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">AssignedField</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
@@ -389,7 +389,7 @@ EXIT: Optimal Solution Found.
     <span class="n">output</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"world"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">ComponentImplementation</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">implementations</span><span class="o">.</span><span class="n">ExplicitSystem</span><span class="p">):</span>
@@ -400,7 +400,7 @@ EXIT: Optimal Solution Found.
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">ComponentAT</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">ExplicitSystem</span><span class="p">,</span> <span class="n">as_template</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;AT component base&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""AT component base"""</span>
 
     <span class="n">x</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -408,21 +408,21 @@ EXIT: Optimal Solution Found.
     <span class="n">output</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">hello</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"world"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyComponentR</span><span class="p">(</span><span class="n">ComponentRaw</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;my component R&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""my component R"""</span>
 
     <span class="n">u</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
     <span class="n">output</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">u</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">hello2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"world"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyComponentA</span><span class="p">(</span><span class="n">ComponentAT</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;my component A&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""my component A"""</span>
 
     <span class="n">u</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
     <span class="n">output</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">u</span>
@@ -444,7 +444,7 @@ EXIT: Optimal Solution Found.
     <span class="n">u</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
     <span class="c1"># output.xx = z+u</span>
     <span class="n">output</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">u</span> <span class="o">+</span> <span class="mf">2.0</span>
-    <span class="c1"># output.x = z+u # this should produce an error because it&#39;s overwriting x but didnt</span>
+    <span class="c1"># output.x = z+u # this should produce an error because it's overwriting x but didnt</span>
 
 
 <span class="n">comp2</span> <span class="o">=</span> <span class="n">MyComponent2</span><span class="p">(</span><span class="n">u</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
@@ -494,7 +494,7 @@ EXIT: Optimal Solution Found.
 <span class="n">opt</span> <span class="o">=</span> <span class="n">Opt</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.040 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.036 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-templating-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/a0ffd510e3742dd94a6f42d918cc3248/templating.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">templating.ipynb</span></code></a></p>
@@ -558,7 +558,7 @@ EXIT: Optimal Solution Found.
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=ae3cf199"></script>
+</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

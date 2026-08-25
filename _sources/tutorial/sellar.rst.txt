@@ -200,12 +200,32 @@ problem by providing an initial value for the variables and instantiating the mo
 
  .. code-block:: none
 
-    This is Ipopt version 3.14.11, running with linear solver MUMPS 5.4.1.
+    This is Ipopt version 3.14.19, running with linear solver MUMPS 5.8.2.
 
     Number of nonzeros in equality constraint Jacobian...:        0
     Number of nonzeros in inequality constraint Jacobian.:        6
     Number of nonzeros in Lagrangian Hessian.............:        6
 
+    /opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning: 
+    casadi: a numpy function was called on a casadi value (issue #2959).
+    This used legacy casadi 3.7.2 behaviour, where the result type follows
+    the input:
+      - a numeric input (DM)       -> a plain numpy array
+      - a symbolic input (SX / MX) -> a casadi value, or an error if the
+                                      function has no casadi equivalent
+
+    For a shape-correct, type-preserving result, opt in to the
+    casadi-aware numpy support:
+
+        try:
+            ca.GlobalOptions.setNumpyMode(1)
+        except AttributeError:
+            pass
+
+    Or use setNumpyMode(-1) to keep legacy behaviour silently.
+    Shown once; run python with -W always to see every occurrence.
+
+      _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
     Total number of variables............................:        3
                          variables with only lower bounds:        0
                     variables with lower and upper bounds:        3
@@ -242,8 +262,8 @@ problem by providing an initial value for the variables and instantiating the mo
     Dual infeasibility......:   3.3805821765621465e-14    3.3805821765621465e-14
     Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00
     Variable bound violation:   7.4470968355807926e-09    7.4470968355807926e-09
-    Complementarity.........:   2.5421361853922688e-09    2.5421361853922688e-09
-    Overall NLP error.......:   2.5421361853922688e-09    2.5421361853922688e-09
+    Complementarity.........:   2.5421361853922523e-09    2.5421361853922523e-09
+    Overall NLP error.......:   2.5421361853922523e-09    2.5421361853922523e-09
 
 
     Number of objective function evaluations             = 16
@@ -253,7 +273,7 @@ problem by providing an initial value for the variables and instantiating the mo
     Number of equality constraint Jacobian evaluations   = 0
     Number of inequality constraint Jacobian evaluations = 16
     Number of Lagrangian Hessian evaluations             = 15
-    Total seconds in IPOPT                               = 0.051
+    Total seconds in IPOPT                               = 0.055
 
     EXIT: Optimal Solution Found.
 
@@ -300,7 +320,7 @@ including the embedded ``Coupling`` model:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.135 seconds)
+   **Total running time of the script:** (0 minutes 0.136 seconds)
 
 
 .. _sphx_glr_download_tutorial_sellar.py:

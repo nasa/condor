@@ -120,8 +120,28 @@ problem:
 
  .. code-block:: none
 
-    /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
+    /opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
       min_out = minimize(
+    /opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning: 
+    casadi: a numpy function was called on a casadi value (issue #2959).
+    This used legacy casadi 3.7.2 behaviour, where the result type follows
+    the input:
+      - a numeric input (DM)       -> a plain numpy array
+      - a symbolic input (SX / MX) -> a casadi value, or an error if the
+                                      function has no casadi equivalent
+
+    For a shape-correct, type-preserving result, opt in to the
+    casadi-aware numpy support:
+
+        try:
+            ca.GlobalOptions.setNumpyMode(1)
+        except AttributeError:
+            pass
+
+    Or use setNumpyMode(-1) to keep legacy behaviour silently.
+    Shown once; run python with -W always to see every occurrence.
+
+      _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
     [[1.00000506 1.73205902]]
 
 
@@ -204,7 +224,7 @@ Compare with the solution from the continuous algebraic Riccati equation:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.418 seconds)
+   **Total running time of the script:** (0 minutes 3.785 seconds)
 
 
 .. _sphx_glr_download_examples_ct_lqr.py:
