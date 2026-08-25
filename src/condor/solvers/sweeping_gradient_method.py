@@ -24,16 +24,26 @@ try:
         CV_TSTOP_RETURN,
         CVode,
         CVodeAdjInit,
+        CVodeB,
         CVodeCreate,
+        CVodeCreateB,
         CVodeF,
+        CVodeGetB,
         CVodeGetQuad,
+        CVodeGetQuadB,
         CVodeInit,
+        CVodeInitB,
         CVodeQuadInit,
+        CVodeQuadInitB,
+        CVodeQuadSStolerancesB,
         CVodeSetInterpolateStopTime,
         CVodeSetLinearSolver,
+        CVodeSetLinearSolverB,
         CVodeSetMaxNumSteps,
+        CVodeSetQuadErrConB,
         CVodeSetStopTime,
         CVodeSStolerances,
+        CVodeSStolerancesB,
     )
 except ModuleNotFoundError:
     has_cvode = False
@@ -244,7 +254,7 @@ class SolverSciPyBase(SolverMixin):
             # subsequent events use length of time for index, so root index is the index
             # of the updated state to the right of event. -> root coinciding with
             # initialization has index 1
-            last_x = system.update(last_t, last_x, rootsfound)
+            last_x = system.update(rootsfound, last_t, last_x)
         results.e.append(Root(1, rootsfound))
 
         terminate = np.any(rootsfound[system.terminating] != 0)
@@ -325,7 +335,9 @@ class SolverSciPyBase(SolverMixin):
                         send_rootsfound = np.zeros_like(rootsfound)
                         send_rootsfound[g_idx] = rootsfound[g_idx]
                         next_x = system.update(
-                            results.t[-1], results.x[-1], send_rootsfound
+                            send_rootsfound,
+                            results.t[-1],
+                            results.x[-1],
                         )
                         if num_processed_events:
                             self.store_result(results.t[-1], next_x)
@@ -334,9 +346,9 @@ class SolverSciPyBase(SolverMixin):
                 else:
                     results.e.append(Root(idx, rootsfound))
                     next_x = system.update(
+                        rootsfound,
                         results.t[-1],
                         results.x[-1],
-                        rootsfound,
                     )
 
                 terminate = np.any(rootsfound[system.terminating] != 0)
@@ -420,6 +432,26 @@ class SolverCVODE(SolverMixin):
         # 0 maybe correspodns to no preconditioner and krylov basis vectors 3?
         assert self.ls is not None
 
+        if adj_system is not None:
+            self.uB = N_VNew_Serial(adj_system.dim_state, sunctx)
+            self.qB = N_VNew_Serial(adj_system.dim_output, sunctx)
+            self.lsb = SUNLinSol_SPGMR(self.uB, 0, 3, sunctx)
+            assert self.lsb is not None
+
+    def adjoint_quad(self, t, x_SD, lamda_SD, qBd_SD, _):
+        x = N_VGetArrayPointer(x_SD)
+        lamda = N_VGetArrayPointer(lamda_SD)
+        qBd = N_VGetArrayPointer(qBd_SD)
+        qBd[:] = self.adj_system.integrand_terms(t, lamda, x)
+        return 0
+
+    def adjoint_dots(self, t, x_SD, lamda_SD, lamda_dot_SD, _):
+        x = N_VGetArrayPointer(x_SD)
+        lamda = N_VGetArrayPointer(lamda_SD)
+        lamda_dot = N_VGetArrayPointer(lamda_dot_SD)
+        lamda_dot[:] = self.adj_system.adjoint_dots(t, lamda[:], x[:])
+        return 0
+
     def dots(
         self,
         t,
@@ -451,7 +483,7 @@ class SolverCVODE(SolverMixin):
             x,
         )
 
-    def simulate(self, one_step=0):
+    def simulate(self, one_step=0, test_out_vectors=None):
         """
         expects:
         self.solver is an object with CVODE-like interface to parameterized
@@ -484,7 +516,7 @@ class SolverCVODE(SolverMixin):
             # subsequent events use length of time for index, so root index is the index
             # of the updated state to the right of event. -> root coinciding with
             # initialization has index 1
-            last_x = system.update(last_t, np.copy(last_x), rootsfound)
+            last_x = system.update(rootsfound, last_t, np.copy(last_x))
         results.e.append(Root(1, rootsfound))
         self.store_result(last_t, last_x)
         terminate = np.any(rootsfound[system.terminating] != 0)
@@ -496,7 +528,7 @@ class SolverCVODE(SolverMixin):
         # solver = self.solver
         y = self.y
         ls = self.ls
-        steps = 5
+        steps = 32
 
         yarr = N_VGetArrayPointer(y)
         yarr[:] = last_x
@@ -504,6 +536,9 @@ class SolverCVODE(SolverMixin):
         Q = self.Q
         Qarr = N_VGetArrayPointer(Q)
         Qarr[:] = 0.0
+
+        if self.adj_system is not None and test_out_vectors is not None:
+            test_out_vectors = np.array(test_out_vectors)
 
         while True:
             # contents of loop could be a funciton call?
@@ -539,7 +574,11 @@ class SolverCVODE(SolverMixin):
             status = CVodeSetLinearSolver(cvode.get(), ls, None)
             assert status == CV_SUCCESS
 
-            if self.system.dim_output:
+            if (
+                self.system.dim_output
+                and self.sen_system is None
+                and self.adj_system is None
+            ):
                 status = CVodeQuadInit(cvode.get(), self.integrand_terms, Q)
                 assert status == CV_SUCCESS
 
@@ -565,7 +604,7 @@ class SolverCVODE(SolverMixin):
             # implementation makes function dependent on test vector,
             # but also wraps in an if-else to bypass 0'd out channels
 
-            if self.adj_system is not None and test_out is not None:
+            if self.adj_system is not None:  # and test_out_vectors is not None:
                 status = CVodeAdjInit(cvode.get(), steps, CV_HERMITE)
             assert status == CV_SUCCESS
 
@@ -573,21 +612,34 @@ class SolverCVODE(SolverMixin):
 
             # if one step mode, will need to do single steps to copy all data --
             # if not one step mode, full step to next_t
-            if one_step:
+            if one_step and 1:
                 while True:
                     status, tret = CVode(cvode.get(), next_t, y, CV_ONE_STEP)
                     if status >= 0:
                         self.store_result(tret, np.copy(yarr[:]))
+                    else:
+                        print(status)
+                        breakpoint()
                     if status != CV_SUCCESS:
                         break
             else:
-                # status, tret, ncheck = CVodeF(cvode.get(), next_t, y, CV_NORMAL)
-                status, tret = CVode(cvode.get(), next_t, y, CV_NORMAL)
-                if status not in (CV_TSTOP_RETURN, CV_SUCCESS):
+                if self.adj_system is not None:
+                    status, tret, ncheck = CVodeF(cvode.get(), next_t, y, CV_NORMAL)
+                else:
+                    status, tret = CVode(cvode.get(), next_t, y, CV_NORMAL)
+                if status not in (CV_TSTOP_RETURN, CV_SUCCESS, CV_ROOT_RETURN):
                     breakpoint()
                 self.store_result(tret, np.copy(yarr[:]))
 
-            if self.system.dim_output:
+            if (
+                self.system.dim_output
+                and self.sen_system is None
+                and self.adj_system is None
+            ):
+                # original system owns output if no sensitivity or adjoint system
+                # sensitivity owns output if no adjoint
+                # adjoint takes presedence
+
                 quad_status, tret = CVodeGetQuad(cvode.get(), Q)
                 assert quad_status == CV_SUCCESS
                 results.o = Qarr[:] + system.terminal_terms(tret, yarr[:])
@@ -598,7 +650,7 @@ class SolverCVODE(SolverMixin):
             if status == CV_ROOT_RETURN:
                 rootsfound = solver.rootinfo()
 
-            if status == CV_TSTOP_RETURN:
+            if status in (CV_TSTOP_RETURN, CV_SUCCESS):
                 # assume this is associated with an event
                 # does occur on time_switch but not sp_lqr
                 gs = system.events(results.t[-1], results.x[-1])
@@ -606,13 +658,13 @@ class SolverCVODE(SolverMixin):
                 rootsfound = (gs == min_e).astype(int)
                 assert next_t == tret
 
-            if status in (CV_TSTOP_RETURN, CV_ROOT_RETURN):
+            if status in (CV_TSTOP_RETURN, CV_ROOT_RETURN, CV_SUCCESS):
                 idx = len(results.t)
                 results.e.append(Root(idx, rootsfound))
                 next_x = system.update(
+                    rootsfound,
                     results.t[-1],
                     results.x[-1],
-                    rootsfound,
                 )
                 try:
                     terminate = np.any(rootsfound[system.terminating] != 0)
@@ -628,8 +680,75 @@ class SolverCVODE(SolverMixin):
 
             last_t = tret
 
-        if self.adj_system is not None and test_out is not None:
-            pass
+        if self.adj_system is None:  # or test_out_vectors is None:
+            return
+
+        if one_step:
+            raise ValueError
+
+        uB = self.uB
+        lsb = self.lsb
+        qB = self.qB
+        uBarr = N_VGetArrayPointer(uB)
+        last_lamda = self.adj_system.initial_adjoint(tret, yarr[:])
+        uBarr[:] = last_lamda
+
+        qBarr = N_VGetArrayPointer(qB)
+        qBarr[:] = self.adj_system.terminal_terms(tret, yarr[:])
+
+        for cvode, e1, e0 in zip(
+            results.cvode_mems,
+            results.e[-1::-1],
+            results.e[-2::-1],
+        ):
+            status, which = CVodeCreateB(cvode.get(), CV_BDF)
+            results.adjoint_mems.append(which)
+
+            status = CVodeInitB(
+                cvode.get(),
+                which,
+                self.adjoint_dots,
+                results.t[e1.index],  # Tf
+                uB,
+            )
+
+            # Set the tolerances for the backward problem
+            status = CVodeSStolerancesB(cvode.get(), which, self.rtol, self.atol)
+            assert status == CV_SUCCESS
+
+            # Create the linear solver for the backward problem
+            status = CVodeSetLinearSolverB(cvode.get(), which, lsb, None)
+            assert status == CV_SUCCESS
+
+            if self.adj_system.dim_output:
+                status = CVodeQuadInitB(cvode.get(), which, self.adjoint_quad, qB)
+                assert status == CV_SUCCESS
+                status = CVodeSetQuadErrConB(cvode.get(), which, True)
+                assert status == CV_SUCCESS
+                status = CVodeQuadSStolerancesB(
+                    cvode.get(), which, self.rtol, self.atol
+                )
+                assert status == CV_SUCCESS
+
+            status = CVodeB(cvode.get(), results.t[e0.index], CV_NORMAL)
+            if status < 0:
+                breakpoint()
+
+            # Get the final adjoint solution
+            status, t = CVodeGetB(cvode.get(), which, uB)
+            assert status == CV_SUCCESS
+
+            if self.adj_system.dim_output:
+                quad_status, t = CVodeGetQuadB(cvode.get(), which, qB)
+                assert quad_status == CV_SUCCESS
+
+            last_lamda = uBarr[:]
+
+        results.o = qBarr[:]
+
+        # need to establish datastructure for holding each adjoint system
+        # so turn it into one system!
+        pass
 
 
 class Root(NamedTuple):
@@ -777,36 +896,37 @@ class System:
     def integrand_terms(self, t, x):
         return np.array(self._integrand_terms(self.result.p, t, x)).reshape(-1)
 
-    def dots(self, t, x):
-        return np.array(self._dot(self.result.p, t, x)).reshape(-1)
+    def dots(self, *args):
+        return np.array(self._dot(self.result.p, *args)).reshape(-1)
 
-    def jac(
-        self,
-        t,
-        x,
-    ):
-        return np.array(self._jac(self.result.p, t, x)).squeeze()
+    def jac(self, *args):
+        return np.array(self._jac(self.result.p, *args)).squeeze()
 
-    def events(self, t, x):
-        return np.array(self._events(self.result.p, t, x)).reshape(-1)
+    def events(self, *args):
+        return np.array(self._events(self.result.p, *args)).reshape(-1)
 
-    def update(self, t, x, rootsfound):
+    def update(self, rootsfound, t, x, *args):
         next_x = x  # np.copy(x) # who is responsible for copying? I suppose simulate
         for root_sign, update in zip(rootsfound, self._updates):
             if root_sign != 0:
-                next_x = update(self.result.p, t, next_x)
+                next_x = update(self.result.p, t, next_x, *args)
         return np.array(next_x).squeeze()
 
     def time_generator(self):
         for t in self._time_generator(self.result.p):
             yield np.array(t).reshape(-1)[0]
 
-    def __call__(self, p, from_implementation=False):
+    def attach_result(self, p):
         if isinstance(self.system_solver, SolverCVODE):
             self.result = CVodeResult(p=p, system=self)
-            self.system_solver.simulate(one_step=from_implementation)
         else:
             self.result = Result(p=p, system=self)
+
+    def __call__(self, p, from_implementation=False):
+        self.attach_result(p)
+        if isinstance(self.system_solver, SolverCVODE):
+            self.system_solver.simulate(one_step=from_implementation)
+        else:
             self.system_solver.simulate()
         result = self.result
         self.result = None
@@ -889,6 +1009,7 @@ class Result(ResultBase, ResultMixin):
 @dataclass
 class CVodeResult(ResultBase, ResultMixin):
     cvode_mems: list[CVodeCreate] = field(default_factory=list)
+    adjoint_mems: list[CVodeCreateB] = field(default_factory=list)
 
 
 class ResultSegmentInterpolant(NamedTuple):
@@ -1064,6 +1185,66 @@ class AdjointResult(
 
 
 class AdjointSystem(System):
+    def __init__(
+        self,
+        adjoint_to,
+        autonomous_dot,
+        forcing_dot,
+        initial_state,
+        integrand_terms,
+        terminal_terms,
+        dim_state=0,
+        dim_output=0,
+        sen_system=None,
+        **solver_options,
+    ):
+        self.sen_system = sen_system
+        self.adjoint_to = adjoint_to
+        self.autonomous_dot = autonomous_dot
+        self.forcing_dot = forcing_dot
+        self._initial_state = initial_state
+        self.dim_state = dim_state
+        self.dim_output = dim_output
+        self._integrand_terms = integrand_terms
+        self._terminal_terms = terminal_terms
+        self.make_solver(**solver_options)
+
+    def initial_adjoint(self, t, x, *sens):
+        p = self.result.p
+        return self._initial_state(p, t, x, *sens)
+
+    def attach_result(self, p):
+        super().attach_result(p)
+        self.adjoint_to.result = self.result
+
+    def terminal_terms(self, t, x, *sens):
+        p = self.result.p
+        return -np.array(self._terminal_terms(p, t, x, *sens)).reshape(-1)
+
+    def integrand_terms(self, t, lamda, x, *sens):
+        p = self.result.p
+        return -np.array(self._integrand_terms(p, t, lamda, x, *sens)).reshape(-1)
+
+    def adjoint_dots(self, t, lamda, x, *sens):
+        p = self.result.p
+        return np.array(
+            self.autonomous_dot(p, t, lamda, x, *sens)
+            + self.forcing_dot(p, t, lamda, x, *sens)
+        ).reshape(-1)
+
+    def make_solver(self, solver_class, **solver_options):
+        if solver_class is SolverCVODE:
+            self.system_solver = solver_class(  # SolverSciPy( #SolverCVODE(
+                system=self.adjoint_to,
+                adj_system=self,
+                sen_system=self.sen_system,
+                **solver_options,
+            )
+        else:
+            super().make_solver(solver_class, **solver_options)
+
+
+class SciPyAdjointSystem(System):
     def __init__(
         self,
         state_jac,
@@ -1470,7 +1651,7 @@ class TrajectoryAnalysisSGM:
                 raise ValueError(msg)
             state_jac = state_system._jac
 
-        self.adjoint_system = AdjointSystem(
+        self.adjoint_system = SciPyAdjointSystem(
             state_jac=state_jac, dte_dxs=dte_dxs, dh_dxs=dh_dxs, **adjoint_options
         )
 

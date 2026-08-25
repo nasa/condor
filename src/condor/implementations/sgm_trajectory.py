@@ -336,11 +336,14 @@ class TrajectoryAnalysis:
         )
 
     @cached_property
+    def state_jacobian_expr(self):
+        return jacobian(self.state_equation_func.expr, self.x)
+
+    @cached_property
     def state_jac_func(self):
-        state_jacobian_expr = jacobian(self.state_equation_func.expr, self.x)
         state_dot_jac_func = expression_to_operator(
             self.simulation_signature,
-            state_jacobian_expr,
+            self.state_jacobian_expr,
             f"{self.ode_model.__name__}_state_jacobian",
         )
         return state_dot_jac_func
@@ -526,6 +529,78 @@ class TrajectoryAnalysis:
                 )
             )
             self.dh_dps[-1].expr = dh_dp
+
+        self.adjoint_initial_condition_expr = jacobian(
+            self.traj_out_terminal_term, self.x
+        )
+        self.adjoint_initial_condition_func = expression_to_operator(
+            self.simulation_signature,
+            self.adjoint_initial_condition_expr,
+            f"{model.__name__}_adjoint_initial_expr",
+        )
+
+        self.lamda_full = backend.symbol_generator(
+            "lambda", (model.state._count, model.trajectory_output._count)
+        )
+
+        adjoint_full_signature = (
+            self.p,
+            self.model.t,
+            self.lamda_full,
+            self.x,
+        )
+        autonomous_adjoint_expr = -self.state_jacobian_expr.T @ self.lamda_full
+        forcing_adjoint_expr = -concat(state_integrand_jacs, axis=1)
+
+        adjoint_deriv_terminal = jacobian(self.traj_out_terminal_term, self.p)
+        adjoint_deriv_integrand = (
+            concat(param_integrand_jacs, axis=1).T + self.lamda_full.T @ state_param_jac
+        )
+
+        self.adjoint_system = sgm.AdjointSystem(
+            dim_state=model.trajectory_output._count * model.state._count,
+            dim_output=adjoint_deriv_terminal.reshape((-1, 1)).shape[0],
+            initial_state=self.adjoint_initial_condition_func,
+            adjoint_to=self.state_system,
+            autonomous_dot=expression_to_operator(
+                adjoint_full_signature,
+                autonomous_adjoint_expr,
+                f"{model.__name__}_adjoint_autonomous_dots",
+            ),
+            forcing_dot=expression_to_operator(
+                adjoint_full_signature,
+                forcing_adjoint_expr,
+                f"{model.__name__}_adjoint_forcing_dots",
+            ),
+            integrand_terms=expression_to_operator(
+                adjoint_full_signature,
+                adjoint_deriv_integrand,
+                f"{model.__name__}_adjoint_integrand_terms",
+            ),
+            terminal_terms=expression_to_operator(
+                self.simulation_signature,
+                adjoint_deriv_terminal,
+                f"{model.__name__}_adjoint_terminal_terms",
+            ),
+            **self.adjoint_options,
+        )
+
+        if self.adjoint_options["solver_class"] == sgm.SolverCVODE:
+            self.adjoint_analysis = sgm.TrajectoryAnalysis(
+                state_system=self.adjoint_system,
+                integrand_terms=self.traj_out_integrand_func,
+                terminal_terms=self.traj_out_terminal_term_func,
+            )
+            self.adjoint_analysis.from_implementation = False
+            return FunctionOperator(
+                function=self.adjoint_analysis,
+                get_jacobian_func=None,
+                # model_name=model.__name__+"Jacobian",
+                implementation=self,
+                input_symbol=self.p,
+                output_symbol=self.traj_out_expr,
+                jacobian_of=jacobian_of,  # same as self.callback, currently
+            )
 
         self.trajectory_analysis_sgm = sgm.TrajectoryAnalysisSGM(
             trajectory_analysis=self.trajectory_analysis_nom,
