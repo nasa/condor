@@ -16,6 +16,7 @@ try:
     )
     from sundials4py.cvodes import (
         CV_BDF,
+        CV_ADAMS,
         CV_HERMITE,
         CV_NORMAL,
         CV_ONE_STEP,
@@ -35,6 +36,8 @@ try:
         CVodeInitB,
         CVodeQuadInit,
         CVodeQuadInitB,
+        CVodeSetJacFnB,
+        CVodeSetJacFn,
         CVodeQuadSStolerancesB,
         CVodeSetInterpolateStopTime,
         CVodeSetLinearSolver,
@@ -464,6 +467,12 @@ class SolverCVODE(SolverMixin):
         xdot[:] = self.system.dots(t, x[:])
         return 0
 
+    def adjoint_jac(self, t, x_sd, lamda_sd, lamda_dot_sd, jac_sd, _):
+        x = N_VGetArrayPointer(x_sd)
+        jac = SUNDenseMatrix_Data(jac_sd)
+        jac[...] = self.system.jac(t, x).T
+        return 0
+
     def jac(self, t, x_sd, xdot_sd, jac_sd, _):
         x = N_VGetArrayPointer(x_sd)
         xdot = N_VGetArrayPointer(xdot_sd)
@@ -528,7 +537,7 @@ class SolverCVODE(SolverMixin):
         # solver = self.solver
         y = self.y
         ls = self.ls
-        steps = 32
+        steps = 1
 
         yarr = N_VGetArrayPointer(y)
         yarr[:] = last_x
@@ -555,7 +564,8 @@ class SolverCVODE(SolverMixin):
                 )
 
             # Create CVODE solver and set up problem
-            cvode = CVodeCreate(CV_BDF, sunctx)
+            cvode = CVodeCreate(CV_ADAMS, sunctx)
+            #cvode = CVodeCreate(CV_BDF, sunctx)
             results.cvode_mems.append(cvode)
             assert cvode is not None
 
@@ -573,6 +583,8 @@ class SolverCVODE(SolverMixin):
 
             status = CVodeSetLinearSolver(cvode.get(), ls, None)
             assert status == CV_SUCCESS
+
+            #status = CVodeSetJacFn(cvode.get(), self.jac)
 
             if (
                 self.system.dim_output
@@ -720,6 +732,8 @@ class SolverCVODE(SolverMixin):
             status = CVodeSetLinearSolverB(cvode.get(), which, lsb, None)
             assert status == CV_SUCCESS
 
+            #status = CVodeSetJacFnB(cvode.get(), self.adjoint_jac)
+
             if self.adj_system.dim_output:
                 status = CVodeQuadInitB(cvode.get(), which, self.adjoint_quad, qB)
                 assert status == CV_SUCCESS
@@ -745,6 +759,8 @@ class SolverCVODE(SolverMixin):
             last_lamda = uBarr[:]
 
         results.o = qBarr[:]
+        print(results.o)
+        #breakpoint()
 
         # need to establish datastructure for holding each adjoint system
         # so turn it into one system!
@@ -1211,7 +1227,7 @@ class AdjointSystem(System):
 
     def initial_adjoint(self, t, x, *sens):
         p = self.result.p
-        return self._initial_state(p, t, x, *sens)
+        return np.array(self._initial_state(p, t, x, *sens))
 
     def attach_result(self, p):
         super().attach_result(p)
@@ -1242,6 +1258,9 @@ class AdjointSystem(System):
             )
         else:
             super().make_solver(solver_class, **solver_options)
+
+    def update(self, roots_found, t, lamda, x, *sens):
+        breakpoint()
 
 
 class SciPyAdjointSystem(System):
@@ -1277,7 +1296,7 @@ class SciPyAdjointSystem(System):
             ]
         ).reshape(-1)
 
-    def update(self, t, lamda, ignore_rootsfound):
+    def update(self,ignore_rootsfound, t, lamda, ):
         """
         for adjoint system, update will always get called for t1 of each segment,
         """
@@ -1434,6 +1453,9 @@ class TrajectoryAnalysis:
     # for constructing the output of the trajectory analysis
     integrand_terms: callable = None
     terminal_terms: callable = None
+
+    sen_system: System = None
+    adj_system: AdjointSystem = None
 
     cache_size: int = 1
 
@@ -1608,6 +1630,10 @@ class SweepingGradientMethod:
                     ).squeeze()
 
             jac_rows.append(jac_row)
+
+        jac_out = np.stack(jac_rows, axis=0)
+        #breakpoint()
+        print(jac_out)
 
         return np.stack(jac_rows, axis=0)
 
