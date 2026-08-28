@@ -9,10 +9,16 @@ try:
     from sundials4py.core import (
         SUN_COMM_NULL,
         SUN_SUCCESS,
+        SUNNONLINSOL_AUTO_NEWTON,
         N_VGetArrayPointer,
         N_VNew_Serial,
         SUNContext_Create,
+        SUNDenseMatrix,
+        SUNDenseMatrix_Data,
+        SUNLinSol_Dense,
         SUNLinSol_SPGMR,
+        SUNNonlinSol_Auto,
+        SUNNonlinSolSetSwitchingParameters_Auto,
     )
     from sundials4py.cvodes import (
         CV_ADAMS,
@@ -43,6 +49,7 @@ try:
         CVodeSetLinearSolver,
         CVodeSetLinearSolverB,
         CVodeSetMaxNumSteps,
+        CVodeSetNonlinearSolver,
         CVodeSetQuadErrConB,
         CVodeSetStopTime,
         CVodeSStolerances,
@@ -486,9 +493,38 @@ class SolverCVODE(SolverMixin):
         # adjoint interp, steps, etc
 
         # Set linear solver
-        self.ls = SUNLinSol_SPGMR(self.y, 0, 3, sunctx)
-        # 0 maybe correspodns to no preconditioner and krylov basis vectors 3?
+
+        # self.A = SUNDenseMatrix(self.system.dim_state,self.system.dim_output, sunctx)
+        self.A = SUNDenseMatrix(*2 * (self.system.dim_state,), sunctx)
+        if 1:
+            self.ls = SUNLinSol_Dense(self.y, self.A, sunctx)
+            assert self.A is not None
+            # 0 maybe correspodns to no preconditioner and krylov basis vectors 3?
+        elif 0:
+            self.ls = SUNLinSol_SPGMR(self.y, 0, 3, sunctx)
         assert self.ls is not None
+
+        # Attach the switching nonlinear solver and linear solver support for the
+        # Newton sub-solver.
+        active_solver_type = (
+            SUNNONLINSOL_AUTO_FIXEDPOINT if False else SUNNONLINSOL_AUTO_NEWTON
+        )
+        self.nls = SUNNonlinSol_Auto(
+            self.y,
+            0,  # args.aa_depth, # default
+            active_solver_type,
+            sunctx,
+        )
+        assert self.nls is not None
+
+        status = SUNNonlinSolSetSwitchingParameters_Auto(
+            self.nls,
+            -1.0,  # args.newt_to_fp_threshold,
+            -1,  # args.newt_to_fp_delay,
+            -1.0,  # args.fp_to_newt_threshold,
+            -1,  # args.fp_to_newt_delay,
+        )
+        assert status == SUN_SUCCESS
 
         if adj_system is not None:
             self.uB = N_VNew_Serial(adj_system.dim_state, sunctx)
@@ -500,7 +536,7 @@ class SolverCVODE(SolverMixin):
         x = N_VGetArrayPointer(x_SD)
         lamda = N_VGetArrayPointer(lamda_SD)
         qBd = N_VGetArrayPointer(qBd_SD)
-        qBd[:] = self.adj_system.integrand_terms(t, lamda, x)
+        qBd[:] = -self.adj_system._integrand_terms(self.system.result.p, t, lamda, x)
         return 0
 
     def adjoint_dots(self, t, x_SD, lamda_SD, lamda_dot_SD, _):
@@ -522,16 +558,27 @@ class SolverCVODE(SolverMixin):
         xdot[:] = self.system.dots(t, x[:])
         return 0
 
-    def adjoint_jac(self, t, x_sd, lamda_sd, lamda_dot_sd, jac_sd, _):
+    def adjoint_jac(
+        self,
+        t,
+        x_sd,
+        lamda_sd,
+        lamda_dot_sd,
+        jac_sd,
+        _0,
+        _1,
+        _2,
+    ):
         x = N_VGetArrayPointer(x_sd)
         jac = SUNDenseMatrix_Data(jac_sd)
         jac[...] = self.system.jac(t, x).T
         return 0
 
-    def jac(self, t, x_sd, xdot_sd, jac_sd, _):
+    def jac(self, t, x_sd, xdot_sd, jac_sd, _0, _1, _2, _3):
         x = N_VGetArrayPointer(x_sd)
         xdot = N_VGetArrayPointer(xdot_sd)
         jac = SUNDenseMatrix_Data(jac_sd)
+
         jac[...] = self.system.jac(t, x)
         return 0
 
@@ -592,6 +639,7 @@ class SolverCVODE(SolverMixin):
         # solver = self.solver
         y = self.y
         ls = self.ls
+        nls = self.nls
         steps = 1
 
         yarr = N_VGetArrayPointer(y)
@@ -636,8 +684,12 @@ class SolverCVODE(SolverMixin):
             status = CVodeSetMaxNumSteps(cvode.get(), 100000)
             assert status == CV_SUCCESS
 
-            status = CVodeSetLinearSolver(cvode.get(), ls, None)
+            # status = CVodeSetNonlinearSolver(cvode.get(), nls)
             assert status == CV_SUCCESS
+
+            status = CVodeSetLinearSolver(cvode.get(), ls, self.A)
+            if status != CV_SUCCESS:
+                breakpoint()
 
             # status = CVodeSetJacFn(cvode.get(), self.jac)
 
@@ -761,7 +813,7 @@ class SolverCVODE(SolverMixin):
         uBarr[:] = last_lamda
 
         qBarr = N_VGetArrayPointer(qB)
-        qBarr[:] = self.adj_system.terminal_terms(tret, yarr[:])
+        qBarr[:] = self.adj_system._terminal_terms(results.p, tret, yarr[:])
 
         for cvode, e1, e0 in zip(
             results.cvode_mems,
