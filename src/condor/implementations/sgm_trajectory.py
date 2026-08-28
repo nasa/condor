@@ -117,7 +117,7 @@ class TrajectoryAnalysis:
             f"{model.__name__}_trajectory_output_terminal_term",
         )
 
-        self.state0 = get_state_setter(model.initial, [self.p])
+        self.state0 = get_state_setter(model.initial, [self.model.t, self.p])
 
         control_subs_pairs = {
             control.backend_repr: [control.default] for control in ode_model.modal

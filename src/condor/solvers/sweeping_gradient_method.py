@@ -265,23 +265,25 @@ class SolverSciPyBase(SolverMixin):
         system = self.system
         results = system.result
 
+        time_generator = system.time_generator()
+
         if self.system is self.original_system:
             dots = self.system.dots
-            last_x = system.initial_state()
+            last_t = next(time_generator)
+            last_x = system.initial_state(last_t)
 
         if self.system is not self.original_system:
             state_result = self.original_system(system.result.p, compute_output=False)
             state_interp = ResultInterpolant(state_result)
             results.state_result = state_result
             results.state_interp = state_interp
+            last_t = next(time_generator)
 
         if self.system is self.adj_system:
             last_x = self.adj_system.initial_adjoint(
                 state_result.t[-1], state_result.x[-1]
             )
 
-        time_generator = system.time_generator()
-        last_t = next(time_generator)
 
         # self.gs  will be used to monitor the event function
         self.gs = system.events(last_t, last_x)
@@ -501,7 +503,7 @@ class SolverCVODE(SolverMixin):
             assert self.A is not None
             # 0 maybe correspodns to no preconditioner and krylov basis vectors 3?
         elif 0:
-            self.ls = SUNLinSol_SPGMR(self.y, 0, 3, sunctx)
+            sorlf.ls = SUNLinSol_SPGMR(self.y, 0, 3, sunctx)
         assert self.ls is not None
 
         # Attach the switching nonlinear solver and linear solver support for the
@@ -613,10 +615,10 @@ class SolverCVODE(SolverMixin):
         """
         system = self.system
         results = system.result
-        last_x = system.initial_state()
-
         time_generator = system.time_generator()
         last_t = next(time_generator)
+        last_x = system.initial_state(last_t)
+
         # TODO: add dynamic_output feature
 
         gs = system.events(last_t, last_x)
@@ -866,8 +868,6 @@ class SolverCVODE(SolverMixin):
             last_lamda = uBarr[:]
 
         results.o = qBarr[:]
-        print(results.o)
-        # breakpoint()
 
         # need to establish datastructure for holding each adjoint system
         # so turn it into one system!
@@ -1010,8 +1010,8 @@ class System:
             **solver_options,
         )
 
-    def initial_state(self):
-        return np.array(self._initial_state(self.result.p)).reshape(-1)
+    def initial_state(self, t):
+        return np.array(self._initial_state(t, self.result.p)).reshape(-1)
 
     def terminal_terms(self, t, x):
         return np.array(self._terminal_terms(self.result.p, t, x)).reshape(-1)
