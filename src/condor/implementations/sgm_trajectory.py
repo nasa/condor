@@ -299,7 +299,7 @@ class TrajectoryAnalysis:
 
         self.state_system = sgm.System(
             dim_state=model.state._count,
-            initial_state=self.state0,
+            initial_condition=self.state0,
             dot=state_equation_func,
             jac=None if solver is not self.Solver.CVODE else self.state_jac_func,
             time_generator=sgm.TimeGeneratorFromSlices(at_time_slices),
@@ -560,7 +560,7 @@ class TrajectoryAnalysis:
         self.adjoint_system = sgm.AdjointSystem(
             dim_state=model.trajectory_output._count * model.state._count,
             dim_output=adjoint_deriv_terminal.reshape((-1, 1)).shape[0],
-            initial_state=self.adjoint_initial_condition_func,
+            initial_condition=self.adjoint_initial_condition_func,
             adjoint_to=self.state_system,
             autonomous_dot=expression_to_operator(
                 adjoint_full_signature,

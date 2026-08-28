@@ -139,10 +139,16 @@ class SolverSciPyBase(SolverMixin):
 
         # set the primary in precedence: adjoint, then sensitivity, then original
         system = system
+        dots = system.dots
+        self.terminal_terms = system.terminal_terms
+        self.integrand_terms = system.integrand_terms
         if sen_system is not None:
             system = sen_system
         if adj_system is not None:
             system = adj_system
+            dots = self.adjoint_dots
+            self.terminal_terms = self.adjoint_terminal_terms
+            self.integrand_terms = self.adjoint_integrand_terms
 
         self.system = system
 
@@ -151,7 +157,7 @@ class SolverSciPyBase(SolverMixin):
         self.reset_step_after_event = reset_step_after_event
         self.max_step_size = max_step_size
         self.solver = scipy_ode(
-            system.dots,
+            dots,
         )
         self.int_options = dict(
             name=self.SOLVER_NAME,
@@ -261,6 +267,18 @@ class SolverSciPyBase(SolverMixin):
 
         return min_t, x_spl(min_t)
 
+    def adjoint_dots(self, t, lamda):
+        x = self.adj_system.result.state_interp(t)
+        return self.adj_system.dots(t, lamda, x)
+
+    def adjoint_integrand_terms(self, t, lamda):
+        x = self.adj_system.result.state_interp(t)
+        return self.adj_system.integrand_terms(t, lamda, x)
+
+    def adjoint_terminal_terms(self, t, lamda):
+        x = self.adj_system.result.state_interp(t)
+        return self.adj_system.terminal_terms(t, x)
+
     def simulate(self, do_compute_output=True):
         system = self.system
         results = system.result
@@ -268,9 +286,8 @@ class SolverSciPyBase(SolverMixin):
         time_generator = system.time_generator()
 
         if self.system is self.original_system:
-            dots = self.system.dots
             last_t = next(time_generator)
-            last_x = system.initial_state(last_t)
+            last_x = system.initial_condition(last_t)
 
         if self.system is not self.original_system:
             state_result = self.original_system(system.result.p, compute_output=False)
@@ -280,10 +297,9 @@ class SolverSciPyBase(SolverMixin):
             last_t = next(time_generator)
 
         if self.system is self.adj_system:
-            last_x = self.adj_system.initial_adjoint(
+            last_x = self.adj_system.initial_condition(
                 state_result.t[-1], state_result.x[-1]
             )
-
 
         # self.gs  will be used to monitor the event function
         self.gs = system.events(last_t, last_x)
@@ -436,7 +452,7 @@ class SolverSciPyBase(SolverMixin):
         result = system.result
         integral = 0.0
         integrand_interpolant = ResultInterpolant(
-            result=result, function=lambda p, t, x: system.integrand_terms(t, x)
+            result=result, function=self.integrand_terms
         )
         for segment in integrand_interpolant:
             integrand_antideriv = segment.interpolant.antiderivative()
@@ -444,7 +460,7 @@ class SolverSciPyBase(SolverMixin):
                 segment.t0
             )
         result.o = (
-            system.terminal_terms(
+            self.terminal_terms(
                 # result.p,
                 result.t[-1],
                 result.x[-1],
@@ -538,14 +554,14 @@ class SolverCVODE(SolverMixin):
         x = N_VGetArrayPointer(x_SD)
         lamda = N_VGetArrayPointer(lamda_SD)
         qBd = N_VGetArrayPointer(qBd_SD)
-        qBd[:] = -self.adj_system._integrand_terms(self.system.result.p, t, lamda, x)
+        qBd[:] = self.adj_system.integrand_terms(t, lamda, x)
         return 0
 
     def adjoint_dots(self, t, x_SD, lamda_SD, lamda_dot_SD, _):
         x = N_VGetArrayPointer(x_SD)
         lamda = N_VGetArrayPointer(lamda_SD)
         lamda_dot = N_VGetArrayPointer(lamda_dot_SD)
-        lamda_dot[:] = self.adj_system.adjoint_dots(t, lamda[:], x[:])
+        lamda_dot[:] = self.adj_system.dots(t, lamda[:], x[:])
         return 0
 
     def dots(
@@ -617,7 +633,7 @@ class SolverCVODE(SolverMixin):
         results = system.result
         time_generator = system.time_generator()
         last_t = next(time_generator)
-        last_x = system.initial_state(last_t)
+        last_x = system.initial_condition(last_t)
 
         # TODO: add dynamic_output feature
 
@@ -811,11 +827,11 @@ class SolverCVODE(SolverMixin):
         lsb = self.lsb
         qB = self.qB
         uBarr = N_VGetArrayPointer(uB)
-        last_lamda = self.adj_system.initial_adjoint(tret, yarr[:])
+        last_lamda = self.adj_system.initial_condition(tret, yarr[:])
         uBarr[:] = last_lamda
 
         qBarr = N_VGetArrayPointer(qB)
-        qBarr[:] = self.adj_system._terminal_terms(results.p, tret, yarr[:])
+        qBarr[:] = self.adj_system.terminal_terms(tret, yarr[:])
 
         for cvode, e1, e0 in zip(
             results.cvode_mems,
@@ -934,7 +950,7 @@ class System:
     def __init__(
         self,
         dim_state,
-        initial_state,
+        initial_condition,
         dot,
         time_generator,
         # these are related Event objects...
@@ -982,7 +998,7 @@ class System:
         self.dynamic_output = dynamic_output
 
         #     define initial conditions
-        self._initial_state = initial_state
+        self._initial_condition = initial_condition
         # who owns t0? time generator? for adjoint system, very easy to own all of them.
         # I guess can just handle single point as a special case instead of assuming all
         # take the form of an interval? Does this make it easier to allow events that
@@ -1010,8 +1026,8 @@ class System:
             **solver_options,
         )
 
-    def initial_state(self, t):
-        return np.array(self._initial_state(t, self.result.p)).reshape(-1)
+    def initial_condition(self, t):
+        return np.array(self._initial_condition(t, self.result.p)).reshape(-1)
 
     def terminal_terms(self, t, x):
         return np.array(self._terminal_terms(self.result.p, t, x)).reshape(-1)
@@ -1138,7 +1154,7 @@ class ResultSegmentInterpolant(NamedTuple):
 @dataclass
 class ResultInterpolant:
     result: Result
-    function: callable = lambda p, t, x: x
+    function: callable = lambda t, x: x
     # don't pass interpolants to init?
     # should state_Result be saved or just be an initvar? I back-references are OK so
     # we can keep it...
@@ -1193,7 +1209,7 @@ class ResultInterpolant:
             try:
                 all_coeff_data = [
                     [
-                        np.array(function(result.p, t, x)).squeeze()
+                        np.array(function(t, x)).squeeze()
                         for t, x in zip(result.t[idx0:idx1], result.x[idx0:idx1])
                     ]
                     for idx0, idx1 in zip(event_idxs[:-1], event_idxs[1:])
@@ -1300,7 +1316,7 @@ class AdjointSystem(System):
         adjoint_to,
         autonomous_dot,
         forcing_dot,
-        initial_state,
+        initial_condition,
         integrand_terms,
         terminal_terms,
         dim_state=0,
@@ -1313,7 +1329,7 @@ class AdjointSystem(System):
         self.adjoint_to = adjoint_to
         self.autonomous_dot = autonomous_dot
         self.forcing_dot = forcing_dot
-        self._initial_state = initial_state
+        self._initial_condition = initial_condition
         self.dim_state = dim_state
         self.dim_output = dim_output
         self._integrand_terms = integrand_terms
@@ -1376,35 +1392,23 @@ class AdjointSystem(System):
         breakpoint()
         yield np.inf
 
-    def initial_adjoint(self, t, x, *sens):
+    def initial_condition(self, t, x, *sens):
         p = self.result.p
-        return np.array(self._initial_state(p, t, x, *sens)).reshape(-1)
+        return np.array(self._initial_condition(p, t, x, *sens)).reshape(-1)
 
     def attach_result(self, p):
         super().attach_result(p)
         self.adjoint_to.result = self.result
 
-    def adjoint_terminal_terms(self, t, x, *sens):
+    def terminal_terms(self, t, x, *sens):
         p = self.result.p
         return -np.array(self._terminal_terms(p, t, x, *sens)).reshape(-1)
 
-    def terminal_terms(self, t, lamda):
-        x = self.result.state_interp(t)
-        return self.adjoint_terminal_terms(t, x)
-
-    def integrand_terms(self, t, lamda):
-        x = self.result.state_interp(t)
-        return self.adjoint_integrand_terms(t, lamda, x)
-
-    def adjoint_integrand_terms(self, t, lamda, x, *sens):
+    def integrand_terms(self, t, lamda, x, *sens):
         p = self.result.p
         return -np.array(self._integrand_terms(p, t, lamda, x, *sens)).reshape(-1)
 
-    def dots(self, t, lamda):
-        x = self.result.state_interp(t)
-        return self.adjoint_dots(t, lamda, x)
-
-    def adjoint_dots(self, t, lamda, x, *sens):
+    def dots(self, t, lamda, x, *sens):
         p = self.result.p
         return np.array(
             self.autonomous_dot(p, t, lamda, x, *sens)
