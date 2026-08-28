@@ -15,8 +15,8 @@ try:
         SUNLinSol_SPGMR,
     )
     from sundials4py.cvodes import (
-        CV_BDF,
         CV_ADAMS,
+        CV_BDF,
         CV_HERMITE,
         CV_NORMAL,
         CV_ONE_STEP,
@@ -36,10 +36,10 @@ try:
         CVodeInitB,
         CVodeQuadInit,
         CVodeQuadInitB,
-        CVodeSetJacFnB,
-        CVodeSetJacFn,
         CVodeQuadSStolerancesB,
         CVodeSetInterpolateStopTime,
+        CVodeSetJacFn,
+        CVodeSetJacFnB,
         CVodeSetLinearSolver,
         CVodeSetLinearSolverB,
         CVodeSetMaxNumSteps,
@@ -114,6 +114,8 @@ class SolverSciPyBase(SolverMixin):
     def __init__(
         self,
         system,
+        sen_system=None,
+        adj_system=None,
         atol=1e-12,
         rtol=1e-6,
         adaptive_min_steps=0,
@@ -124,7 +126,19 @@ class SolverSciPyBase(SolverMixin):
         nsteps=10_000,
         **kwargs,
     ):
+        self.original_system = system
+        self.sen_system = sen_system
+        self.adj_system = adj_system
+
+        # set the primary in precedence: adjoint, then sensitivity, then original
+        system = system
+        if sen_system is not None:
+            system = sen_system
+        if adj_system is not None:
+            system = adj_system
+
         self.system = system
+
         self.adaptive_min_steps = adaptive_min_steps
         self.separate_events = separate_events
         self.reset_step_after_event = reset_step_after_event
@@ -240,10 +254,24 @@ class SolverSciPyBase(SolverMixin):
 
         return min_t, x_spl(min_t)
 
-    def simulate(self):
+    def simulate(self, do_compute_output=True):
         system = self.system
         results = system.result
-        last_x = system.initial_state()
+
+        if self.system is self.original_system:
+            dots = self.system.dots
+            last_x = system.initial_state()
+
+        if self.system is not self.original_system:
+            state_result = self.original_system(system.result.p, compute_output=False)
+            state_interp = ResultInterpolant(state_result)
+            results.state_result = state_result
+            results.state_interp = state_interp
+
+        if self.system is self.adj_system:
+            last_x = self.adj_system.initial_adjoint(
+                state_result.t[-1], state_result.x[-1]
+            )
 
         time_generator = system.time_generator()
         last_t = next(time_generator)
@@ -361,6 +389,7 @@ class SolverSciPyBase(SolverMixin):
 
                 if terminate:
                     self.store_result(last_t, next_x)
+                    self.compute_output(do_compute_output)
                     return
 
                 last_x = next_x
@@ -389,6 +418,32 @@ class SolverSciPyBase(SolverMixin):
                     breakpoint()
 
             last_t = next_t
+        self.compute_output(do_compute_output)
+
+    def compute_output(self, doit=True):
+        if not doit:
+            return result
+        system = self.system
+        result = system.result
+        integral = 0.0
+        integrand_interpolant = ResultInterpolant(
+            result=result, function=lambda p, t, x: system.integrand_terms(t, x)
+        )
+        for segment in integrand_interpolant:
+            integrand_antideriv = segment.interpolant.antiderivative()
+            integral += integrand_antideriv(segment.t1) - integrand_antideriv(
+                segment.t0
+            )
+        result.o = (
+            system.terminal_terms(
+                # result.p,
+                result.t[-1],
+                result.x[-1],
+            )
+            + integral
+        )
+
+        return result
 
 
 class SolverSciPyDopri5(SolverSciPyBase):
@@ -565,7 +620,7 @@ class SolverCVODE(SolverMixin):
 
             # Create CVODE solver and set up problem
             cvode = CVodeCreate(CV_ADAMS, sunctx)
-            #cvode = CVodeCreate(CV_BDF, sunctx)
+            # cvode = CVodeCreate(CV_BDF, sunctx)
             results.cvode_mems.append(cvode)
             assert cvode is not None
 
@@ -584,7 +639,7 @@ class SolverCVODE(SolverMixin):
             status = CVodeSetLinearSolver(cvode.get(), ls, None)
             assert status == CV_SUCCESS
 
-            #status = CVodeSetJacFn(cvode.get(), self.jac)
+            # status = CVodeSetJacFn(cvode.get(), self.jac)
 
             if (
                 self.system.dim_output
@@ -732,7 +787,7 @@ class SolverCVODE(SolverMixin):
             status = CVodeSetLinearSolverB(cvode.get(), which, lsb, None)
             assert status == CV_SUCCESS
 
-            #status = CVodeSetJacFnB(cvode.get(), self.adjoint_jac)
+            # status = CVodeSetJacFnB(cvode.get(), self.adjoint_jac)
 
             if self.adj_system.dim_output:
                 status = CVodeQuadInitB(cvode.get(), which, self.adjoint_quad, qB)
@@ -760,7 +815,7 @@ class SolverCVODE(SolverMixin):
 
         results.o = qBarr[:]
         print(results.o)
-        #breakpoint()
+        # breakpoint()
 
         # need to establish datastructure for holding each adjoint system
         # so turn it into one system!
@@ -938,36 +993,23 @@ class System:
         else:
             self.result = Result(p=p, system=self)
 
-    def __call__(self, p, from_implementation=False):
+    def run_sim(self, p, from_implementation=False):
         self.attach_result(p)
         if isinstance(self.system_solver, SolverCVODE):
             self.system_solver.simulate(one_step=from_implementation)
         else:
             self.system_solver.simulate()
         result = self.result
-        self.result = None
-
         result.t = np.array(result.t)
         if self.dim_state == 1:
             result.x = [np.atleast_1d(x) for x in result.x]
         result.x = np.array(result.x)
         result.y = np.array(result.y)
 
-        if isinstance(self.system_solver, SolverCVODE):
-            return result
-        # evaluate the trajectory analysis of this result
-        # should this return a dataclass? Or just the vector of results?
-        integral = 0.0
-        integrand_interpolant = ResultInterpolant(
-            result=result, function=self._integrand_terms
-        )
-        for segment in integrand_interpolant:
-            integrand_antideriv = segment.interpolant.antiderivative()
-            integral += integrand_antideriv(segment.t1) - integrand_antideriv(
-                segment.t0
-            )
-        result.o = self._terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
-
+    def __call__(self, p, from_implementation=False, compute_output=True):
+        self.run_sim(p, from_implementation)
+        result = self.result
+        self.result = None
         return result
 
 
@@ -1212,6 +1254,7 @@ class AdjointSystem(System):
         dim_state=0,
         dim_output=0,
         sen_system=None,
+        dynamic_output=None,
         **solver_options,
     ):
         self.sen_system = sen_system
@@ -1223,23 +1266,91 @@ class AdjointSystem(System):
         self.dim_output = dim_output
         self._integrand_terms = integrand_terms
         self._terminal_terms = terminal_terms
+
+        self.dynamic_output = dynamic_output
+        self.num_events = 1
+
         self.make_solver(**solver_options)
+
+    def events(self, t, lamda):
+        return np.array(
+            t
+            - self.result.state_result.t[
+                self.result.state_result.e[self.segment_idx].index
+            ]
+        ).reshape(-1)
+
+    def update(self, rootsfound, t, lamda):
+        return lamda
+
+    def time_generator(self):
+        """ """
+        result = self.result
+        for (
+            segment_idx,
+            event,
+            # jac_segment, forcing_segment,
+        ) in zip(
+            range(len(result.state_result.e) - 1, -1, -1),
+            result.state_result.e[::-1],
+            # result.state_jacobian[::-1], result.forcing_function[::-1],
+        ):
+            # the  event corresponds to the t0+ of the segment index which can be used
+            # for selecting the jacobian and forcing segments
+            self.segment_idx = segment_idx
+            if segment_idx == 0:
+                self.terminating = [0]
+            # if event.index == 1:
+            #    breakpoint()
+            yield result.state_result.t[event.index]
+            # nothing about segment_idx will get used the first time (terminal event)
+            # and would be out-of-bounds if if tried -- simulate will use the yielded
+            # time to determine inital condition, then calls next to set endpoint of
+            # next segment then propoagate it.
+
+            # so on first iteration, will not propoagate, will hit first iteration of
+            # simulate's loop and call next-yield. so do terminal update (can optimize
+            # code to reduce computations if needed) then loop.
+            # self.update(event)
+
+            # so update for terminal event is right, but could optimize performance for
+            # special cases/maybe need distinct expression for update (to implement
+            # update from from true terminal condition to effect of an immediate update)
+            # then when this yields initial event (i.e., index=1) will THEN propoagate
+            # backwards to initial condition.
+
+        # then exits above loop, will have just simulated to t0 and handled any possible
+        # update
+        breakpoint()
+        yield np.inf
 
     def initial_adjoint(self, t, x, *sens):
         p = self.result.p
-        return np.array(self._initial_state(p, t, x, *sens))
+        return np.array(self._initial_state(p, t, x, *sens)).reshape(-1)
 
     def attach_result(self, p):
         super().attach_result(p)
         self.adjoint_to.result = self.result
 
-    def terminal_terms(self, t, x, *sens):
+    def adjoint_terminal_terms(self, t, x, *sens):
         p = self.result.p
         return -np.array(self._terminal_terms(p, t, x, *sens)).reshape(-1)
 
-    def integrand_terms(self, t, lamda, x, *sens):
+    def terminal_terms(self, t, lamda):
+        x = self.result.state_interp(t)
+        return self.adjoint_terminal_terms(t, x)
+
+    def integrand_terms(self, t, lamda):
+        x = self.result.state_interp(t)
+        return self.adjoint_integrand_terms(t, lamda, x)
+
+    def adjoint_integrand_terms(self, t, lamda, x, *sens):
         p = self.result.p
         return -np.array(self._integrand_terms(p, t, lamda, x, *sens)).reshape(-1)
+
+    def dots(self, t, lamda):
+        x = self.result.state_interp(t)
+        return self.adjoint_dots(t, lamda, x)
 
     def adjoint_dots(self, t, lamda, x, *sens):
         p = self.result.p
@@ -1249,18 +1360,19 @@ class AdjointSystem(System):
         ).reshape(-1)
 
     def make_solver(self, solver_class, **solver_options):
-        if solver_class is SolverCVODE:
-            self.system_solver = solver_class(  # SolverSciPy( #SolverCVODE(
-                system=self.adjoint_to,
-                adj_system=self,
-                sen_system=self.sen_system,
-                **solver_options,
-            )
-        else:
-            super().make_solver(solver_class, **solver_options)
+        self.system_solver = solver_class(  # SolverSciPy( #SolverCVODE(
+            system=self.adjoint_to,
+            adj_system=self,
+            sen_system=self.sen_system,
+            **solver_options,
+        )
 
-    def update(self, roots_found, t, lamda, x, *sens):
+    def adjoint_update(self, roots_found, t, lamda, x, *sens):
         breakpoint()
+
+    def __call__(self, p, from_implementation=False):
+        self.terminating = slice(0, 0)
+        return super().__call__(p, from_implementation)
 
 
 class SciPyAdjointSystem(System):
@@ -1296,7 +1408,12 @@ class SciPyAdjointSystem(System):
             ]
         ).reshape(-1)
 
-    def update(self,ignore_rootsfound, t, lamda, ):
+    def update(
+        self,
+        ignore_rootsfound,
+        t,
+        lamda,
+    ):
         """
         for adjoint system, update will always get called for t1 of each segment,
         """
@@ -1357,47 +1474,6 @@ class SciPyAdjointSystem(System):
 
         lamda_tem = np.array(lamda_tem).squeeze()
         return lamda_tem
-
-    def time_generator(self):
-        """ """
-        result = self.result
-        for (
-            segment_idx,
-            event,
-            # jac_segment, forcing_segment,
-        ) in zip(
-            range(len(result.state_result.e) - 1, -1, -1),
-            result.state_result.e[::-1],
-            # result.state_jacobian[::-1], result.forcing_function[::-1],
-        ):
-            # the  event corresponds to the t0+ of the segment index which can be used
-            # for selecting the jacobian and forcing segments
-            self.segment_idx = segment_idx
-            if segment_idx == 0:
-                self.terminating = [0]
-            # if event.index == 1:
-            #    breakpoint()
-            yield result.state_result.t[event.index]
-            # nothing about segment_idx will get used the first time (terminal event)
-            # and would be out-of-bounds if if tried -- simulate will use the yielded
-            # time to determine inital condition, then calls next to set endpoint of
-            # next segment then propoagate it.
-
-            # so on first iteration, will not propoagate, will hit first iteration of
-            # simulate's loop and call next-yield. so do terminal update (can optimize
-            # code to reduce computations if needed) then loop.
-            # self.update(event)
-
-            # so update for terminal event is right, but could optimize performance for
-            # special cases/maybe need distinct expression for update (to implement
-            # update from from true terminal condition to effect of an immediate update)
-            # then when this yields initial event (i.e., index=1) will THEN propoagate
-            # backwards to initial condition.
-
-        # then exits above loop, will have just simulated to t0 and handled any possible
-        # update
-        breakpoint()
-        yield np.inf
 
     def initial_state(self):
         return self.final_lamda
@@ -1467,7 +1543,6 @@ class TrajectoryAnalysis:
             return self.cached_output
         self.cached_p = p
         result = self.res = self.state_system(p, self.from_implementation)
-
         self.cached_output = result.o
         return result.o
 
@@ -1632,7 +1707,7 @@ class SweepingGradientMethod:
             jac_rows.append(jac_row)
 
         jac_out = np.stack(jac_rows, axis=0)
-        #breakpoint()
+        # breakpoint()
         print(jac_out)
 
         return np.stack(jac_rows, axis=0)

@@ -585,23 +585,23 @@ class TrajectoryAnalysis:
             **self.adjoint_options,
         )
 
-        if self.adjoint_options["solver_class"] == sgm.SolverCVODE:
-            self.adjoint_analysis = sgm.TrajectoryAnalysis(
-                state_system=self.adjoint_system,
-                integrand_terms=self.traj_out_integrand_func,
-                terminal_terms=self.traj_out_terminal_term_func,
-            )
-            self.adjoint_analysis.from_implementation = False
-            return FunctionOperator(
-                function=self.adjoint_analysis,
-                get_jacobian_func=None,
-                # model_name=model.__name__+"Jacobian",
-                implementation=self,
-                input_symbol=self.p,
-                output_symbol=self.traj_out_expr,
-                jacobian_of=jacobian_of,  # same as self.callback, currently
-            )
+        self.adjoint_analysis = sgm.TrajectoryAnalysis(
+            state_system=self.adjoint_system,
+            integrand_terms=self.traj_out_integrand_func,
+            terminal_terms=self.traj_out_terminal_term_func,
+        )
+        self.adjoint_analysis.from_implementation = False
+        return FunctionOperator(
+            function=self.adjoint_analysis,
+            get_jacobian_func=None,
+            # model_name=model.__name__+"Jacobian",
+            implementation=self,
+            input_symbol=self.p,
+            output_symbol=self.traj_out_expr,
+            jacobian_of=jacobian_of,  # same as self.callback, currently
+        )
 
+        # keeping this for now until porting is finished
         self.trajectory_analysis_sgm = sgm.TrajectoryAnalysisSGM(
             trajectory_analysis=self.trajectory_analysis_nom,
             dte_dxs=self.dte_dxs,
