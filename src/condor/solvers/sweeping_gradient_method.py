@@ -140,8 +140,10 @@ class SolverSciPyBase(SolverMixin):
         # set the primary in precedence: adjoint, then sensitivity, then original
         system = system
         dots = system.dots
-        self.terminal_terms = system.terminal_terms
+        self.terminal_terms = self.original_terminal_terms
         self.integrand_terms = system.integrand_terms
+        self.update = system.update
+
         if sen_system is not None:
             system = sen_system
         if adj_system is not None:
@@ -149,6 +151,7 @@ class SolverSciPyBase(SolverMixin):
             dots = self.adjoint_dots
             self.terminal_terms = self.adjoint_terminal_terms
             self.integrand_terms = self.adjoint_integrand_terms
+            self.update = self.adjoint_update
 
         self.system = system
 
@@ -271,13 +274,37 @@ class SolverSciPyBase(SolverMixin):
         x = self.adj_system.result.state_interp(t)
         return self.adj_system.dots(t, lamda, x)
 
+    def adjoint_update(self, rootsfound, t, lamda):
+        state_res = self.system.result.state_result
+        segment_idx = len(state_res.e)-len(self.system.result.e)-1
+        if segment_idx < 0:
+            return lamda
+
+        event = state_res.e[segment_idx]
+        xp = state_res.x[event.index]
+        xm = state_res.x[event.index-1]
+        return self.adj_system.update(event.rootsfound, t, lamda, xp, xm)
+
+
     def adjoint_integrand_terms(self, t, lamda):
         x = self.adj_system.result.state_interp(t)
         return self.adj_system.integrand_terms(t, lamda, x)
 
-    def adjoint_terminal_terms(self, t, lamda):
-        x = self.adj_system.result.state_interp(t)
-        return self.adj_system.terminal_terms(t, x)
+
+    def original_terminal_terms(self):
+        res = self.system.result
+        return self.system.terminal_terms(res.t[-1], res.x[-1])
+
+    def adjoint_terminal_terms(self):
+        lamda_res = self.adj_system.result
+        state_res = lamda_res.state_result
+        # include initial
+        return (
+            self.adj_system.terminal_terms(state_res.t[-1], state_res.x[-1]) +
+            self.adj_system.initial_terms(
+                lamda_res.t[-1], lamda_res.x[-2], state_res.x[0],
+            )
+        )
 
     def simulate(self, do_compute_output=True):
         system = self.system
@@ -310,7 +337,7 @@ class SolverSciPyBase(SolverMixin):
             # subsequent events use length of time for index, so root index is the index
             # of the updated state to the right of event. -> root coinciding with
             # initialization has index 1
-            last_x = system.update(rootsfound, last_t, last_x)
+            last_x = self.update(rootsfound, last_t, last_x)
         results.e.append(Root(1, rootsfound))
 
         terminate = np.any(rootsfound[system.terminating] != 0)
@@ -390,7 +417,7 @@ class SolverSciPyBase(SolverMixin):
                     ):
                         send_rootsfound = np.zeros_like(rootsfound)
                         send_rootsfound[g_idx] = rootsfound[g_idx]
-                        next_x = system.update(
+                        next_x = self.update(
                             send_rootsfound,
                             results.t[-1],
                             results.x[-1],
@@ -401,7 +428,7 @@ class SolverSciPyBase(SolverMixin):
                     results.e.append(Root(len(results.t), rootsfound))
                 else:
                     results.e.append(Root(idx, rootsfound))
-                    next_x = system.update(
+                    next_x = self.update(
                         rootsfound,
                         results.t[-1],
                         results.x[-1],
@@ -459,14 +486,42 @@ class SolverSciPyBase(SolverMixin):
             integral += integrand_antideriv(segment.t1) - integrand_antideriv(
                 segment.t0
             )
-        result.o = (
-            self.terminal_terms(
-                # result.p,
-                result.t[-1],
-                result.x[-1],
+        result.o = self.terminal_terms() + integral
+
+        if system is not self.adj_system:
+            return result
+
+        adjoint_result = result
+        state_result = result.state_result
+        for lamda_event, state_event in zip(adjoint_result.e, state_result.e[::-1]):
+            # had to copy and paste this setup code from adjointsystem.update, not
+            # sure if that's acceptable given the nature of these variables (mostly
+            # selecting indices, a few hopefully cheap calls to time derivative,
+            # etc)
+            idxp = state_event.index  # positive side of event
+            te = state_result.t[idxp]
+            xtep = state_result.x[idxp]
+
+            idxm = idxp - 1
+            xtem = state_result.x[idxm]
+
+            active_update_idxs = np.where(state_event.rootsfound != 0)[0]
+
+            idxm = lamda_event.index
+            idxp = idxm - 1
+            if adjoint_result.t[idxm] != adjoint_result.t[idxp]:
+                breakpoint()
+            if not np.isclose(adjoint_result.t[idxm], te):
+                breakpoint()
+
+            lamda_tep = adjoint_result.x[idxp]
+
+            if state_event.index == 1:
+                continue # included in adjoint terminal event
+
+            result.o += self.adj_system.event_terms(
+                state_event.rootsfound, te, lamda_tep, xtep, xtem
             )
-            + integral
-        )
 
         return result
 
@@ -1046,9 +1101,9 @@ class System:
 
     def update(self, rootsfound, t, x, *args):
         next_x = x  # np.copy(x) # who is responsible for copying? I suppose simulate
-        for root_sign, update in zip(rootsfound, self._updates):
+        for root_sign, _update in zip(rootsfound, self._updates):
             if root_sign != 0:
-                next_x = update(self.result.p, t, next_x, *args)
+                next_x = _update(self.result.p, t, next_x, *args)
         return np.array(next_x).squeeze()
 
     def time_generator(self):
@@ -1314,11 +1369,16 @@ class AdjointSystem(System):
     def __init__(
         self,
         adjoint_to,
-        autonomous_dot,
-        forcing_dot,
+
+        dot,
         initial_condition,
+        updates,
+
         integrand_terms,
         terminal_terms,
+        initial_terms,
+        event_terms,
+
         dim_state=0,
         dim_output=0,
         sen_system=None,
@@ -1327,13 +1387,17 @@ class AdjointSystem(System):
     ):
         self.sen_system = sen_system
         self.adjoint_to = adjoint_to
-        self.autonomous_dot = autonomous_dot
-        self.forcing_dot = forcing_dot
+        self._dot = dot
         self._initial_condition = initial_condition
+        self._updates = updates
+
         self.dim_state = dim_state
         self.dim_output = dim_output
+
         self._integrand_terms = integrand_terms
         self._terminal_terms = terminal_terms
+        self._initial_terms = initial_terms
+        self._event_terms = event_terms
 
         self.dynamic_output = dynamic_output
         self.num_events = 1
@@ -1348,8 +1412,23 @@ class AdjointSystem(System):
             ]
         ).reshape(-1)
 
-    def update(self, rootsfound, t, lamda):
-        return lamda
+    def event_terms(self, rootsfound, t, lamda, xp, xm, *sens):
+        p = self.result.p
+        out = 0
+        for root_sign, _event_terms in zip(rootsfound[::-1], self._event_terms[::-1]):
+            if root_sign != 0:
+                out += _event_terms(self.result.p, t, lamda, xp, xm, *sens)
+        return out
+
+    def update(self, rootsfound, t, lamda, xp, xm, *sens):
+        p = self.result.p
+        lamda_m = lamda
+        # to do this properly, I think each x needs to be included not just 
+        for root_sign, _update in zip(rootsfound[::-1], self._updates[::-1]):
+            if root_sign != 0:
+                lamda_m = _update(self.result.p, t, lamda_m, xp, xm, *sens)
+        return np.array(lamda_m).squeeze()
+
 
     def time_generator(self):
         """ """
@@ -1400,20 +1479,20 @@ class AdjointSystem(System):
         super().attach_result(p)
         self.adjoint_to.result = self.result
 
+    def initial_terms(self, t, lamda, x):
+        return np.array(self._initial_terms(self.result.p, t, lamda, x))
+
     def terminal_terms(self, t, x, *sens):
         p = self.result.p
-        return -np.array(self._terminal_terms(p, t, x, *sens)).reshape(-1)
+        return -np.array(self._terminal_terms(p, t, x, *sens))
 
     def integrand_terms(self, t, lamda, x, *sens):
         p = self.result.p
-        return -np.array(self._integrand_terms(p, t, lamda, x, *sens)).reshape(-1)
+        return -np.array(self._integrand_terms(p, t, lamda, x, *sens))
 
     def dots(self, t, lamda, x, *sens):
         p = self.result.p
-        return np.array(
-            self.autonomous_dot(p, t, lamda, x, *sens)
-            + self.forcing_dot(p, t, lamda, x, *sens)
-        ).reshape(-1)
+        return np.array(self._dot(p, t, lamda, x, *sens)).reshape(-1)
 
     def make_solver(self, solver_class, **solver_options):
         self.system_solver = solver_class(  # SolverSciPy( #SolverCVODE(
@@ -1422,9 +1501,6 @@ class AdjointSystem(System):
             sen_system=self.sen_system,
             **solver_options,
         )
-
-    def adjoint_update(self, roots_found, t, lamda, x, *sens):
-        breakpoint()
 
     def __call__(self, p, from_implementation=False):
         self.terminating = slice(0, 0)

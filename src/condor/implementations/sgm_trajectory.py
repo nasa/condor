@@ -297,6 +297,7 @@ class TrajectoryAnalysis:
         else:
             self.dynamic_output_func = None
 
+        self.terminating = terminating
         self.state_system = sgm.System(
             dim_state=model.state._count,
             initial_condition=self.state0,
@@ -447,7 +448,41 @@ class TrajectoryAnalysis:
         self.dte_dps = []
         self.dh_dps = []
 
-        for event, e_expr, h_expr in zip(self.events, self.e_exprs, self.h_exprs):
+        self.lamda_full = backend.symbol_generator(
+            "lambda", (model.state._count, model.trajectory_output._count)
+        )
+
+        xtep = backend.symbol_generator(
+            "xtep", self.x.shape
+        )
+        xtem = backend.symbol_generator(
+            "xtem", self.x.shape
+        )
+        xtep_subs = {
+            k: v for k, v in zip(
+                self.model.state.list_of("backend_repr"),
+                self.model.state.wrap(xtep).asdict().values()
+            )
+        }
+        xtem_subs = {
+            k: v for k, v in zip(
+                self.model.state.list_of("backend_repr"),
+                self.model.state.wrap(xtem).asdict().values()
+            )
+        }
+
+        ftep = substitute(self.state_equation_func.expr, xtep_subs)
+        ftem = substitute(self.state_equation_func.expr, xtem_subs)
+
+        self.adjoint_updates = []
+        self.adjoint_output_events = []
+        self.adjoint_event_signature = (
+            self.p, self.model.t, self.lamda_full, xtep, xtem,
+        )
+
+        for event_idx, (event, e_expr, h_expr,) in enumerate(zip(
+                self.events, self.e_exprs, self.h_exprs,
+        )):
             dg_dx = jacobian(e_expr, self.x)
             dg_dt = jacobian(e_expr, model.t)
             dg_dp = jacobian(e_expr, self.p)
@@ -506,6 +541,9 @@ class TrajectoryAnalysis:
             )
             self.dte_dxs[-1].expr = dte_dx
 
+
+
+
             dte_dp = substitute(dte_dp, control_sub_expression)
             self.dte_dps.append(
                 expression_to_operator(
@@ -530,6 +568,54 @@ class TrajectoryAnalysis:
             )
             self.dh_dps[-1].expr = dh_dp
 
+            dte_dx = substitute(dte_dx, xtem_subs)
+            dh_dx = substitute(dh_dx, xtem_subs)
+
+            dh_dp = substitute(dh_dp, xtem_subs)
+            dte_dp = substitute(dte_dp, xtem_subs)
+
+            if event_idx in self.terminating:
+                update_expr = (dh_dx.T - dte_dx.T @ (dh_dx @ ftem).T) @ self.lamda_full
+
+                ftep = ftep*0
+            else:
+                update_expr = (dh_dx.T - dte_dx.T @ (ftep - dh_dx @ ftem).T) @ self.lamda_full
+
+
+
+            self.adjoint_updates.append(
+                expression_to_operator(
+                    self.adjoint_event_signature,
+                    update_expr,
+                    f"{model.__name__}_{event.__name__}_adjoint_update",
+                )
+            )
+            self.adjoint_updates[-1].expr = update_expr
+
+            adjoint_gradient_event_contribution = (
+                self.lamda_full.T @ (dh_dp - (ftep - dh_dx @ ftem) @ dte_dp)
+            )
+            self.adjoint_output_events.append(
+                expression_to_operator(
+                    self.adjoint_event_signature,
+                    adjoint_gradient_event_contribution,
+                    f"{model.__name__}_{event.__name__}_gradient_update",
+                )
+            )
+            self.adjoint_output_events[-1].expr = adjoint_gradient_event_contribution
+
+        adjoint_full_signature = (
+            self.p,
+            self.model.t,
+            self.lamda_full,
+            self.x,
+        )
+        adjoint_gradient_initial_expr = self.lamda_full.T @ jacobian(self.state0.expr, self.p)
+        self.adjoint_gradient_initial_term = expression_to_operator(
+            adjoint_full_signature,
+            adjoint_gradient_initial_expr,
+            f"{model.__name__}_adjoint_output_initial_expr"
+        )
         self.adjoint_initial_condition_expr = jacobian(
             self.traj_out_terminal_term, self.x
         )
@@ -539,18 +625,11 @@ class TrajectoryAnalysis:
             f"{model.__name__}_adjoint_initial_expr",
         )
 
-        self.lamda_full = backend.symbol_generator(
-            "lambda", (model.state._count, model.trajectory_output._count)
-        )
 
-        adjoint_full_signature = (
-            self.p,
-            self.model.t,
-            self.lamda_full,
-            self.x,
-        )
         autonomous_adjoint_expr = -self.state_jacobian_expr.T @ self.lamda_full
         forcing_adjoint_expr = -concat(state_integrand_jacs, axis=1)
+
+        adjoint_dot = autonomous_adjoint_expr + forcing_adjoint_expr
 
         adjoint_deriv_terminal = jacobian(self.traj_out_terminal_term, self.p)
         adjoint_deriv_integrand = (
@@ -562,16 +641,12 @@ class TrajectoryAnalysis:
             dim_output=adjoint_deriv_terminal.reshape((-1, 1)).shape[0],
             initial_condition=self.adjoint_initial_condition_func,
             adjoint_to=self.state_system,
-            autonomous_dot=expression_to_operator(
+            dot=expression_to_operator(
                 adjoint_full_signature,
-                autonomous_adjoint_expr,
+                adjoint_dot,
                 f"{model.__name__}_adjoint_autonomous_dots",
             ),
-            forcing_dot=expression_to_operator(
-                adjoint_full_signature,
-                forcing_adjoint_expr,
-                f"{model.__name__}_adjoint_forcing_dots",
-            ),
+            updates = self.adjoint_updates,
             integrand_terms=expression_to_operator(
                 adjoint_full_signature,
                 adjoint_deriv_integrand,
@@ -582,6 +657,8 @@ class TrajectoryAnalysis:
                 adjoint_deriv_terminal,
                 f"{model.__name__}_adjoint_terminal_terms",
             ),
+            initial_terms = self.adjoint_gradient_initial_term,
+            event_terms = self.adjoint_output_events,
             **self.adjoint_options,
         )
 
