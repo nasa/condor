@@ -2,8 +2,11 @@ import numpy as np
 
 from condor.backend import (
     callables_to_operator,
-    expression_to_operator,
+    evalf,
     get_symbol_data,
+)
+from condor.backend import (
+    operators as ops,
 )
 from condor.fields import BaseElement, Field, MatchedElement, MatchedField, asdict
 
@@ -37,17 +40,24 @@ class ExplicitSystem:
     def construct(self, model):
         self.symbol_inputs = model.input.flatten()
         self.symbol_outputs = model.output.flatten()
-
         self.model = model
-        self.func = expression_to_operator(
-            [self.symbol_inputs],
-            self.symbol_outputs,
-            name=model.__name__,
-        )
 
     def __call__(self, model_instance):
-        self.args = model_instance.input.flatten()
-        self.out = self.func(self.args)
+        new_input = model_instance.input.wrap(model_instance.input.flatten())
+        input_dict = {
+            getattr(self.model, k).backend_repr: v
+            for k, v in new_input.asdict().items()
+        }
+        if (
+            isinstance(model_instance.input.flatten(), np.ndarray)
+            and self.symbol_inputs.size != 0
+        ):
+            self.out = evalf(
+                self.symbol_outputs,
+                {self.symbol_inputs: model_instance.input.flatten()},
+            )
+        else:
+            self.out = ops.substitute(self.symbol_outputs, input_dict)
         model_instance.bind_field(self.model.output.wrap(self.out))
 
 
