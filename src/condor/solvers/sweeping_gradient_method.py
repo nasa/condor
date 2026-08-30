@@ -1111,6 +1111,7 @@ class System:
             yield np.array(t).reshape(-1)[0]
 
     def attach_result(self, p):
+        p = np.array(p)
         if isinstance(self.system_solver, SolverCVODE):
             self.result = CVodeResult(p=p, system=self)
         else:
@@ -1122,6 +1123,7 @@ class System:
             self.system_solver.simulate(one_step=from_implementation)
         else:
             self.system_solver.simulate()
+
         result = self.result
         result.t = np.array(result.t)
         if self.dim_state == 1:
