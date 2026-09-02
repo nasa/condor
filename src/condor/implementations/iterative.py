@@ -626,7 +626,7 @@ class ScipyTrustConstr(ScipyMinimizeBase):
                     for ub, is_nonlinear in zip(self.ubg, nonlinear_flags)
                     if is_nonlinear
                 ]
-            )
+            ).squeeze()
 
             self.nonlinear_lb = np.array(
                 [
@@ -634,7 +634,7 @@ class ScipyTrustConstr(ScipyMinimizeBase):
                     for lb, is_nonlinear in zip(self.lbg, nonlinear_flags)
                     if is_nonlinear
                 ]
-            )
+            ).squeeze()
 
         # process linear constraints
         linear_a_exprs = [

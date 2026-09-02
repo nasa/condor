@@ -149,7 +149,7 @@ class BaseCondorClassDict(dict):
             for input_val in attr_val.input_kwargs.values():
                 if not can_embed:
                     break
-                if isinstance(input_val, backend.symbol_class):
+                if backend.is_symbol(input_val):
                     for input_sym in backend.symbols_in(input_val):
                         if input_sym not in self.meta.backend_repr_elements:
                             can_embed = False
@@ -164,7 +164,7 @@ class BaseCondorClassDict(dict):
                 attr_val.name = attr_name
         if isinstance(attr_val, BaseElement) and not attr_val.name:
             attr_val.name = attr_name
-        if isinstance(attr_val, backend.symbol_class):
+        if backend.is_symbol(attr_val):
             # from a FreeField
             element = self.meta.backend_repr_elements.get(attr_val, None)
             if element is not None:
@@ -425,7 +425,7 @@ class BaseModelType(type):
         # what about a Model(Template) that is being declared in the class boy?
         else:
             existing_attr = cls_dict.get(k, None)
-            if isinstance(v, backend.symbol_class):
+            if backend.is_symbol(v):
                 elem_matching_backend_repr = meta.backend_repr_elements.get(v, None)
             else:
                 elem_matching_backend_repr = None
@@ -437,7 +437,7 @@ class BaseModelType(type):
                     existing_attr = elem_matching_backend_repr.backend_repr
                     # assume cls dict assignment??
                 if (existing_attr is v) or (
-                    isinstance(existing_attr, backend.symbol_class)
+                    backend.is_symbol(existing_attr)
                     and backend.symbol_is(existing_attr, v)
                 ):
                     # only ensure that this is marked as inherited, don't need
@@ -464,7 +464,7 @@ class BaseModelType(type):
                     f"to {name}"
                 )
 
-            if isinstance(v, backend.symbol_class):
+            if backend.is_symbol(v):
                 original_v = v
                 v = base._meta.backend_repr_elements.get(v, v)
                 if isinstance(v, BaseElement) and v.field_type._name == "placeholder":
@@ -497,7 +497,7 @@ class BaseModelType(type):
                         name,
                     )
                     cls_dict[k] = v
-            elif isinstance(v, backend.symbol_class):
+            elif backend.is_symbol(v):
                 # TODO: check what hits this. Previously, time dummy variable. But I
                 # think that might be captured by placeholders now?
                 log.debug(
@@ -563,7 +563,8 @@ class BaseModelType(type):
     @classmethod
     def is_condor_attr(cls, k, v):
         return (
-            isinstance(v, (Field, BaseElement, backend.symbol_class))
+            isinstance(v, (Field, BaseElement))
+            or backend.is_symbol(v)
             or k in cls.reserved_words
         )
 
@@ -740,7 +741,7 @@ class BaseModelType(type):
         pass_attr = True
         if isinstance(attr_val, BaseElement):
             pass
-        if isinstance(attr_val, backend.symbol_class):
+        if backend.is_symbol(attr_val):
             element = new_cls._meta.backend_repr_elements.get(attr_val, None)
             if element is not None:
                 log.debug(
@@ -811,7 +812,7 @@ def check_attr_name(attr_name, attr_val, new_cls):
         else:
             compare_attr_new = attr_val
 
-        if isinstance(compare_attr_existing, backend.symbol_class):
+        if backend.symbol_is(compare_attr_existing):
             if backend.symbol_is(compare_attr_new, compare_attr_existing):
                 return
         elif compare_attr_new is compare_attr_existing:
@@ -1134,7 +1135,7 @@ class ModelType(BaseModelType):
     @classmethod
     def process_condor_attr(cls, attr_name, attr_val, new_cls):
         pass_super = True
-        if isinstance(attr_val, (backend.symbol_class, BaseElement)):
+        if isinstance(attr_val, BaseElement) or backend.is_symbol(attr_val):
             log.debug(
                 "ModelType is checking a backend_repr... %s, %s, %s, %s",
                 attr_name,
@@ -1257,7 +1258,7 @@ class ModelType(BaseModelType):
 
         for field in new_cls._meta.noninput_fields:
             for elem in field:
-                if isinstance(elem.backend_repr, backend.symbol_class):
+                if backend.is_symbol(elem.backend_repr):
                     elem.backend_repr = backend.operators.substitute(
                         elem.backend_repr, placeholder_assignment_dict
                     )
@@ -1459,12 +1460,8 @@ class Model(metaclass=ModelType):
         for field in fields:
             model_instance_field = getattr(self, field._name)
             model_instance_field_dict = dc.asdict(model_instance_field)
-            model_assignments.update(
-                {
-                    elem.backend_repr: val
-                    for elem, val in zip(field, model_instance_field_dict.values())
-                }
-            )
+            for elem, val in zip(field, model_instance_field_dict.values()):
+                model_assignments[elem.backend_repr] = val
 
         self.update_model_assignments(model_assignments)
 
@@ -1510,7 +1507,7 @@ class Model(metaclass=ModelType):
             bound_field = getattr(self, field._name)
             bound_field_dict = dc.asdict(bound_field)
             for k, v in bound_field_dict.items():
-                if not isinstance(v, backend.symbol_class):
+                if not backend.is_symbol(v):
                     embedded_model_kwargs[k] = v
                 else:
                     value_found = False
@@ -1537,7 +1534,7 @@ class Model(metaclass=ModelType):
         bound_embedded_model.bind_input_fields(**embedded_model_kwargs)
 
     def bind_output_as_embedded(self, parent_instance, bound_embedded_model):
-        assignment_updates = {}
+        assignment_updates = backend.SymbolCompatibleDict()
         for field in self._meta.output_fields:
             sym_bound_field = getattr(self, field._name)
             ran_bound_field = getattr(bound_embedded_model, field._name)
@@ -1548,17 +1545,13 @@ class Model(metaclass=ModelType):
                 # TODO: sym_bound_field_dict is really just list_of?
                 sym_bound_field_dict = dc.asdict(sym_bound_field)
                 ran_bound_field_dict = dc.asdict(ran_bound_field)
-                assignment_updates.update(
-                    {
-                        sym_val: ran_val
-                        for sym_val, ran_val in zip(
-                            sym_bound_field_dict.values(), ran_bound_field_dict.values()
-                        )
-                        if isinstance(sym_val, backend.symbol_class)
-                    }
-                )
-            elif isinstance(sym_bound_field, backend.symbol_class):
-                assignment_updates.update({sym_bound_field: ran_bound_field})
+                for sym_val, ran_val in zip(
+                    sym_bound_field_dict.values(), ran_bound_field_dict.values()
+                ):
+                    if backend.is_symbol(sym_val):
+                        assignment_updates[sym_val] = ran_val
+            elif backend.is_symbol(sym_bound_field):
+                assignment_updates[sym_bound_field] = ran_bound_field
             else:
                 raise ValueError
         return assignment_updates

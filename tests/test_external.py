@@ -67,7 +67,7 @@ class CondoricMisc(condor.ExplicitSystem):
 
 def simple_rot(th, axis):
     non_axis = [i for i in range(3) if i != axis]
-    if isinstance(th, backend.symbol_class):
+    if backend.is_symbol(th):
         dcm = ops.zeros((3, 3))
     else:
         dcm = np.zeros((3, 3))
@@ -225,12 +225,9 @@ def test_external_jacobian(output_mode, models):
     out_jac = Jac(**kwargs)
     for output_ in Condoric.output:
         for input_ in Jac.input:
-            assert getattr(
-                out_jac, f"nsys_d{output_.name}_d{input_.name}"
-            ) == pytest.approx(
-                getattr(out_jac, f"csys_d{output_.name}_d{input_.name}"),
-                abs=1e-18,
-                rel=1e-15,
+            assert np.all(
+                getattr(out_jac, f"nsys_d{output_.name}_d{input_.name}")
+                == getattr(out_jac, f"csys_d{output_.name}_d{input_.name}")
             )
 
 

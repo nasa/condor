@@ -406,9 +406,14 @@ class CasadiIterationCallback(casadi.Callback):
         if n == "f":
             return casadi.Sparsity.dense(1)
         elif n in ("x", "lam_x"):
-            return self.nlpdict["x"].sparsity()
+            x = self.nlpdict["x"]
+            if isinstance(x, casadi.array):
+                x = x.to_casadi()
+            return x.sparsity()
         elif n in ("g", "lam_g"):
             g = self.nlpdict["g"]
+            if isinstance(g, casadi.array):
+                g = g.to_casadi()
             if not hasattr(g, "sparsity"):
                 return casadi.Sparsity.dense(np.atleast_2d(g).shape)
             return g.sparsity()

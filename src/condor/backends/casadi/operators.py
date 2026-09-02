@@ -257,7 +257,7 @@ def substitute(expr, subs):
         with contextlib.suppress(RuntimeError):
             expr = casadi.evalf(expr)
 
-    return expr
+    return casadi.array(expr)
 
 
 def if_else(*conditions_actions, short_circuit=False):
