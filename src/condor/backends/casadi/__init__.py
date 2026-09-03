@@ -18,6 +18,11 @@ for attr in casadi.__dir__():
     if attr.startswith("OP_"):
         print(f"{attr}: {getattr(casadi, attr)}")
 
+-----
+# TODO: ArrayInterface has nice static methods that mayy be useful: (if stable?)
+_arg_has_symbolic
+_as_array
+
 ------
 
 import casadi as ca
@@ -25,6 +30,14 @@ import numpy as np
 import condor as co
 backend = co.backend
 ops = backend.operators
+
+b = np.array([[0,1,0]]).T
+u = ca.array(ca.MX.sym("u", 1,1))
+
+b =ca.array([[0,1,0]]).T
+b = np.array([[0,1,0]]).T
+u = ca.array([[1]])
+b@u
 
 
 a = ca.MX.sym("a", 12,1)
@@ -232,7 +245,7 @@ class BackendSymbolData(BackendSymbolDataMixin):
                     return syms[0]
             return unique_values
         if self.size == 1 and isinstance(value, (float, int)):
-            return value
+            return np.array([[value]])
         else:
             if not isinstance(value, np.ndarray) and not is_symbol(value):
                 value = np.array(value)
@@ -257,7 +270,10 @@ class BackendSymbolData(BackendSymbolDataMixin):
         if self.symmetric:
             value = unique_to_symmetric(value, symbolic=is_symbolic(value))
 
-        if is_symbol(value) and value.is_constant():
+        if (isinstance(value, symbol_class) and value.is_constant()) or (
+            isinstance(value, casadi.array)
+            and not casadi.array._arg_has_symbolic(value)
+        ):
             value = value.to_DM()
 
         if isinstance(value, symbol_class):
@@ -614,6 +630,12 @@ class CasadiFunctionCallback(casadi.Callback):
         self.opts = opts
 
         self.construct()
+
+    def __call__(self, *args, **kwargs):
+        out = super().__call__(*args, **kwargs)
+        if isinstance(out, symbol_class):
+            out = casadi.array(out)
+        return out
 
     def construct(self):
         super().construct(self.placeholder_func.name(), self.opts)

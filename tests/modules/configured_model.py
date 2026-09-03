@@ -32,7 +32,10 @@ class LTI(co.ODESystem):
             u = -K @ x
             dynamic_output.u = u
 
-        xdot += b @ u
+        if b.shape[-1] == 1:
+            xdot += b * u
+        else:
+            xdot += b @ u
 
     if not (settings["dt_plant"] and settings["dt"]):
         dot[x] = xdot

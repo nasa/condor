@@ -107,6 +107,7 @@ class BackendSymbolDataMixin:
             self.shape = (1, 1)
         n = self.shape[0]
         size = np.prod(self.shape)
+
         if self.symmetric:
             size = int(n * (n + 1) / 2)
         if self.diagonal:

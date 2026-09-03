@@ -812,7 +812,7 @@ def check_attr_name(attr_name, attr_val, new_cls):
         else:
             compare_attr_new = attr_val
 
-        if backend.symbol_is(compare_attr_existing):
+        if backend.is_symbol(compare_attr_existing):
             if backend.symbol_is(compare_attr_new, compare_attr_existing):
                 return
         elif compare_attr_new is compare_attr_existing:

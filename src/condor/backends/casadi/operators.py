@@ -35,11 +35,17 @@ sqrt = casadi.sqrt
 floor = casadi.floor
 ceil = casadi.ceil
 
-eye = casadi.MX.eye
-ones = casadi.MX.ones
 
 fabs = casadi.fabs
 sign = casadi.sign
+
+
+def eye(*args, **kwargs):
+    return casadi.array(casadi.MX.eye(*args, **kwargs))
+
+
+def ones(*args, **kwargs):
+    return casadi.array(casadi.MX.ones(*args, **kwargs))
 
 
 def diag(v, k=0):
@@ -83,6 +89,7 @@ def diff(x, axis=-1, n=1):
 
 
 def prod(x, axis=None):
+    return np.atleast_2d(np.prod(x, axis))  # .atleast2d()
     if axis is None:
         out = 1
         for i in range(x.shape[0]):
@@ -131,6 +138,13 @@ pinv = casadi.pinv
 
 
 def concat(arrs, axis=0):
+    if len(arrs) == 0:
+        return np.array(arrs)
+    if len(arrs) == 1 and np.isscalar(arrs[0]):
+        if isinstance(arrs, (casadi.MX, casadi.array)):
+            return arrs
+        return np.array(arrs)
+    return np.concat(arrs, axis=axis)
     """implement concat from array API for casadi"""
     if not arrs:
         return arrs
@@ -160,6 +174,7 @@ def zeros(shape=(1, 1)):
 def min(x, axis=None):
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
+    return np.min(x, axis=axis)
     if axis is not None:
         msg = "Only axis=None supported"
         raise ValueError(msg)
@@ -169,6 +184,7 @@ def min(x, axis=None):
 def max(x, axis=None):
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
+    return np.max(x, axis=axis)
     if axis is not None:
         msg = "Only axis=None supported"
         raise ValueError(msg)
