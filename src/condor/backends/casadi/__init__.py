@@ -205,6 +205,8 @@ def process_relational_element(elem):
 def shape_to_nm(shape):
     if isinstance(shape, (int, np.int64)):
         shape = (shape, 1)
+    if len(shape) == 0:
+        shape = (1, 1)
     if len(shape) > 2:
         raise ValueError
     n = shape[0]
@@ -235,9 +237,10 @@ class BackendSymbolData(BackendSymbolDataMixin):
             if not isinstance(value, np.ndarray) and not is_symbol(value):
                 value = np.array(value)
             if isinstance(value, symbol_class):
-                value = casadi.array(value)
-            # if is_symbol(value):
-            #    value = value#.T
+                # value = casadi.array(value)
+                # if is_symbol(value):
+                value = value.T
+                breakpoint()
             return value.reshape((-1, 1))
 
     def wrap_value(self, value):
@@ -282,6 +285,7 @@ class BackendSymbolData(BackendSymbolDataMixin):
             and 0
         ):
             value = value.reshape(self.shape[::-1]).T
+            breakpoint()
         else:
             try:
                 value = value.reshape(self.shape)
@@ -357,7 +361,7 @@ def symbol_generator(name, shape=(1, 1), symmetric=False, diagonal=False):
         matrix_symbols = unique_to_symmetric(unique_symbols)
         return matrix_symbols
     else:
-        raw_sym = casadi.array(symbol_class.sym(name, (n, m)))
+        raw_sym = casadi.array(symbol_class.sym(name, n * m)).reshape((n, m))
         sym = raw_sym  # .T
         return sym
 
@@ -780,6 +784,13 @@ def expression_to_operator(input_symbols, output_expressions, name="", **kwargs)
     #    if len(input_symbols) != len(args):
     #        raise ValueError
     #    for input_symbol, arg in
+
+    def process_input(sym):
+        if isinstance(sym, casadi.array):
+            sym = sym.to_casadi()
+        return sym
+
+    input_symbols = [process_input(sym) for sym in input_symbols]
 
     return casadi.Function(
         name,
