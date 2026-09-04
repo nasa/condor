@@ -1108,12 +1108,12 @@ class TableLookup(ExternalSolverWrapper):
         input_data = []
         for k, v in xx.items():
             self.input(name=k)
-            input_data.append(v)
+            input_data.append(np.array(v))
         output_data = []
         for k, v in yy.items():
             self.output(name=k)
             output_data.append(v)
-        output_data = np.stack(output_data, axis=-1)
+        output_data = np.array(np.stack(output_data, axis=-1))
         self.interpolant = ndsplines.make_interp_spline(
             input_data,
             output_data,
