@@ -13,8 +13,8 @@ import condor as co
 
 
 class DblInt(co.ODESystem):
-    A = np.array([[0, 1], [0, 0]])
-    B = np.array([[0], [1]])
+    A = co.backend.operators.array([[0, 1], [0, 0]])
+    B = co.backend.operators.array([[0], [1]])
 
     x = state(shape=A.shape[0])
     mode = state()
@@ -55,8 +55,7 @@ from scipy.optimize import bisect
 
 class Transfer(DblInt.TrajectoryAnalysis):
     initial[x] = [-9.0, 0.0]
-    xd = [1.0, 2.0]
-    Q = np.eye(2)
+    xd = co.backend.operators.array([1.0, 2.0]).reshape((2, 1))
     cost = trajectory_output(((x - xd).T @ (x - xd)) / 2)
     tf = 20.0
 

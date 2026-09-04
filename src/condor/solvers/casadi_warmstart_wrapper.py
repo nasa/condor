@@ -216,7 +216,7 @@ class CasadiNlpsolWarmstart(CasadiWarmstartWrapperBase, CasadiFunctionCallback):
             self.nlp_args,
             self.options,
         )
-        if not self.init_var.jacobian()(self.p, []).nnz():
+        if not casadi.jacobian(self.init_var(self.p), self.p).nnz():
             sym_x0 = self.init_var(np.zeros(self.p.shape))
         else:
             sym_x0 = self.init_var(self.p)
@@ -336,7 +336,7 @@ class CasadiRootfinderWarmstart(CasadiWarmstartWrapperBase, CasadiFunctionCallba
             self.options,
         )
 
-        if not self.init_var.jacobian()(self.p, []).nnz():
+        if not casadi.jacobian(self.init_var(self.p), self.p).nnz():
             sym_x0 = self.init_var(np.zeros(self.p.shape))
         else:
             sym_x0 = self.init_var(self.p)

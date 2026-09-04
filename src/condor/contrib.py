@@ -8,6 +8,7 @@ import ndsplines
 import numpy as np
 
 from condor.backend import (
+    SymbolCompatibleDict,
     expression_to_operator,
     is_constant,
     process_relational_element,
@@ -521,9 +522,10 @@ class TrajectoryAnalysisType(SubmodelType):
 
         ode_model = new_cls._meta.primary
         model = new_cls
-        control_subs_pairs = {
-            control.backend_repr: [control.default] for control in ode_model.modal
-        }
+        control_subs_pairs = SymbolCompatibleDict()
+        for control in ode_model.modal:
+            control_subs_pairs[control.backend_repr] = [control.default]
+
         for mode in model._meta.modes:
             for act in mode.action:
                 control_subs_pairs[act.match.backend_repr].insert(

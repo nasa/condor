@@ -144,7 +144,10 @@ def concat(arrs, axis=0):
         if isinstance(arrs, (casadi.MX, casadi.array)):
             return arrs
         return np.array(arrs)
-    return np.concat(arrs, axis=axis)
+    try:
+        return np.concat(arrs, axis=axis)
+    except ValueError:
+        return np.array(arrs)
     """implement concat from array API for casadi"""
     if not arrs:
         return arrs
@@ -169,6 +172,9 @@ def unstack(arr, axis=0):
 
 def zeros(shape=(1, 1)):
     return backend.symbol_class(*shape)
+
+
+array = casadi.array
 
 
 def min(x, axis=None):

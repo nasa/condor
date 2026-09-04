@@ -1107,7 +1107,8 @@ class TrajectoryAnalysis:
                 segment.t0
             )
         self.cached_output = (
-            self.terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
+            self.terminal_terms(result.p, result.t[-1], result.x[-1]).squeeze()
+            + integral
         )
         return self.cached_output
 

@@ -95,9 +95,16 @@ def symbols_in(expression):
         return casadi.symvar(expression)
 
 
-def is_constant(symbol):
+def is_symbol(value):
+    return (isinstance(value, symbol_class) and not value.is_constant()) or (
+        isinstance(value, casadi.array) and casadi.array._arg_has_symbolic(value)
+    )
+
+
+def is_constant(value):
     """evaluate whether the :attr:`symbol` is a constant (e.g., numeric)"""
-    return not isinstance(symbol, symbol_class) or symbol.is_constant()
+    # return not isinstance(symbol, symbol_class) or symbol.is_constant()
+    return bool(1 - is_symbol(value))
 
 
 def process_relational_element(elem):
@@ -247,13 +254,8 @@ class BackendSymbolData(BackendSymbolDataMixin):
         if self.size == 1 and isinstance(value, (float, int)):
             return np.array([[value]])
         else:
-            if not isinstance(value, np.ndarray) and not is_symbol(value):
+            if isinstance(value, (list, tuple)):
                 value = np.array(value)
-            if isinstance(value, symbol_class):
-                # value = casadi.array(value)
-                # if is_symbol(value):
-                value = value.T
-                breakpoint()
             return value.reshape((-1, 1))
 
     def wrap_value(self, value):
@@ -429,10 +431,6 @@ def get_symbol_data(symbol, symmetric=None):
         symmetric=symmetric,
         diagonal=diagonal,
     )
-
-
-def is_symbol(a):
-    return isinstance(a, (symbol_class, casadi.array))
 
 
 def symbol_is(a, b):
@@ -802,11 +800,6 @@ def expression_to_operator(input_symbols, output_expressions, name="", **kwargs)
     if not name:
         name = "function_from_expression"
 
-    # def wrapped_function(*args):
-    #    if len(input_symbols) != len(args):
-    #        raise ValueError
-    #    for input_symbol, arg in
-
     def process_input(sym):
         if isinstance(sym, casadi.array):
             sym = sym.to_casadi()
@@ -814,9 +807,18 @@ def expression_to_operator(input_symbols, output_expressions, name="", **kwargs)
 
     input_symbols = [process_input(sym) for sym in input_symbols]
 
-    return casadi.Function(
+    func = casadi.Function(
         name,
         input_symbols,
         [casadi.array(output_expressions)],
         kwargs,
     )
+
+    def wrapped_function(*args):
+        out = func(*args)
+        out = casadi.array(out)
+        if is_constant(out):
+            out = np.array(out)
+        return out
+
+    return wrapped_function

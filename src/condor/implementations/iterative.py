@@ -482,9 +482,9 @@ class ScipyMinimizeBase(OptimizationProblem):
             )
 
         min_out = minimize(
-            lambda *args: self.f_func(*args).toarray().squeeze(),
+            lambda *args: self.f_func(*args).squeeze(),
             self.x0,
-            jac=lambda *args: self.f_jac_func(*args).toarray().squeeze(),
+            jac=lambda *args: self.f_jac_func(*args).squeeze(),
             method=self.method_string,
             args=extra_args,
             constraints=scipy_constraints,
@@ -539,7 +539,7 @@ class ScipySLSQP(ScipyMinimizeBase):
             self.con.append(
                 dict(
                     type="eq",
-                    fun=lambda x, p: self.eq_g_func(x, p).toarray().squeeze().T,
+                    fun=lambda x, p: self.eq_g_func(x, p).squeeze().T,
                     jac=self.eq_g_jac_func,
                 )
             )
@@ -559,7 +559,7 @@ class ScipySLSQP(ScipyMinimizeBase):
             self.con.append(
                 dict(
                     type="ineq",
-                    fun=lambda x, p: self.ineq_g_func(x, p).toarray().squeeze().T,
+                    fun=lambda x, p: self.ineq_g_func(x, p).squeeze().T,
                     jac=self.ineq_g_jac_func,
                 )
             )
@@ -682,10 +682,10 @@ class ScipyTrustConstr(ScipyMinimizeBase):
                 NonlinearConstraint(
                     fun=(
                         lambda *args: self.g_func(*args, *extra_args)
-                        .toarray()
+                        # .toarray()
                         .squeeze()
                     ),
-                    jac=(lambda *args: self.g_jac_func(*args, *extra_args).sparse()),
+                    jac=(lambda *args: self.g_jac_func(*args, *extra_args)),
                     lb=self.nonlinear_lb,
                     ub=self.nonlinear_ub,
                 )
