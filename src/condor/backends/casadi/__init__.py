@@ -206,7 +206,7 @@ class BackendSymbolData(BackendSymbolDataMixin):
                 return np.array(value).reshape(-1)
 
         if self.symmetric:
-            value = unique_to_symmetric(value, symbolic=is_symbolic(value))
+            value = unique_to_symmetric(value, symbolic=is_symbol(value))
 
         if (isinstance(value, symbol_class) and value.is_constant()) or (
             isinstance(value, casadi.array)

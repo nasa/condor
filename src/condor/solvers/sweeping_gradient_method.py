@@ -1217,6 +1217,7 @@ class SweepingGradientMethod:
                     time_data,
                     integrand_data,
                     # bc_type=["natural", "natural"],
+                    k=min(3, len(time_data) - 1),
                 )
                 integrand_antider = integrand_interp.antiderivative()
                 jac_row += integrand_antider(time_data[-1]) - integrand_antider(
