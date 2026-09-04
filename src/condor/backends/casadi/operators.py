@@ -90,21 +90,6 @@ def diff(x, axis=-1, n=1):
 
 def prod(x, axis=None):
     return np.atleast_2d(np.prod(x, axis))  # .atleast2d()
-    if axis is None:
-        out = 1
-        for i in range(x.shape[0]):
-            for j in range(x.shape[1]):
-                out *= x[i, j]
-    elif axis == 0:
-        out = ones((1, x.shape[1]))
-        for i in range(x.shape[0]):
-            out *= x[i, :]
-    elif axis == 1:
-        out = ones((x.shape[0], 1))
-        for j in range(x.shape[1]):
-            out *= x[:, j]
-
-    return out
 
 
 def isnan(x):
@@ -138,6 +123,7 @@ pinv = casadi.pinv
 
 
 def concat(arrs, axis=0):
+    """implement concat from array API for casadi"""
     if len(arrs) == 0:
         return np.array(arrs)
     if len(arrs) == 1 and np.isscalar(arrs[0]):
@@ -148,19 +134,6 @@ def concat(arrs, axis=0):
         return np.concat(arrs, axis=axis)
     except ValueError:
         return np.array(arrs)
-    """implement concat from array API for casadi"""
-    if not arrs:
-        return arrs
-    if np.any([isinstance(arr, backend.symbol_class) for arr in arrs]):
-        if axis == 0:
-            return casadi.vcat(arrs)
-        elif axis in (1, -1):
-            return casadi.hcat(arrs)
-        else:
-            msg = "Casadi only supports matrices"
-            raise ValueError(msg)
-    else:
-        return np.concat([np.atleast_2d(arr) for arr in arrs], axis=axis)
 
 
 def unstack(arr, axis=0):
@@ -181,20 +154,12 @@ def min(x, axis=None):
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
     return np.min(x, axis=axis)
-    if axis is not None:
-        msg = "Only axis=None supported"
-        raise ValueError(msg)
-    return casadi.mmin(x)
 
 
 def max(x, axis=None):
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
     return np.max(x, axis=axis)
-    if axis is not None:
-        msg = "Only axis=None supported"
-        raise ValueError(msg)
-    return casadi.mmax(x)
 
 
 unsupported_jacobian_message = (

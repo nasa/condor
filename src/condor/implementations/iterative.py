@@ -7,6 +7,7 @@ from scipy.optimize import LinearConstraint, NonlinearConstraint, minimize
 import condor as co
 from condor.backend import (
     expression_to_operator,
+    is_symbol,
     symbol_class,
 )
 from condor.backend.operators import (
@@ -408,7 +409,7 @@ class CasadiNlpsolImplementation(OptimizationProblem):
         else:
             var_out = self.callback(run_p)
 
-        if isinstance(var_out, symbol_class):
+        if is_symbol(var_out):
             out = dict(
                 x=var_out,
                 p=run_p,
@@ -417,13 +418,14 @@ class CasadiNlpsolImplementation(OptimizationProblem):
                 lam_g=None,
                 lam_x=None,
             )
+            model_instance.objective = out["f"]
         else:
             out = self.callback.out
             model_instance._stats = self.callback._stats
+            model_instance.objective = np.array(out["f"]).squeeze()
 
         model_instance.bind_field(self.model.variable.wrap(out["x"]))
         model_instance.bind_field(self.model.constraint.wrap(out["g"]))
-        model_instance.objective = np.array(out["f"]).squeeze()
         self.out = out
         self.lam_g0 = out["lam_g"]
         self.lam_x0 = out["lam_x"]

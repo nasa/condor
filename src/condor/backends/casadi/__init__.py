@@ -18,70 +18,6 @@ for attr in casadi.__dir__():
     if attr.startswith("OP_"):
         print(f"{attr}: {getattr(casadi, attr)}")
 
------
-# TODO: ArrayInterface has nice static methods that mayy be useful: (if stable?)
-_arg_has_symbolic
-_as_array
-
-------
-
-import casadi as ca
-import numpy as np
-import condor as co
-backend = co.backend
-ops = backend.operators
-
-b = np.array([[0,1,0]]).T
-u = ca.array(ca.MX.sym("u", 1,1))
-
-b =ca.array([[0,1,0]]).T
-b = np.array([[0,1,0]]).T
-u = ca.array([[1]])
-b@u
-
-
-a = ca.MX.sym("a", 12,1)
-f1 = backend.expression_to_operator([a], a.reshape((4,3)), "func")
-
-x = np.arange(12)
-
-print(np.all(f1(x) == x.reshape((4,3))))
-f1(x)
-
-f2 = backend.expression_to_operator([a], ca.array(a).reshape((4,3)), "func")
-
-print(np.all(f2(x) == x.reshape((4,3))))
-f2(x)
-
-
-f3 = backend.expression_to_operator([a], ops.sin(ca.array(a).reshape((4,3))), "func")
-print(np.all(f3(x) == np.sin(x.reshape((4,3)))))
-f3(x)
-
----
-
-a = ca.MX.sym("a", 4,3)
-f1 = backend.expression_to_operator([a], a, "func")
-
-x = np.arange(12).reshape((4,3))
-
-print(np.all(f1(x) == x))
-f1(x)
-
-f2 = backend.expression_to_operator([a], ca.array(a).reshape((-1,1)), "func")
-
-print(np.all(f2(x) == x.reshape(-1)))
-f2(x)
-
-
-f3 = backend.expression_to_operator([a], a.T.reshape((-1,1)), "func")
-print(np.all(f3(x) == x.reshape(-1)))
-f3(x)
-
-ops
-
-
-
 """
 
 
@@ -545,11 +481,6 @@ def evalf(expr, backend_repr2value):
     """evaluate :attr:`expr` with dictionary of {symbol: value}"""
     if not isinstance(expr, list):
         expr = [expr]
-    # expr = [
-    #     expr_ if isinstance(expr_, symbol_class) else expr_.to_casadi()
-    #     for expr_ in expr
-    # ]
-    # args = [v.to_casadi() for v in backend_repr2value.keys()]
     args = list(backend_repr2value.keys())
     func = casadi.Function(
         "temp_func",
