@@ -103,8 +103,11 @@ class BackendSymbolDataMixin:
     # cached? currently computed by actual backend...
 
     def __post_init__(self, *args, **kwargs):
+        if len(self.shape) == 0:
+            self.shape = (1, 1)
         n = self.shape[0]
         size = np.prod(self.shape)
+
         if self.symmetric:
             size = int(n * (n + 1) / 2)
         if self.diagonal:

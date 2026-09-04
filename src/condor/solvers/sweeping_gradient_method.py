@@ -1107,7 +1107,8 @@ class TrajectoryAnalysis:
                 segment.t0
             )
         self.cached_output = (
-            self.terminal_terms(result.p, result.t[-1], result.x[-1]) + integral
+            self.terminal_terms(result.p, result.t[-1], result.x[-1]).squeeze()
+            + integral
         )
         return self.cached_output
 
@@ -1216,6 +1217,7 @@ class SweepingGradientMethod:
                     time_data,
                     integrand_data,
                     # bc_type=["natural", "natural"],
+                    k=min(3, len(time_data) - 1),
                 )
                 integrand_antider = integrand_interp.antiderivative()
                 jac_row += integrand_antider(time_data[-1]) - integrand_antider(
