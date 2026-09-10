@@ -1,7 +1,6 @@
 """Built-in model templates"""
 
 import logging
-import warnings
 from dataclasses import dataclass, field
 
 import ndsplines
@@ -660,6 +659,8 @@ class TrajectoryAnalysis(
             Sample spacing in the independent variable (usually time).
         include_output : bool, optional
             Include :attr:`~ODESystem.dynamic_output` in the returned result.
+            Uses the model's output equations, including for results loaded from disk
+            or detached from their numerical implementation.
         include_events : bool, optional
             Include events regardless of whether or not they fall on a multiple of `dt`.
             Two points will be inserted for each internal event to get the state
@@ -695,17 +696,8 @@ class TrajectoryAnalysis(
 
         new_self = model.__new__(model)
 
-        # TODO: add option to rebuild the implemention
         if (impl := getattr(self, "implementation", None)) is not None:
             new_self.implementation = impl
-        elif include_output:  # override include_output if implementation is not found
-            include_output = False
-            warnings.warn(
-                "Trajectory instances without an implementation currently do not "
-                "support dynamic output sampling. Set include_output=False to "
-                "suppress.",
-                stacklevel=2,
-            )
 
         new_self._original_instance = original_instance
         new_self.bind_field(self.parameter)
@@ -770,11 +762,11 @@ class TrajectoryAnalysis(
 
         include_output = include_output and model.dynamic_output._count
         if include_output:
-            dynamic_output = self.implementation.state_system.dynamic_output
+            dynamic_output = model._meta.output_equation_function
             p = self._res.p
             new_y = np.empty((new_t.size, model.dynamic_output._count))
             for i, (t, x) in enumerate(zip(new_t, new_x, strict=True)):
-                new_y[i] = dynamic_output(p, t, x).T
+                new_y[i] = np.asarray(dynamic_output(t, x, p)).reshape(-1)
 
         new_self.t = new_t
         new_self.bind_field(model.state.wrap(new_x.T))
