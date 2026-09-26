@@ -90,6 +90,33 @@ class FieldValues:
         datacalss"""
         return dc.asdict(self)
 
+    def dict_of(self, attr="backend_repr"):
+        """Return assigned values keyed by an attribute of each field element.
+
+        Parameters
+        ----------
+        attr : str, optional
+            Element attribute to use as the key. The default, ``backend_repr``,
+            produces a mapping for :func:`condor.backend.operators.substitute`.
+            Use ``"name"`` for a name-keyed mapping. Keys must be hashable;
+            repeated keys follow the usual dictionary last-value-wins behavior.
+
+        Returns
+        -------
+        dict
+            A new dictionary in field-element order. Values are taken directly
+            from this instance, preserving array shapes and symbolic objects
+            without copying. Unlike :meth:`asdict`, this is a shallow mapping.
+
+        Raises
+        ------
+        AttributeError
+            If an element does not have the requested attribute.
+        TypeError
+            If a key is not hashable.
+        """
+        return {getattr(elem, attr): getattr(self, elem.name) for elem in self.field}
+
     def flatten(self):
         """turn the bound values of this field instance into a single symbol -- may be
         numeric or in the backend representation (symbol class)"""
