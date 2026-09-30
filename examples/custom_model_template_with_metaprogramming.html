@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Linear Covariance Analysis" href="orbital_1.html"><link rel="prev" title="Continuous Time LQR" href="ct_lqr.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Custom Model Template - Condor 0.3.4.dev4+g30718f32d documentation</title>
+        <title>Custom Model Template - Condor 0.3.4.dev5+ga182017d0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev5+ga182017d0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev5+ga182017d0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -293,126 +293,125 @@ Use for something like ReferenceFrame, it's also possible to modify the kwargs
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">co</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">co</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="type"><span class="nc">CustomMetaprogrammedType</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="type"><span class="n">co</span><span class="o">.</span><span class="n">ModelType</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="nd">&#64;classmethod</span><span class="w">
+</span>    <span class="k">def</span><span class="w"> </span><span class="nf">process_placeholders</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_cls</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>        <span class="nb">print</span><span class="p">(</span><span class="w">
+</span>            <span class="sa">f</span><span class="s2">&quot;</span><span class="s2">CustomMetaprogrammedType.processs_placeholders for </span><span class="si">{</span><span class="n">new_cls</span><span class="si">}</span><span class="s2"> is a good </span><span class="s2">&quot;</span><span class="w">
+</span>            <span class="s2">&quot;</span><span class="s2">place for manipulating substitutions</span><span class="s2">&quot;</span><span class="w">
+</span>        <span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="nd">&#64;classmethod</span><span class="w">
+</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__prepare__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="o">*</span><span class="n">kwargs</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="sd">&quot;&quot;&quot;
+        custom processing behavior use cases:
+        - condor-flight cross-substitution of vehicle state to environment models
+        (atmosphere/wind/gravity/etc)
+        - lincov generation of augmented covariance state, propagation/correction/update
+          equations, etc.
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">CustomMetaprogrammedType</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#type" title="builtins.type" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">co</span><span class="o">.</span><span class="n">ModelType</span></a><span class="p">):</span>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">process_placeholders</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">new_cls</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"CustomMetaprogrammedType.processs_placeholders for </span><span class="si">{</span><span class="n">new_cls</span><span class="si">}</span><span class="s2"> is a good "</span>
-            <span class="s2">"place for manipulating substitutions"</span>
-        <span class="p">)</span>
+        catching custom metaclass arguments use cases:
+        big gascon: component inputs and sub-assembly declaration (like a primary model)
+        then singleton submodels for &quot;outputs&quot;, but these are not condor built-in
+        submodels, gascon will define a template for each:
+         - weight with &quot;subtotal&quot; placheolder
+         - aero with lift-curve slope, equivalent wetted area, etc, placeholder +
+           potentially dynamic inputs?
+         - propulsion with dynamic inputs (maybe base aircraft provides all the core
+           state plus flight conditions, etc.) and placeholder for thrust, incidence
+           angle, and state field for adding new state
+        so primary component model metaclass will have to have a slot for these gascon
+        output submodels
+        so the gascon output submodel will at least bind to the primary model template
+        its when the primary is inserted into a parent assembly that the output
+        submodels really get processed, and then combined into the parents as needed?
+        will the assembly user model
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__prepare__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""</span>
-<span class="sd">        custom processing behavior use cases:</span>
-<span class="sd">        - condor-flight cross-substitution of vehicle state to environment models</span>
-<span class="sd">        (atmosphere/wind/gravity/etc)</span>
-<span class="sd">        - lincov generation of augmented covariance state, propagation/correction/update</span>
-<span class="sd">          equations, etc.</span>
+        class Component(ComponentTemplate):
+            input = field()
 
+        class Weight(GasconComponentOutput):
+            subtotal = placeholder()
 
-<span class="sd">        catching custom metaclass arguments use cases:</span>
-<span class="sd">        big gascon: component inputs and sub-assembly declaration (like a primary model)</span>
-<span class="sd">        then singleton submodels for "outputs", but these are not condor built-in</span>
-<span class="sd">        submodels, gascon will define a template for each:</span>
-<span class="sd">         - weight with "subtotal" placheolder</span>
-<span class="sd">         - aero with lift-curve slope, equivalent wetted area, etc, placeholder +</span>
-<span class="sd">           potentially dynamic inputs?</span>
-<span class="sd">         - propulsion with dynamic inputs (maybe base aircraft provides all the core</span>
-<span class="sd">           state plus flight conditions, etc.) and placeholder for thrust, incidence</span>
-<span class="sd">           angle, and state field for adding new state</span>
-<span class="sd">        so primary component model metaclass will have to have a slot for these gascon</span>
-<span class="sd">        output submodels</span>
-<span class="sd">        so the gascon output submodel will at least bind to the primary model template</span>
-<span class="sd">        its when the primary is inserted into a parent assembly that the output</span>
-<span class="sd">        submodels really get processed, and then combined into the parents as needed?</span>
-<span class="sd">        will the assembly user model</span>
+        class Aero(GasconComponentOutput):
+            lift_curve_slope = placeholder()
+            flat_plate_equivalent_area = placeholder()
 
-<span class="sd">        class Component(ComponentTemplate):</span>
-<span class="sd">            input = field()</span>
-
-<span class="sd">        class Weight(GasconComponentOutput):</span>
-<span class="sd">            subtotal = placeholder()</span>
-
-<span class="sd">        class Aero(GasconComponentOutput):</span>
-<span class="sd">            lift_curve_slope = placeholder()</span>
-<span class="sd">            flat_plate_equivalent_area = placeholder()</span>
-
-<span class="sd">        class Propulsion(GasconComponentOutput):</span>
-<span class="sd">            state = field()</span>
-<span class="sd">            thrust_lbf = placeholder()</span>
-<span class="sd">            incidence_angle = placeholder()</span>
+        class Propulsion(GasconComponentOutput):
+            state = field()
+            thrust_lbf = placeholder()
+            incidence_angle = placeholder()
 
 
-<span class="sd">        # this is a bad example since we will use a custom metaclass for lots of the</span>
-<span class="sd">        # propulsion models for the engine decks...</span>
-<span class="sd">        class Turbofan(Component):</span>
-<span class="sd">            fan_diameter_ft = input()</span>
-<span class="sd">            sls_airflow = input()</span>
-<span class="sd">            # require location?</span>
+        # this is a bad example since we will use a custom metaclass for lots of the
+        # propulsion models for the engine decks...
+        class Turbofan(Component):
+            fan_diameter_ft = input()
+            sls_airflow = input()
+            # require location?
 
-<span class="sd">        class Performance(Turbofan):</span>
-<span class="sd">            thrust = ...</span>
+        class Performance(Turbofan):
+            thrust = ...
 
-<span class="sd">        class EngineOutDrag(Turbofan):</span>
-<span class="sd">            drag_lbf = ...</span>
+        class EngineOutDrag(Turbofan):
+            drag_lbf = ...
 
-<span class="sd">        # I kinda like this syntax, use the name of the "subclass" to figure out which</span>
-<span class="sd">        # template to use?</span>
-
-
-
+        # I kinda like this syntax, use the name of the &quot;subclass&quot; to figure out which
+        # template to use?
 
 
 
-<span class="sd">        """</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CustomMetaprogrammedType.__prepare__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__prepare__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"CustomMetaprogrammedType.__new__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">new_cls</span>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">CustomMetaprogrammed</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">ModelTemplate</span><span class="p">,</span> <span class="n">model_metaclass</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#type" title="builtins.type" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class"><span class="n">CustomMetaprogrammedType</span></a><span class="p">):</span>
-    <span class="k">pass</span>
 
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyModel0</span><span class="p">(</span><span class="n">CustomMetaprogrammed</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyModel1</span><span class="p">(</span><span class="n">CustomMetaprogrammed</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="s2">"handle a string"</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">ModelsCouldAlwaysTakeNonCondorInputs</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">ExplicitSystem</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">my_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">"Use for something like ReferenceFrame, it's also possible to modify the "</span>
-            <span class="s2">"kwargs"</span>
-        <span class="p">)</span>
-        <span class="c1"># store frame state as condor elements, then can use normal python type logic to</span>
-        <span class="c1"># compose bigger expressions like finding path from arbitrary frames -- but</span>
-        <span class="c1"># would need to do something to make sure that the extra kwargs were saved and</span>
-        <span class="c1"># re-bound as needed... or maybe it's okay if they're not? the final expression</span>
-        <span class="c1"># which will get used with the bound thing will be right? not sure.</span>
-
-        <span class="c1"># it's also possible to manipulate the (k)wargs that get passed to super based</span>
-        <span class="c1"># on my_kwarg -- is that a way this could work?</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-
-<span class="n">ModelsCouldAlwaysTakeNonCondorInputs</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span>
-</pre></div>
-</div>
+        &quot;&quot;&quot;</span><span class="w">
+</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">CustomMetaprogrammedType.__prepare__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span>        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__prepare__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="o">*</span><span class="n">kwargs</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="o">*</span><span class="n">kwargs</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">CustomMetaprogrammedType.__new__ with new_kwarg=</span><span class="si">{</span><span class="n">new_kwarg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span>        <span class="n">new_cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="o">*</span><span class="n">kwargs</span><span class="p">)</span><span class="w">
+</span>        <span class="k">return</span> <span class="n">new_cls</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">CustomMetaprogrammed</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">ModelTemplate</span><span class="p">,</span> <span class="n">model_metaclass</span><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="type"><span class="n">CustomMetaprogrammedType</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="k">pass</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel0</span><span class="p">(</span><span class="n">CustomMetaprogrammed</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="k">pass</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">MyModel1</span><span class="p">(</span><span class="n">CustomMetaprogrammed</span><span class="p">,</span> <span class="n">new_kwarg</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">handle a string</span><span class="s2">&quot;</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="k">pass</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">ModelsCouldAlwaysTakeNonCondorInputs</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.ExplicitSystem" title="condor.ExplicitSystem"><span class="n">co</span><span class="o">.</span><span class="n">ExplicitSystem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>    <span class="n">output</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">my_kwarg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="o">*</span><span class="n">kwargs</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>        <span class="nb">print</span><span class="p">(</span><span class="w">
+</span>            <span class="s2">&quot;</span><span class="s2">Use for something like ReferenceFrame, it</span><span class="s2">'</span><span class="s2">s also possible to modify the </span><span class="s2">&quot;</span><span class="w">
+</span>            <span class="s2">&quot;</span><span class="s2">kwargs</span><span class="s2">&quot;</span><span class="w">
+</span>        <span class="p">)</span><span class="w">
+</span>        <span class="c1"># store frame state as condor elements, then can use normal python type logic to</span><span class="w">
+</span>        <span class="c1"># compose bigger expressions like finding path from arbitrary frames -- but</span><span class="w">
+</span>        <span class="c1"># would need to do something to make sure that the extra kwargs were saved and</span><span class="w">
+</span>        <span class="c1"># re-bound as needed... or maybe it's okay if they're not? the final expression</span><span class="w">
+</span>        <span class="c1"># which will get used with the bound thing will be right? not sure.</span><span class="w">
+</span><span class="w">
+</span>        <span class="c1"># it's also possible to manipulate the (k)wargs that get passed to super based</span><span class="w">
+</span>        <span class="c1"># on my_kwarg -- is that a way this could work?</span><span class="w">
+</span>        <span class="nb">super</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="o">*</span><span class="n">kwargs</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="n">ModelsCouldAlwaysTakeNonCondorInputs</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.004 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-custom-model-template-with-metaprogramming-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
@@ -477,7 +476,7 @@ Use for something like ReferenceFrame, it's also possible to modify the kwargs
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
+</div><script src="../_static/documentation_options.js?v=7007d963"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

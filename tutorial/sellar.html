@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Polar Transformation" href="polar_transform.html"><link rel="prev" title="Tutorials" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Introduction to Condor - Condor 0.3.4.dev4+g30718f32d documentation</title>
+        <title>Introduction to Condor - Condor 0.3.4.dev5+ga182017d0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev5+ga182017d0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev5+ga182017d0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -288,44 +288,39 @@ an arbitrary system of equations like from Sellar <a class="footnote-reference b
 y_{2}&amp;=\sqrt{y_{1}}+x_{0}+x_{1}\end{split}\]</div>
 </div>
 <p>should be writable as</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">y1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">y2</span>
-<span class="n">y2</span> <span class="o">==</span> <span class="n">y1</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</pre></div>
-</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span class="n">y1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span><span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">y2</span><span class="w">
+</span><span class="n">y2</span> <span class="o">==</span> <span class="n">y1</span><span class="o">*</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w">
+</span></pre></div></div>
 <p>Of course, in both the mathematical and programmatic description, the source of each
 symbol must be defined. In an engineering memo, we might say “where <span class="math notranslate nohighlight">\(y_1,y_2\)</span>
 are the variables to solve and <span class="math notranslate nohighlight">\(x \in \mathbb{R}^3\)</span> parameterizes the system of
 equations,” which suggests the API for an algebraic system of equations as</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">Coupling</span><span class="p">(</span><span class="n">condor</span><span class="o">.</span><span class="n">AlgebraicSystem</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">y1</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">y2</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
-
-    <span class="n">residual</span><span class="p">(</span><span class="n">y1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">y2</span><span class="p">)</span>
-    <span class="n">residual</span><span class="p">(</span><span class="n">y2</span> <span class="o">==</span> <span class="n">y1</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">Coupling</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.AlgebraicSystem" title="condor.AlgebraicSystem"><span class="n">condor</span><span class="o">.</span><span class="n">AlgebraicSystem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="w">
+</span>    <span class="n">y1</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span><span class="w">
+</span>    <span class="n">y2</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">residual</span><span class="p">(</span><span class="n">y1</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span><span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">y2</span><span class="p">)</span><span class="w">
+</span>    <span class="n">residual</span><span class="p">(</span><span class="n">y2</span> <span class="o">==</span> <span class="n">y1</span><span class="o">*</span><span class="o">*</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>which can be evaluated by instantiating the model with numerical values for the
 parameters:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">coupling</span> <span class="o">=</span> <span class="n">Coupling</span><span class="p">([</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">coupling</span> <span class="o">=</span> <span class="n">Coupling</span><span class="p">(</span><span class="p">[</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Once the model is finished running, the model <em>binds</em> the numerical results from the
 iterative solver to the named <em>element</em> and <em>field</em> attributes on the instance. That
 is, elements of fields accessible directly:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">coupling</span><span class="o">.</span><span class="n">y1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">coupling</span><span class="o">.</span><span class="n">y2</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">coupling</span><span class="o">.</span><span class="n">y1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">coupling</span><span class="o">.</span><span class="n">y2</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[25.58830237] [12.05848815]
 </pre></div>
 </div>
 <p>Fields are bound as dataclasses</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">coupling</span><span class="o">.</span><span class="n">variable</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="n">coupling</span><span class="o">.</span><span class="n">variable</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>CouplingVariable(y1=array([25.58830237]), y2=array([12.05848815]))
 </pre></div>
 </div>
@@ -342,25 +337,23 @@ define the optimization as</p>
 </div>
 <p>where <span class="math notranslate nohighlight">\(y_1\)</span> and <span class="math notranslate nohighlight">\(y_2\)</span> are the solution to the system of algebraic
 equations described above. In condor, we can write this as</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">condor.backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span> <span class="k">as</span> <span class="n">ops</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">Sellar</span><span class="p">(</span><span class="n">condor</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">coupling</span> <span class="o">=</span> <span class="n">Coupling</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">coupling</span>
-
-    <span class="n">objective</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">ops</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">y2</span><span class="p">)</span>
-    <span class="n">constraint</span><span class="p">(</span><span class="n">y1</span> <span class="o">&gt;=</span> <span class="mf">3.16</span><span class="p">)</span>
-    <span class="n">constraint</span><span class="p">(</span><span class="n">y2</span> <span class="o">&lt;=</span> <span class="mf">24.0</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">condor</span><span class="nn">.</span><span class="nn">backend</span><span class="w"> </span><span class="kn">import</span> <span class="n">operators</span> <span class="k">as</span> <span class="n">ops</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">Sellar</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.OptimizationProblem" title="condor.OptimizationProblem"><span class="n">condor</span><span class="o">.</span><span class="n">OptimizationProblem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">upper_bound</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="w">
+</span>    <span class="n">coupling</span> <span class="o">=</span> <span class="n">Coupling</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w">
+</span>    <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">coupling</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">objective</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span><span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y1</span> <span class="o">+</span> <a class="sphx-glr-backref-module-condor-backend-operators sphx-glr-backref-type-py-function reference internal" href="../api/backend.html#condor.backend.operators.exp" title="condor.backend.operators.exp"><span class="n">ops</span><span class="o">.</span><span class="n">exp</span></a><span class="p">(</span><span class="o">-</span><span class="n">y2</span><span class="p">)</span><span class="w">
+</span>    <span class="n">constraint</span><span class="p">(</span><span class="n">y1</span> <span class="o">&gt;</span><span class="o">=</span> <span class="mf">3.16</span><span class="p">)</span><span class="w">
+</span>    <span class="n">constraint</span><span class="p">(</span><span class="n">y2</span> <span class="o">&lt;</span><span class="o">=</span> <span class="mf">24.0</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>As with the system of algebraic equations, we can numerically solve this optimization
 problem by providing an initial value for the variables and instantiating the model.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">Sellar</span><span class="o">.</span><span class="n">set_initial</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">sellar</span> <span class="o">=</span> <span class="n">Sellar</span><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">Sellar</span><span class="o">.</span><span class="n">set_initial</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><span class="n">sellar</span> <span class="o">=</span> <span class="n">Sellar</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>This is Ipopt version 3.14.19, running with linear solver MUMPS 5.8.2.
 
 Number of nonzeros in equality constraint Jacobian...:        0
@@ -434,18 +427,17 @@ Number of inequality constraint evaluations          = 16
 Number of equality constraint Jacobian evaluations   = 0
 Number of inequality constraint Jacobian evaluations = 16
 Number of Lagrangian Hessian evaluations             = 15
-Total seconds in IPOPT                               = 0.055
+Total seconds in IPOPT                               = 0.044
 
 EXIT: Optimal Solution Found.
 </pre></div>
 </div>
 <p>The resulting object will have a dot-able data structure with the bound results,
 including the embedded <code class="docutils literal notranslate"><span class="pre">Coupling</span></code> model:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"objective value:"</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sellar</span><span class="o">.</span><span class="n">objective</span></a><span class="p">)</span>  <span class="c1"># scalar value</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sellar</span><span class="o">.</span><span class="n">constraint</span><span class="p">)</span>  <span class="c1"># field</span>
-<span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sellar</span><span class="o">.</span><span class="n">coupling</span><span class="o">.</span><span class="n">y1</span></a><span class="p">)</span>  <span class="c1"># embedded-model element</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">objective value:</span><span class="s2">&quot;</span><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sellar</span><span class="o">.</span><span class="n">objective</span></a><span class="p">)</span>  <span class="c1"># scalar value</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="n">sellar</span><span class="o">.</span><span class="n">constraint</span><span class="p">)</span>  <span class="c1"># field</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sellar</span><span class="o">.</span><span class="n">coupling</span><span class="o">.</span><span class="n">y1</span></a><span class="p">)</span>  <span class="c1"># embedded-model element</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>objective value: 3.183393918133255
 SellarConstraint(Sellar_constraint_0=array([3.16]), Sellar_constraint_1=array([3.75527764]))
 [3.15999998]
@@ -460,7 +452,7 @@ Concurrent Subspace Optimization for Multidisciplinary System Design,” 1996.
 <a class="reference external" href="https://doi.org/10.2514/6.1996-714">https://doi.org/10.2514/6.1996-714</a></p>
 </aside>
 </aside>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.136 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.076 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorial-sellar-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/28e68f211ea6a4798582e6288ba86172/sellar.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">sellar.ipynb</span></code></a></p>
@@ -524,7 +516,7 @@ Concurrent Subspace Optimization for Multidisciplinary System Design,” 1996.
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
+</div><script src="../_static/documentation_options.js?v=7007d963"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

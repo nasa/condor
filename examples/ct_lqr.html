@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Custom Model Template" href="custom_model_template_with_metaprogramming.html"><link rel="prev" title="Examples" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Continuous Time LQR - Condor 0.3.4.dev4+g30718f32d documentation</title>
+        <title>Continuous Time LQR - Condor 0.3.4.dev5+ga182017d0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev5+ga182017d0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev5+ga182017d0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,64 +279,62 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="continuous-time-lqr">
 <span id="sphx-glr-examples-ct-lqr-py"></span><h1>Continuous Time LQR<a class="headerlink" href="#continuous-time-lqr" title="Link to this heading">¶</a></h1>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">_sgm_test_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LTI_plot</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">co</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">DblInt</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">ODESystem</span><span class="p">):</span>
-    <span class="n">A</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]])</span>
-    <span class="n">B</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([[</span><span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]])</span>
-
-    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-
-    <span class="n">x</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">dynamic_output</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a> <span class="o">@</span> <span class="n">x</span>
-
-    <span class="n">dot</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">B</span> <span class="o">@</span> <span class="n">u</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">DblIntLQR</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">TrajectoryAnalysis</span><span class="p">):</span>
-    <span class="n">tf</span> <span class="o">=</span> <span class="mf">32.0</span>
-
-    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
-
-    <span class="n">Q</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">R</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="n">cost</span> <span class="o">=</span> <span class="n">trajectory_output</span><span class="p">(</span><span class="n">integrand</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">u</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">R</span> <span class="o">@</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-
-    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-        <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1e-8</span>
-
-
-<span class="n">ct_sim</span> <span class="o">=</span> <span class="n">DblIntLQR</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
-<span class="n">LTI_plot</span><span class="p">(</span><span class="n">ct_sim</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">_sgm_test_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LTI_plot</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">co</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">DblInt</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.ODESystem" title="condor.ODESystem"><span class="n">co</span><span class="o">.</span><span class="n">ODESystem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">A</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">B</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">dynamic_output</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="o">-</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a> <span class="o">&#64;</span> <span class="n">x</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">dot</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">&#64;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">B</span> <span class="o">&#64;</span> <span class="n">u</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">DblIntLQR</span><span class="p">(</span><a class="sphx-glr-backref-module-condor-contrib sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.TrajectoryAnalysis" title="condor.contrib.TrajectoryAnalysis"><span class="n">DblInt</span><span class="o">.</span><span class="n">TrajectoryAnalysis</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">tf</span> <span class="o">=</span> <span class="mf">32.0</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">Q</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span>    <span class="n">R</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">cost</span> <span class="o">=</span> <span class="n">trajectory_output</span><span class="p">(</span><span class="n">integrand</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">&#64;</span> <span class="n">Q</span> <span class="o">&#64;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">u</span><span class="o">.</span><span class="n">T</span> <span class="o">&#64;</span> <span class="n">R</span> <span class="o">&#64;</span> <span class="n">u</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span><span class="w">
+</span>        <span class="n">rtol</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="n">ct_sim</span> <span class="o">=</span> <span class="n">DblIntLQR</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><span class="n">LTI_plot</span><span class="p">(</span><span class="n">ct_sim</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <ul class="sphx-glr-horizontal">
 <li><img src="../_images/sphx_glr_ct_lqr_001.png" srcset="../_images/sphx_glr_ct_lqr_001.png" alt="DblIntLQR DblIntLQRState.x" class = "sphx-glr-multi-img"/></li>
 <li><img src="../_images/sphx_glr_ct_lqr_002.png" srcset="../_images/sphx_glr_ct_lqr_002.png" alt="DblIntLQR DblIntLQRDynamicOutput.u" class = "sphx-glr-multi-img"/></li>
 </ul>
 <p>Determine the optimal gain by embedding the trajectory analysis in an optimization
 problem:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CtOptLQR</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
-    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#tuple" title="builtins.tuple" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span>
-
-    <span class="n">sim</span> <span class="o">=</span> <span class="n">DblIntLQR</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a><span class="p">)</span>
-    <span class="n">objective</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">cost</span>
-
-    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-        <span class="n">__implementation__</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">implementations</span><span class="o">.</span><span class="n">ScipyCG</span>
-
-
-<span class="n">lqr_sol</span> <span class="o">=</span> <span class="n">CtOptLQR</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lqr_sol</span><span class="o">.</span><span class="n">K</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">CtOptLQR</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.OptimizationProblem" title="condor.OptimizationProblem"><span class="n">co</span><span class="o">.</span><span class="n">OptimizationProblem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="tuple"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">sim</span> <span class="o">=</span> <span class="n">DblIntLQR</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a><span class="p">)</span><span class="w">
+</span>    <span class="n">objective</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">cost</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span><span class="w">
+</span>        <span class="n">__implementation__</span> <span class="o">=</span> <a class="sphx-glr-backref-module-condor-implementations sphx-glr-backref-type-py-class reference internal" href="../api/implementations.html#condor.implementations.iterative.ScipyCG" title="condor.implementations.ScipyCG"><span class="n">co</span><span class="o">.</span><span class="n">implementations</span><span class="o">.</span><span class="n">ScipyCG</span></a><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="n">lqr_sol</span> <span class="o">=</span> <span class="n">CtOptLQR</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">lqr_sol</span><span class="o">.</span><span class="n">K</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
   min_out = minimize(
 /opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning:
@@ -363,29 +361,26 @@ Shown once; run python with -W always to see every occurrence.
 </pre></div>
 </div>
 <p>Compare with the solution from the continuous algebraic Riccati equation:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linalg</span>
-
-<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">S</span></a> <span class="o">=</span> <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.solve_continuous_are.html#scipy.linalg.solve_continuous_are" title="scipy.linalg.solve_continuous_are" class="sphx-glr-backref-module-scipy-linalg sphx-glr-backref-type-py-function"><span class="n">linalg</span><span class="o">.</span><span class="n">solve_continuous_are</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">A</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">B</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">Q</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">R</span></a><span class="p">)</span>
-<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a> <span class="o">=</span> <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.solve.html#scipy.linalg.solve" title="scipy.linalg.solve" class="sphx-glr-backref-module-scipy-linalg sphx-glr-backref-type-py-function"><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">R</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">T</span></a> <span class="o">@</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">S</span></a><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linalg</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">S</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-scipy-linalg sphx-glr-backref-type-py-function reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.solve_continuous_are.html#scipy.linalg.solve_continuous_are" title="scipy.linalg.solve_continuous_are"><span class="n">linalg</span><span class="o">.</span><span class="n">solve_continuous_are</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">A</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">B</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">Q</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">R</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-scipy-linalg sphx-glr-backref-type-py-function reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.solve.html#scipy.linalg.solve" title="scipy.linalg.solve"><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span></a><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">R</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">DblIntLQR</span><span class="o">.</span><span class="n">B</span><span class="o">.</span><span class="n">T</span></a> <span class="o">&#64;</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">S</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[1.         1.73205081]]
 </pre></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sim_are</span> <span class="o">=</span> <span class="n">DblIntLQR</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">K</span></a><span class="p">)</span>
-<span class="n">LTI_plot</span><span class="p">(</span><span class="n">sim_are</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">sim_are</span> <span class="o">=</span> <span class="n">DblIntLQR</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">K</span></a><span class="p">)</span><span class="w">
+</span><span class="n">LTI_plot</span><span class="p">(</span><span class="n">sim_are</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <ul class="sphx-glr-horizontal">
 <li><img src="../_images/sphx_glr_ct_lqr_003.png" srcset="../_images/sphx_glr_ct_lqr_003.png" alt="DblIntLQR DblIntLQRState.x" class = "sphx-glr-multi-img"/></li>
 <li><img src="../_images/sphx_glr_ct_lqr_004.png" srcset="../_images/sphx_glr_ct_lqr_004.png" alt="DblIntLQR DblIntLQRDynamicOutput.u" class = "sphx-glr-multi-img"/></li>
 </ul>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.785 seconds)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.806 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-ct-lqr-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/eabac9e7dae3eb974c114e359c79d0d1/ct_lqr.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">ct_lqr.ipynb</span></code></a></p>
@@ -449,7 +444,7 @@ Shown once; run python with -W always to see every occurrence.
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
+</div><script src="../_static/documentation_options.js?v=7007d963"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

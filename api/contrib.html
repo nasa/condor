@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Fields and Elements" href="fields.html"><link rel="prev" title="Condor API" href="index.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Contrib Models - Condor 0.3.4.dev4+g30718f32d documentation</title>
+        <title>Contrib Models - Condor 0.3.4.dev5+ga182017d0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev5+ga182017d0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev5+ga182017d0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -318,13 +318,13 @@ data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>xx</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are input element names and values are the grid
+<li><p><strong>xx</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are input element names and values are the grid
 points for data on that axis, so the collection of values can be passed to
 <code class="docutils literal notranslate"><span class="pre">np.meshgrid</span></code> to construct a rectilinear grid; input should be a single
 dimension.</p></li>
-<li><p><strong>yy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are output element names and values are the values
+<li><p><strong>yy</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – a dictionary where keys are output element names and values are the values
 on the input grid to be interpolated</p></li>
-<li><p><strong>degrees</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.5)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Degree of interpolant for each axis (or broadcastable). Default is 3.</p></li>
+<li><p><strong>degrees</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.5)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Degree of interpolant for each axis (or broadcastable). Default is 3.</p></li>
 <li><p><strong>bcs</strong> (<a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array_like" title="(in NumPy v2.5)"><span class="xref std std-term">array-like</span></a>, <em>optional</em>) – Array of boundary conditions broadcastable to <code class="docutils literal notranslate"><span class="pre">(xdim,</span> <span class="pre">2,</span> <span class="pre">2)</span></code>. <code class="docutils literal notranslate"><span class="pre">bc[xdim,</span> <span class="pre">0</span>
 <span class="pre">for</span> <span class="pre">left</span> <span class="pre">|</span> <span class="pre">1</span> <span class="pre">for</span> <span class="pre">right,</span> <span class="pre">:]</span> <span class="pre">=</span> <span class="pre">(order,</span> <span class="pre">value)</span></code> for specifying derivative
 conditions. Use (-1, 0) to specify the not-a-knot boundary conditions
@@ -601,13 +601,13 @@ occuring before <code class="docutils literal notranslate"><span class="pre">tf<
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Sample spacing in the independent variable (usually time).</p></li>
-<li><p><strong>include_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – Include <a class="reference internal" href="#condor.contrib.ODESystem.dynamic_output" title="condor.contrib.ODESystem.dynamic_output"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dynamic_output</span></code></a> in the returned result.</p></li>
-<li><p><strong>include_events</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – Include events regardless of whether or not they fall on a multiple of <cite>dt</cite>.
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Sample spacing in the independent variable (usually time).</p></li>
+<li><p><strong>include_output</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – Include <a class="reference internal" href="#condor.contrib.ODESystem.dynamic_output" title="condor.contrib.ODESystem.dynamic_output"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dynamic_output</span></code></a> in the returned result.</p></li>
+<li><p><strong>include_events</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – Include events regardless of whether or not they fall on a multiple of <cite>dt</cite>.
 Two points will be inserted for each internal event to get the state
 immediately before and after the event. If disabled and a sample coincides
 exactly with an event, the state <em>after</em> the update is returned.</p></li>
-<li><p><strong>max_deg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>optional</em>) – Maximum degree of the interpolating spline. Actual degree used in any given
+<li><p><strong>max_deg</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>optional</em>) – Maximum degree of the interpolating spline. Actual degree used in any given
 segment between events may be fewer if there are not sufficient samples.</p></li>
 </ul>
 </dd>
@@ -771,7 +771,7 @@ construction).</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
+</div><script src="../_static/documentation_options.js?v=7007d963"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

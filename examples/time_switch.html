@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="prev" title="Creating Model Templates" href="templating.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Optimal Transfer With Time Trigger - Condor 0.3.4.dev4+g30718f32d documentation</title>
+        <title>Optimal Transfer With Time Trigger - Condor 0.3.4.dev5+ga182017d0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev5+ga182017d0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev5+ga182017d0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,128 +279,119 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="optimal-transfer-with-time-trigger">
 <span id="sphx-glr-examples-time-switch-py"></span><h1>Optimal Transfer With Time Trigger<a class="headerlink" href="#optimal-transfer-with-time-trigger" title="Link to this heading">¶</a></h1>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <a href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">perf_counter</span></a>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">_sgm_test_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LTI_plot</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">co</span>
-
-<span class="c1"># either include time as state or increase tolerances to ensure sufficient ODE solver</span>
-<span class="c1"># accuracy</span>
-<a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">with_time_state</span></a> <span class="o">=</span> <span class="kc">False</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter"><span class="n">perf_counter</span></a><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">_sgm_test_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LTI_plot</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">co</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># either include time as state or increase tolerances to ensure sufficient ODE solver</span><span class="w">
+</span><span class="c1"># accuracy</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">with_time_state</span></a> <span class="o">=</span> <span class="kc">False</span><span class="w">
+</span></pre></div></div>
 <p>Define the double integrator system</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DblInt</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">ODESystem</span><span class="p">):</span>
-    <span class="n">A</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
-    <span class="n">B</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-
-    <span class="n">x</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">mode</span> <span class="o">=</span> <span class="n">state</span><span class="p">()</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">modal</span><span class="p">()</span>
-
-    <span class="n">dot</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">u</span>
-
-    <span class="k">if</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">with_time_state</span></a><span class="p">:</span>
-        <span class="n">tt</span> <span class="o">=</span> <span class="n">state</span><span class="p">()</span>
-        <span class="n">dot</span><span class="p">[</span><span class="n">tt</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">DblInt</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.ODESystem" title="condor.ODESystem"><span class="n">co</span><span class="o">.</span><span class="n">ODESystem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">A</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">B</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="numpy.array"><span class="n">np</span><span class="o">.</span><span class="n">array</span></a><span class="p">(</span><span class="p">[</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>    <span class="n">mode</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>    <span class="n">u</span> <span class="o">=</span> <span class="n">modal</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">dot</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">&#64;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">B</span> <span class="o">*</span> <span class="n">u</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">if</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">with_time_state</span></a><span class="p">:</span><span class="w">
+</span>        <span class="n">tt</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>        <span class="n">dot</span><span class="p">[</span><span class="n">tt</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="w">
+</span></pre></div></div>
 <p>Now a mode to accelerate</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Accel</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">Mode</span><span class="p">):</span>
-    <span class="n">condition</span> <span class="o">=</span> <span class="n">mode</span> <span class="o">==</span> <span class="mf">0.0</span>
-    <span class="n">action</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">Accel</span><span class="p">(</span><a class="sphx-glr-backref-module-condor-contrib sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.Mode" title="condor.contrib.Mode"><span class="n">DblInt</span><span class="o">.</span><span class="n">Mode</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">condition</span> <span class="o">=</span> <span class="n">mode</span> <span class="o">==</span> <span class="mf">0.0</span><span class="w">
+</span>    <span class="n">action</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="w">
+</span></pre></div></div>
 <p>An event to switch to deceleration, specified by a parameter <span class="math notranslate nohighlight">\(t_1\)</span>. We’ll also
 create a state to capture the position at the switch event.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Switch1</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
-    <span class="n">t1</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">()</span>
-    <span class="n">pos_at_switch</span> <span class="o">=</span> <span class="n">state</span><span class="p">()</span>
-
-    <span class="n">at_time</span> <span class="o">=</span> <span class="n">t1</span>
-    <span class="n">update</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">update</span><span class="p">[</span><span class="n">pos_at_switch</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">Switch1</span><span class="p">(</span><a class="sphx-glr-backref-module-condor-contrib sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.Event" title="condor.contrib.Event"><span class="n">DblInt</span><span class="o">.</span><span class="n">Event</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">t1</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>    <span class="n">pos_at_switch</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">at_time</span> <span class="o">=</span> <span class="n">t1</span><span class="w">
+</span>    <span class="n">update</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="w">
+</span>    <span class="n">update</span><span class="p">[</span><span class="n">pos_at_switch</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span></pre></div></div>
 <p>Now the mode to switch to deceleration, triggered by <code class="docutils literal notranslate"><span class="pre">Switch1</span></code> updating the
 <code class="docutils literal notranslate"><span class="pre">mode</span></code>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Decel</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">Mode</span><span class="p">):</span>
-    <span class="n">condition</span> <span class="o">=</span> <span class="n">mode</span> <span class="o">==</span> <span class="mf">1.0</span>
-    <span class="n">action</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">Decel</span><span class="p">(</span><a class="sphx-glr-backref-module-condor-contrib sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.Mode" title="condor.contrib.Mode"><span class="n">DblInt</span><span class="o">.</span><span class="n">Mode</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">condition</span> <span class="o">=</span> <span class="n">mode</span> <span class="o">==</span> <span class="mf">1.0</span><span class="w">
+</span>    <span class="n">action</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="w">
+</span></pre></div></div>
 <p>Finally a terminating event specified by a new parameter <span class="math notranslate nohighlight">\(t_2\)</span>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Switch2</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">Event</span><span class="p">):</span>
-    <span class="n">t2</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">()</span>
-    <span class="n">at_time</span> <span class="o">=</span> <span class="n">Switch1</span><span class="o">.</span><span class="n">t1</span> <span class="o">+</span> <span class="n">t2</span>
-    <span class="n">terminate</span> <span class="o">=</span> <span class="kc">True</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">Switch2</span><span class="p">(</span><a class="sphx-glr-backref-module-condor-contrib sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.Event" title="condor.contrib.Event"><span class="n">DblInt</span><span class="o">.</span><span class="n">Event</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">t2</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>    <span class="n">at_time</span> <span class="o">=</span> <a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../api/fields.html#condor.fields.FreeElement" title="condor.FreeElement"><span class="n">Switch1</span><span class="o">.</span><span class="n">t1</span></a> <span class="o">+</span> <span class="n">t2</span><span class="w">
+</span>    <span class="n">terminate</span> <span class="o">=</span> <span class="kc">True</span><span class="w">
+</span></pre></div></div>
 <p>The trajectory analysis adds a terminal quadratic cost for error with respect to the
 desired final position <span class="math notranslate nohighlight">\((0, 0)\)</span>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Transfer</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">TrajectoryAnalysis</span><span class="p">):</span>
-    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-    <span class="n">Q</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">cost</span> <span class="o">=</span> <span class="n">trajectory_output</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">with_time_state</span></a><span class="p">:</span>
-
-        <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-            <span class="n">state_adaptive_min_steps</span> <span class="o">=</span> <span class="mi">4</span>
-
-
-<span class="n">sim</span> <span class="o">=</span> <span class="n">Transfer</span><span class="p">(</span><span class="n">t1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sim</span><span class="o">.</span><span class="n">pos_at_switch</span></a><span class="p">)</span>
-<span class="c1"># jac = sim.implementation.callback.jac_callback(sim.implementation.callback.p, [])</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">Transfer</span><span class="p">(</span><a class="sphx-glr-backref-module-condor-contrib sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.TrajectoryAnalysis" title="condor.contrib.TrajectoryAnalysis"><span class="n">DblInt</span><span class="o">.</span><span class="n">TrajectoryAnalysis</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span><span class="w">
+</span>    <span class="n">Q</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span>    <span class="n">cost</span> <span class="o">=</span> <span class="n">trajectory_output</span><span class="p">(</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">&#64;</span> <span class="n">Q</span> <span class="o">&#64;</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">if</span> <span class="ow">not</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">with_time_state</span></a><span class="p">:</span><span class="w">
+</span><span class="w">
+</span>        <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span><span class="w">
+</span>            <span class="n">state_adaptive_min_steps</span> <span class="o">=</span> <span class="mi">4</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="n">sim</span> <span class="o">=</span> <span class="n">Transfer</span><span class="p">(</span><span class="n">t1</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">sim</span><span class="o">.</span><span class="n">pos_at_switch</span></a><span class="p">)</span><span class="w">
+</span><span class="c1"># jac = sim.implementation.callback.jac_callback(sim.implementation.callback.p, [])</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[ 0.   0.   0.   0.   0.   0.   0.   0.   0.  -8.5 -8.5 -8.5 -8.5 -8.5
  -8.5]
 </pre></div>
 </div>
 <p>Now embed the trajectory analysis in an optimization to minimize the final position
 error over transfer and final times.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MinimumTime</span><span class="p">(</span><span class="n">co</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
-    <span class="n">t1</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">lower_bound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">t2</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">lower_bound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">transfer</span> <span class="o">=</span> <span class="n">Transfer</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
-    <span class="n">objective</span> <span class="o">=</span> <span class="n">transfer</span><span class="o">.</span><span class="n">cost</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">MinimumTime</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.OptimizationProblem" title="condor.OptimizationProblem"><span class="n">co</span><span class="o">.</span><span class="n">OptimizationProblem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">t1</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">lower_bound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span>    <span class="n">t2</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">lower_bound</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span>    <span class="n">transfer</span> <span class="o">=</span> <span class="n">Transfer</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span><span class="w">
+</span>    <span class="n">objective</span> <span class="o">=</span> <span class="n">transfer</span><span class="o">.</span><span class="n">cost</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span><span class="w">
+</span>        <span class="c1"># exact_hessian = False</span><span class="w">
+</span>        <span class="n">__implementation__</span> <span class="o">=</span> <a class="sphx-glr-backref-module-condor-implementations sphx-glr-backref-type-py-class reference internal" href="../api/implementations.html#condor.implementations.iterative.ScipyCG" title="condor.implementations.ScipyCG"><span class="n">co</span><span class="o">.</span><span class="n">implementations</span><span class="o">.</span><span class="n">ScipyCG</span></a><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="sd">&quot;&quot;&quot;
+old:
+eval jacobian for jac_Transfer
+args [DM([1, 4]), DM(00)]
+p=[1, 4]
+[[-56.9839, 0]]
 
-    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-        <span class="c1"># exact_hessian = False</span>
-        <span class="n">__implementation__</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">implementations</span><span class="o">.</span><span class="n">ScipyCG</span>
 
 
-<span class="sd">"""</span>
-<span class="sd">old:</span>
-<span class="sd">eval jacobian for jac_Transfer</span>
-<span class="sd">args [DM([1, 4]), DM(00)]</span>
-<span class="sd">p=[1, 4]</span>
-<span class="sd">[[-56.9839, 0]]</span>
-
-
-
-<span class="sd">"""</span>
-</pre></div>
-</div>
+&quot;&quot;&quot;</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>'\nold:\neval jacobian for jac_Transfer\nargs [DM([1, 4]), DM(00)]\np=[1, 4]\n[[-56.9839, 0]]\n\n\n\n'
 </pre></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">MinimumTime</span><span class="o">.</span><span class="n">set_initial</span><span class="p">(</span><span class="n">t1</span><span class="o">=</span><span class="mf">2.163165480675697</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="mf">4.361971866705403</span><span class="p">)</span>
-
-<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">perf_counter</span></a><span class="p">()</span>
-<span class="n">opt</span> <span class="o">=</span> <span class="n">MinimumTime</span><span class="p">()</span>
-<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter" class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function"><span class="n">perf_counter</span></a><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"time to run:"</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_stop</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_start</span></a><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">t1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">t2</span></a><span class="p">)</span>
-<span class="c1"># print(jac)</span>
-<span class="nb">print</span><span class="p">(</span><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult" title="scipy.optimize.OptimizeResult" class="sphx-glr-backref-module-scipy-optimize sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">_stats</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">MinimumTime</span><span class="o">.</span><span class="n">set_initial</span><span class="p">(</span><span class="n">t1</span><span class="o">=</span><span class="mf">2.163165480675697</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="mf">4.361971866705403</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">t_start</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter"><span class="n">perf_counter</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="n">opt</span> <span class="o">=</span> <span class="n">MinimumTime</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">t_stop</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-time sphx-glr-backref-type-py-function reference external" href="https://docs.python.org/3/library/time.html#time.perf_counter" title="time.perf_counter"><span class="n">perf_counter</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">time to run:</span><span class="s2">&quot;</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">t_stop</span></a> <span class="o">-</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">t_start</span></a><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">opt</span><span class="o">.</span><span class="n">t1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">opt</span><span class="o">.</span><span class="n">t2</span></a><span class="p">)</span><span class="w">
+</span><span class="c1"># print(jac)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-scipy-optimize sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.OptimizeResult.html#scipy.optimize.OptimizeResult" title="scipy.optimize.OptimizeResult"><span class="n">opt</span><span class="o">.</span><span class="n">_stats</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/condor/implementations/iterative.py:484: RuntimeWarning: Method CG cannot handle bounds.
   min_out = minimize(
 /opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/site-packages/casadi/casadi.py:913: FutureWarning:
@@ -423,12 +414,12 @@ Or use setNumpyMode(-1) to keep legacy behaviour silently.
 Shown once; run python with -W always to see every occurrence.
 
   _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
-time to run: 0.34148946300001626
+time to run: 0.24237256400000717
 [2.99999968] [2.99999216]
  message: Optimization terminated successfully.
  success: True
   status: 0
-     fun: 3.008671643193588e-11
+     fun: 3.008671715014618e-11
        x: [ 3.000e+00  3.000e+00]
      nit: 12
      jac: [-4.048e-06 -7.514e-06]
@@ -436,38 +427,35 @@ time to run: 0.34148946300001626
     njev: 22
 </pre></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">LTI_plot</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">transfer</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">LTI_plot</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">transfer</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <ul class="sphx-glr-horizontal">
 <li><img src="../_images/sphx_glr_time_switch_001.png" srcset="../_images/sphx_glr_time_switch_001.png" alt="Transfer TransferState.x" class = "sphx-glr-multi-img"/></li>
 <li><img src="../_images/sphx_glr_time_switch_002.png" srcset="../_images/sphx_glr_time_switch_002.png" alt="Transfer TransferState.mode" class = "sphx-glr-multi-img"/></li>
 <li><img src="../_images/sphx_glr_time_switch_003.png" srcset="../_images/sphx_glr_time_switch_003.png" alt="Transfer TransferState.pos_at_switch" class = "sphx-glr-multi-img"/></li>
 </ul>
 <p>Another version of the transfer analysis excluding the switch event.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AccelerateTransfer</span><span class="p">(</span><span class="n">DblInt</span><span class="o">.</span><span class="n">TrajectoryAnalysis</span><span class="p">,</span> <span class="n">exclude_events</span><span class="o">=</span><span class="p">[</span><span class="n">Switch1</span><span class="p">]):</span>
-    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
-    <span class="n">Q</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">cost</span> <span class="o">=</span> <span class="n">trajectory_output</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">with_time_state</span></a><span class="p">:</span>
-
-        <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-            <span class="n">state_adaptive_min_steps</span> <span class="o">=</span> <span class="mi">4</span>
-
-
-<span class="c1"># TODO?</span>
-<span class="c1"># class AccelerateTransfer(Transfer, exclude_events=[Switch1]):</span>
-<span class="c1">#     pass</span>
-
-<span class="n">sim_accel</span> <span class="o">=</span> <span class="n">AccelerateTransfer</span><span class="p">(</span><span class="o">**</span><span class="n">opt</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">asdict</span><span class="p">())</span>
-<span class="k">assert</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sim_accel</span><span class="o">.</span><span class="n">_res</span><span class="o">.</span><span class="n">e</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rootsfound</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">opt</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">_res</span><span class="o">.</span><span class="n">e</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rootsfound</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># noqa</span>
-</pre></div>
-</div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.693 seconds)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">AccelerateTransfer</span><span class="p">(</span><a class="sphx-glr-backref-module-condor-contrib sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.TrajectoryAnalysis" title="condor.contrib.TrajectoryAnalysis"><span class="n">DblInt</span><span class="o">.</span><span class="n">TrajectoryAnalysis</span></a><span class="p">,</span> <span class="n">exclude_events</span><span class="o">=</span><span class="p">[</span><span class="n">Switch1</span><span class="p">]</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">initial</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span><span class="w">
+</span>    <span class="n">Q</span> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.eye.html#numpy.eye" title="numpy.eye"><span class="n">np</span><span class="o">.</span><span class="n">eye</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span>    <span class="n">cost</span> <span class="o">=</span> <span class="n">trajectory_output</span><span class="p">(</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">&#64;</span> <span class="n">Q</span> <span class="o">&#64;</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">if</span> <span class="ow">not</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">with_time_state</span></a><span class="p">:</span><span class="w">
+</span><span class="w">
+</span>        <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span><span class="w">
+</span>            <span class="n">state_adaptive_min_steps</span> <span class="o">=</span> <span class="mi">4</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># TODO?</span><span class="w">
+</span><span class="c1"># class AccelerateTransfer(Transfer, exclude_events=[Switch1]):</span><span class="w">
+</span><span class="c1">#     pass</span><span class="w">
+</span><span class="w">
+</span><span class="n">sim_accel</span> <span class="o">=</span> <span class="n">AccelerateTransfer</span><span class="p">(</span><span class="o">*</span><span class="o">*</span><a class="sphx-glr-backref-module-condor-fields sphx-glr-backref-type-py-method reference internal" href="../api/fields.html#condor.fields.FieldValues.asdict" title="condor.fields.FieldValues.asdict"><span class="n">opt</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">asdict</span></a><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="k">assert</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">sim_accel</span><span class="o">.</span><span class="n">_res</span><span class="o">.</span><span class="n">e</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rootsfound</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">opt</span><span class="o">.</span><span class="n">transfer</span><span class="o">.</span><span class="n">_res</span><span class="o">.</span><span class="n">e</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rootsfound</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># noqa</span><span class="w">
+</span></pre></div></div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.527 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-time-switch-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/1f4d8c0290aaa36ac7ba257f36664b93/time_switch.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">time_switch.ipynb</span></code></a></p>
@@ -523,7 +511,7 @@ time to run: 0.34148946300001626
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
+</div><script src="../_static/documentation_options.js?v=7007d963"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

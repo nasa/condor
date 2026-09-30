@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Discrete Time LQR" href="sp_lqr.html"><link rel="prev" title="Linear Covariance Analysis" href="orbital_1.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Warm Starting in Iterative Solvers - Condor 0.3.4.dev4+g30718f32d documentation</title>
+        <title>Warm Starting in Iterative Solvers - Condor 0.3.4.dev5+ga182017d0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev5+ga182017d0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev5+ga182017d0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,45 +279,41 @@ to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="warm-starting-in-iterative-solvers">
 <span id="sphx-glr-examples-rosenbrock-py"></span><h1>Warm Starting in Iterative Solvers<a class="headerlink" href="#warm-starting-in-iterative-solvers" title="Link to this heading">¶</a></h1>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="kn">import</span><span class="w"> </span><span class="nn">condor</span><span class="w">
+</span></pre></div></div>
 <p>Here’s a plain Python function implementing the well-known <a class="reference external" href="https://en.wikipedia.org/wiki/Rosenbrock_function">Rosenbrock optimization
 benchmark function</a>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rosenbrock</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
-
-
-<span class="c1"># TODO plot the function and maybe iteration history?</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">rosenbrock</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span> <span class="o">*</span><span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span><span class="o">*</span> <span class="mi">2</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># TODO plot the function and maybe iteration history?</span><span class="w">
+</span></pre></div></div>
 <p>We’ll minimize this function on a circle of a given radius and track the iteration
 history with an <code class="docutils literal notranslate"><span class="pre">iter_callback</span></code> option:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">call_from_count</span></a> <span class="o">=</span> <span class="p">[]</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">RosenbrockOnCircle</span><span class="p">(</span><span class="n">condor</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">()</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="n">objective</span> <span class="o">=</span> <span class="n">rosenbrock</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-
-    <span class="n">constraint</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="o">==</span> <span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-        <span class="n">print_level</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="nd">@staticmethod</span>
-        <span class="k">def</span><span class="w"> </span><span class="nf">iter_callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  inner </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">call_from_count</span></a> <span class="o">=</span> <span class="p">[</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">class</span><span class="w"> </span><span class="nc">RosenbrockOnCircle</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.OptimizationProblem" title="condor.OptimizationProblem"><span class="n">condor</span><span class="o">.</span><span class="n">OptimizationProblem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="n">r</span> <span class="o">=</span> <span class="n">parameter</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>    <span class="n">x</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="w">
+</span>    <span class="n">y</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">objective</span> <span class="o">=</span> <span class="n">rosenbrock</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">constraint</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span> <span class="o">==</span> <span class="n">r</span><span class="o">*</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span><span class="w">
+</span>        <span class="n">print_level</span> <span class="o">=</span> <span class="mi">0</span><span class="w">
+</span><span class="w">
+</span>        <span class="nd">&#64;staticmethod</span><span class="w">
+</span>        <span class="k">def</span><span class="w"> </span><span class="nf">iter_callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">constraint</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">  inner </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Calling the model twice without warm starting gives the same number of iterations each
 time.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">out1</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">out1</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>inner  0: variable=RosenbrockOnCircleVariable(x=array([0.]), y=array([0.]))
 inner  1: variable=RosenbrockOnCircleVariable(x=array([1.]), y=array([0.]))
 inner  2: variable=RosenbrockOnCircleVariable(x=array([2.5]), y=array([9.326861e-08]))
@@ -350,12 +346,11 @@ inner 27: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.
 </div>
 <p>Enabling warm start won’t change the number of iterations on this call, but it will on
 the next call.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <span class="kc">True</span>
-<a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="n">out2</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <span class="kc">True</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <span class="kc">True</span><span class="w">
+</span><span class="w">
+</span><span class="n">out2</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>inner  0: variable=RosenbrockOnCircleVariable(x=array([0.]), y=array([0.]))
 inner  1: variable=RosenbrockOnCircleVariable(x=array([1.]), y=array([0.]))
 inner  2: variable=RosenbrockOnCircleVariable(x=array([2.5]), y=array([9.326861e-08]))
@@ -386,45 +381,43 @@ inner 26: variable=RosenbrockOnCircleVariable(x=array([1.24939192]), y=array([1.
 inner 27: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.56173616]))
 </pre></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">out3</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">out3</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>inner  0: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.56173616]))
 inner  1: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.56173616]))
 </pre></div>
 </div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== with warm_start ="</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a><span class="p">)</span>
-    <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a>
-    <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">use_warm_start</span></a>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== Embed within optimization over disk radius"</span><span class="p">)</span>
-
-    <span class="k">class</span><span class="w"> </span><span class="nc">Outer</span><span class="p">(</span><span class="n">condor</span><span class="o">.</span><span class="n">OptimizationProblem</span><span class="p">):</span>
-        <span class="c1"># r = variable(initializer=2+(5/16)+(1/64))</span>
-        <span class="n">r</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-        <span class="n">out</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">)</span>
-
-        <span class="n">objective</span> <span class="o">=</span> <span class="n">rosenbrock</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-
-        <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span>
-            <span class="n">print_level</span> <span class="o">=</span> <span class="mi">0</span>
-
-            <span class="c1"># with exact_hessian = False means more outer iters and also a larger</span>
-            <span class="c1"># percentage of calls correctly going through #the warm start -- I assume</span>
-            <span class="c1"># the ones where it is re-starting is because of the jacobian?,</span>
-            <span class="c1"># produces about a 16 iter difference</span>
-            <span class="n">exact_hessian</span> <span class="o">=</span> <span class="kc">False</span>
-
-            <span class="nd">@staticmethod</span>
-            <span class="k">def</span><span class="w"> </span><span class="nf">iter_callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">constraint</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"outer </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
-
-    <span class="n">out</span> <span class="o">=</span> <span class="n">Outer</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">r</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="k">for</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">use_warm_start</span></a> <span class="ow">in</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span><span class="p">:</span><span class="w">
+</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">=== with warm_start =</span><span class="s2">&quot;</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">use_warm_start</span></a><span class="p">)</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">use_warm_start</span></a><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">RosenbrockOnCircle</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">warm_start</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">use_warm_start</span></a><span class="w">
+</span><span class="w">
+</span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">=== Embed within optimization over disk radius</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">class</span><span class="w"> </span><span class="nc">Outer</span><span class="p">(</span><a class="sphx-glr-backref-module-condor sphx-glr-backref-type-py-class reference internal" href="../api/contrib.html#condor.contrib.OptimizationProblem" title="condor.OptimizationProblem"><span class="n">condor</span><span class="o">.</span><span class="n">OptimizationProblem</span></a><span class="p">)</span><span class="p">:</span><span class="w">
+</span>        <span class="c1"># r = variable(initializer=2+(5/16)+(1/64))</span><span class="w">
+</span>        <span class="n">r</span> <span class="o">=</span> <span class="n">variable</span><span class="p">(</span><span class="n">initializer</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">warm_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>        <span class="n">out</span> <span class="o">=</span> <span class="n">RosenbrockOnCircle</span><span class="p">(</span><span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>        <span class="n">objective</span> <span class="o">=</span> <span class="n">rosenbrock</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">y</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>        <span class="k">class</span><span class="w"> </span><span class="nc">Options</span><span class="p">:</span><span class="w">
+</span>            <span class="n">print_level</span> <span class="o">=</span> <span class="mi">0</span><span class="w">
+</span><span class="w">
+</span>            <span class="c1"># with exact_hessian = False means more outer iters and also a larger</span><span class="w">
+</span>            <span class="c1"># percentage of calls correctly going through #the warm start -- I assume</span><span class="w">
+</span>            <span class="c1"># the ones where it is re-starting is because of the jacobian?,</span><span class="w">
+</span>            <span class="c1"># produces about a 16 iter difference</span><span class="w">
+</span>            <span class="n">exact_hessian</span> <span class="o">=</span> <span class="kc">False</span><span class="w">
+</span><span class="w">
+</span>            <span class="nd">&#64;staticmethod</span><span class="w">
+</span>            <span class="k">def</span><span class="w"> </span><span class="nf">iter_callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">objective</span><span class="p">,</span> <span class="n">constraint</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="s2">outer </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">variable</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">out</span> <span class="o">=</span> <span class="n">Outer</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>    <span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">out</span><span class="o">.</span><span class="n">r</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>=== with warm_start = False
 === Embed within optimization over disk radius
   inner  0: variable=RosenbrockOnCircleVariable(x=array([1.24939191]), y=array([1.56173616]))
@@ -547,7 +540,7 @@ outer  5: variable=OuterVariable(r=array([1.41421356]))
 [1.41421356]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.180 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.167 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-rosenbrock-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/723d4855ff15fef0afdff48f86f7207f/rosenbrock.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">rosenbrock.ipynb</span></code></a></p>
@@ -611,7 +604,7 @@ outer  5: variable=OuterVariable(r=array([1.41421356]))
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
+</div><script src="../_static/documentation_options.js?v=7007d963"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

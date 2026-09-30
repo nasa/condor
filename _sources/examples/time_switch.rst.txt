@@ -305,12 +305,12 @@ error over transfer and final times.
     Shown once; run python with -W always to see every occurrence.
 
       _w.warn(_NUMPY_LEGACY_NOTICE, FutureWarning)
-    time to run: 0.34148946300001626
+    time to run: 0.24237256400000717
     [2.99999968] [2.99999216]
      message: Optimization terminated successfully.
      success: True
       status: 0
-         fun: 3.008671643193588e-11
+         fun: 3.008671715014618e-11
            x: [ 3.000e+00  3.000e+00]
          nit: 12
          jac: [-4.048e-06 -7.514e-06]
@@ -409,7 +409,7 @@ Another version of the transfer analysis excluding the switch event.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.693 seconds)
+   **Total running time of the script:** (0 minutes 0.527 seconds)
 
 
 .. _sphx_glr_download_examples_time_switch.py:

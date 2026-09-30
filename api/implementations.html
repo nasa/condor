@@ -6,11 +6,11 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Backend Modules" href="backend.html"><link rel="prev" title="Fields and Elements" href="fields.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Implementations - Condor 0.3.4.dev4+g30718f32d documentation</title>
+        <title>Implementations - Condor 0.3.4.dev5+ga182017d0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Condor 0.3.4.dev4+g30718f32d documentation</div></a>
+      <a href="../index.html"><div class="brand">Condor 0.3.4.dev5+ga182017d0 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">Condor 0.3.4.dev4+g30718f32d documentation</span>
+  <span class="sidebar-brand-text">Condor 0.3.4.dev5+ga182017d0 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -393,12 +393,12 @@ passed to both solvers. For additional details on the Solver options, see the
 <dl class="field-list simple">
 <dt class="field-odd">Options<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – absolute tolerance (default 1e-12)</p></li>
-<li><p><strong>rtol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – relative tolerance (default 1e-12)</p></li>
-<li><p><strong>warm_start</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether subsequent calls should initialize the variable values to
+<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – absolute tolerance (default 1e-12)</p></li>
+<li><p><strong>rtol</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – relative tolerance (default 1e-12)</p></li>
+<li><p><strong>warm_start</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether subsequent calls should initialize the variable values to
 the last-run solution (default True)</p></li>
-<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – maximum number of iterations before terminating solver (default 100)</p></li>
-<li><p><strong>error_on_fail</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether to raise an error if the solver fails to converge within
+<li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – maximum number of iterations before terminating solver (default 100)</p></li>
+<li><p><strong>error_on_fail</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag indicating whether to raise an error if the solver fails to converge within
 specified tolerance before reaching max_iter (default False)</p></li>
 </ul>
 </dd>
@@ -456,9 +456,9 @@ subclass optimization implementations.</p></li>
 <dt class="field-odd">Options<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>method</strong> (<a class="reference internal" href="#condor.implementations.iterative.CasadiNlpsolImplementation.Method" title="condor.implementations.iterative.CasadiNlpsolImplementation.Method"><code class="xref py py-class docutils literal notranslate"><span class="pre">CasadiNlpsolImplementation.Method</span></code></a>) – value from method enum to specify supported methods</p></li>
-<li><p><strong>exact_hessian</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to use second order gradient information; use limited Broyden update
+<li><p><strong>exact_hessian</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to use second order gradient information; use limited Broyden update
 otherwise</p></li>
-<li><p><strong>calc_lam_x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to calculate the lagrange multipliers solution, used for IPOPT to perform a
+<li><p><strong>calc_lam_x</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – flag to calculate the lagrange multipliers solution, used for IPOPT to perform a
 true warm start</p></li>
 <li><p><strong>**options</strong> – remaining keyword arguments are passed to casadi’s nlpsol’s constructor’s
 solver-specific options argument. See <a class="reference internal" href="#condor.implementations.iterative.CasadiNlpsolImplementation.method_default_options" title="condor.implementations.iterative.CasadiNlpsolImplementation.method_default_options"><code class="xref py py-attr docutils literal notranslate"><span class="pre">method_default_options</span></code></a> for the
@@ -742,7 +742,7 @@ dict</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=3d1ad97c"></script>
+</div><script src="../_static/documentation_options.js?v=7007d963"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
