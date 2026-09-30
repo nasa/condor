@@ -27,12 +27,13 @@ on what the user passes in for the state and input matrices.
 # To use this module, we use :func:`~condor.settings.get_module`, passing its declared
 # settings as concrete keyword arguments.
 
-import numpy as np
-
 import condor
 
-A = np.array([[0.0, 1.0], [0.0, 0.0]])
-B = np.array([[0.0], [1.0]])
+backend = condor.backend
+ops = backend.operators
+
+A = ops.array([[0.0, 1.0], [0.0, 0.0]])
+B = ops.array([[0.0], [1.0]])
 
 dblint_mod = condor.settings.get_module("_lti", A=A, B=B)
 
@@ -61,7 +62,7 @@ plt.plot(sim.t, sim.x[0].squeeze())
 # %%
 # We can also re-use the module with a different configuration:
 
-LTI_exp = condor.settings.get_module("_lti", A=np.array([[0, 1], [-2, -3]])).LTI
+LTI_exp = condor.settings.get_module("_lti", A=ops.array([[0, 1], [-2, -3]])).LTI
 
 
 class Sim(LTI_exp.TrajectoryAnalysis):
@@ -149,7 +150,7 @@ plt.plot(sim.t, sim.x[0].squeeze())
 
 # %%
 
-LTI_exp = make_LTI(A=np.array([[0, 1], [-2, -3]]))
+LTI_exp = make_LTI(A=ops.array([[0, 1], [-2, -3]]))
 
 
 class Sim(LTI_exp.TrajectoryAnalysis):

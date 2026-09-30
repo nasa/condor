@@ -67,7 +67,7 @@ class CondoricMisc(condor.ExplicitSystem):
 
 def simple_rot(th, axis):
     non_axis = [i for i in range(3) if i != axis]
-    if isinstance(th, backend.symbol_class):
+    if backend.is_symbol(th):
         dcm = ops.zeros((3, 3))
     else:
         dcm = np.zeros((3, 3))

@@ -35,11 +35,17 @@ sqrt = casadi.sqrt
 floor = casadi.floor
 ceil = casadi.ceil
 
-eye = casadi.MX.eye
-ones = casadi.MX.ones
 
 fabs = casadi.fabs
 sign = casadi.sign
+
+
+def eye(*args, **kwargs):
+    return casadi.array(casadi.MX.eye(*args, **kwargs))
+
+
+def ones(*args, **kwargs):
+    return casadi.array(casadi.MX.ones(*args, **kwargs))
 
 
 def diag(v, k=0):
@@ -83,21 +89,7 @@ def diff(x, axis=-1, n=1):
 
 
 def prod(x, axis=None):
-    if axis is None:
-        out = 1
-        for i in range(x.shape[0]):
-            for j in range(x.shape[1]):
-                out *= x[i, j]
-    elif axis == 0:
-        out = ones((1, x.shape[1]))
-        for i in range(x.shape[0]):
-            out *= x[i, :]
-    elif axis == 1:
-        out = ones((x.shape[0], 1))
-        for j in range(x.shape[1]):
-            out *= x[:, j]
-
-    return out
+    return np.atleast_2d(np.prod(x, axis))  # .atleast2d()
 
 
 def isnan(x):
@@ -132,18 +124,16 @@ pinv = casadi.pinv
 
 def concat(arrs, axis=0):
     """implement concat from array API for casadi"""
-    if not arrs:
-        return arrs
-    if np.any([isinstance(arr, backend.symbol_class) for arr in arrs]):
-        if axis == 0:
-            return casadi.vcat(arrs)
-        elif axis in (1, -1):
-            return casadi.hcat(arrs)
-        else:
-            msg = "Casadi only supports matrices"
-            raise ValueError(msg)
-    else:
-        return np.concat([np.atleast_2d(arr) for arr in arrs], axis=axis)
+    if len(arrs) == 0:
+        return np.array(arrs)
+    if len(arrs) == 1 and np.isscalar(arrs[0]):
+        if isinstance(arrs, (casadi.MX, casadi.array)):
+            return arrs
+        return np.array(arrs)
+    try:
+        return np.concat(arrs, axis=axis)
+    except ValueError:
+        return np.array(arrs)
 
 
 def unstack(arr, axis=0):
@@ -157,22 +147,19 @@ def zeros(shape=(1, 1)):
     return backend.symbol_class(*shape)
 
 
+array = casadi.array
+
+
 def min(x, axis=None):
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
-    if axis is not None:
-        msg = "Only axis=None supported"
-        raise ValueError(msg)
-    return casadi.mmin(x)
+    return np.min(x, axis=axis)
 
 
 def max(x, axis=None):
     if not isinstance(x, backend.symbol_class):
         x = concat(x)
-    if axis is not None:
-        msg = "Only axis=None supported"
-        raise ValueError(msg)
-    return casadi.mmax(x)
+    return np.max(x, axis=axis)
 
 
 unsupported_jacobian_message = (
@@ -257,7 +244,7 @@ def substitute(expr, subs):
         with contextlib.suppress(RuntimeError):
             expr = casadi.evalf(expr)
 
-    return expr
+    return casadi.array(expr)
 
 
 def if_else(*conditions_actions, short_circuit=False):

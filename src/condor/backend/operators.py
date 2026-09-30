@@ -36,6 +36,8 @@ substitute = backend_mod.operators.substitute
 zeros = backend_mod.operators.zeros
 eye = backend_mod.operators.eye
 ones = backend_mod.operators.ones
+array = backend_mod.operators.array
+#: create an array from numeric (or symbolic?) elements
 
 
 # "element-wise functions"

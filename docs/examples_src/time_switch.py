@@ -21,8 +21,8 @@ with_time_state = False
 
 
 class DblInt(co.ODESystem):
-    A = np.array([[0, 1], [0, 0]])
-    B = np.array([[0], [1]])
+    A = co.backend.operators.array([[0, 1], [0, 0]])
+    B = co.backend.operators.array([[0], [1]])
 
     x = state(shape=A.shape[0])
     mode = state()

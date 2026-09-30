@@ -58,9 +58,9 @@ def test_diff():
 
     x = rng.random((5, 7))
     test_diff = TestDiff(x)
-    assert test_diff.y == pytest.approx(np.diff(x, axis=-1))
-    assert test_diff.z == pytest.approx(np.diff(x, axis=1))
-    assert test_diff.w == pytest.approx(np.diff(x, axis=0))
+    assert np.all(test_diff.y == np.diff(x, axis=-1))
+    assert np.all(test_diff.z == np.diff(x, axis=1))
+    assert np.all(test_diff.w == np.diff(x, axis=0))
 
 
 def test_prod():

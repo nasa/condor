@@ -99,7 +99,7 @@ class FieldValues:
                 for elem, v in zip(self.field, self.asdict().values())
             ]
         )
-        if not isinstance(flat_val, backend.symbol_class):
+        if not backend.is_symbol(flat_val):
             flat_val = np.array(flat_val).reshape(-1)
         return flat_val
 
@@ -271,7 +271,7 @@ class Field:
         # would be nice to be able to follow references, etc. can match be used?
         if len(args) == 1 and not kwargs:
             field_value = args[0]
-            if isinstance(field_value, backend.symbol_class):
+            if backend.symbol_is(field_value):
                 kwargs.update(backend_repr=field_value)
 
         items = []
@@ -281,8 +281,8 @@ class Field:
                 item_value = item
                 for field_name_comp in field_name.split("__"):
                     item_value = getattr(item_value, field_name_comp)
-                if isinstance(item_value, backend.symbol_class):
-                    if not isinstance(field_value, backend.symbol_class):
+                if backend.is_symbol(item_value):
+                    if not backend.is_symbol(field_value):
                         this_item = False
                         break
                     this_item = this_item and backend.symbol_is(item_value, field_value)
@@ -432,7 +432,7 @@ class BaseElement(
                 # TODO: how to DRY this up? also in MatchedElement.__hash__
                 # (adding match to hash)
                 self.backend_repr
-                if isinstance(self.backend_repr, backend.symbol_class)
+                if backend.is_symbol(self.backend_repr)
                 else tuple(np.array(self.backend_repr).flatten().tolist()),
                 self.shape,
                 self.field_type._name,
@@ -477,7 +477,7 @@ class BaseElement(
         if isinstance(other, self.__class__):
             # short circuit using is if it's the same type of element
             return self is other
-        if isinstance(other, backend.symbol_class):
+        if backend.is_symbol(other):
             return _generic_op(operator.eq)
         return super().__eq__(other)
 
@@ -612,7 +612,7 @@ class WithDefaultElement(FreeElement):
 class WithDefaultField(FreeField):
     def create_substitution_dict(self, subclass, set_attr=False):
         """ """
-        substitution_dict = {}
+        substitution_dict = backend.SymbolCompatibleDict()
         # TODO: no back reference is preserved which frankly seems harsh...
         for elem in self:
             log.debug("checking placeholder %s on %s", elem, subclass)
@@ -639,8 +639,8 @@ class WithDefaultField(FreeField):
             if set_attr:
                 setattr(subclass, elem.name, use_val)
             log.debug("creating substitution %s = %s", elem.backend_repr, use_val)
-            if isinstance(use_val, backend.symbol_class):
-                if elem.size >= np.prod(use_val.size()):
+            if backend.is_symbol(use_val):
+                if elem.size >= np.prod(use_val.size):
                     try:
                         np.broadcast_shapes(elem.shape, use_val.shape)
                     except ValueError:
@@ -703,7 +703,7 @@ class InitializedElement(BoundedElement):
         # TODO: test this behavior? lol
         if isinstance(self.initializer, BaseElement):
             self.initializer = np.ones(self.shape) * self.initializer.backend_repr
-        elif isinstance(self.initializer, backend.symbol_class):
+        elif backend.is_symbol(self.initializer):
             self.initializer = np.ones(self.shape) * self.initializer
         else:
             self.initializer = np.broadcast_to(self.initializer, self.shape)
@@ -756,12 +756,12 @@ class TrajectoryOutputField(FreeField, default_direction=Direction.output):
         if isinstance(integrand, BaseElement):
             integrand = integrand.backend_repr
 
-        if isinstance(terminal_term, backend.symbol_class):
+        if backend.is_symbol(terminal_term):
             # comstant terminal terms are handled below
             shape_data = backend.get_symbol_data(terminal_term)
             kwargs["terminal_term"] = terminal_term
 
-        if isinstance(integrand, backend.symbol_class):
+        if backend.is_symbol(integrand):
             if "terminal_term" in kwargs:
                 if backend.get_symbol_data(integrand) != shape_data:
                     # TODO would be nice to include the names here
@@ -820,7 +820,7 @@ class AssignedField(Field, default_direction=Direction.output):
             self._add_to_namespace = add_to_namespace_override
 
     def __setattr__(self, name, value):
-        if name.startswith("_") and not isinstance(value, backend.symbol_class):
+        if name.startswith("_") and not backend.is_symbol(value):
             # TODO: iirc the reason we need to prefix field attributes that are directly
             # assigned with _ is to allow this check to work, bypassing the creation of
             # a new element. Is it actually sufficient to just if the value is a
@@ -866,7 +866,7 @@ class MatchedElement(BaseElement, MatchedElementMixin):
                 # TODO: how to DRY this up? also in BaseElement.__hash__
                 # (adding match to hash)
                 self.backend_repr
-                if isinstance(self.backend_repr, backend.symbol_class)
+                if backend.is_symbol(self.backend_repr)
                 else tuple(np.array(self.backend_repr).flatten().tolist()),
                 self.match,
                 self.shape,
@@ -909,7 +909,7 @@ class MatchedField(Field):
             element.update_name()
 
     def key_to_matched_element(self, key):
-        if isinstance(key, backend.symbol_class):
+        if backend.is_symbol(key):
             match = self._matched_to.get(backend_repr=key)
             if isinstance(match, list):
                 msg = f"Could not find match for {key}"
@@ -941,7 +941,7 @@ class MatchedField(Field):
             else:
                 symbol_data = backend.get_symbol_data(value)
 
-                if isinstance(value, backend.symbol_class):
+                if backend.is_symbol(value):
                     backend_repr = value
                 else:
                     value = np.atleast_1d(value)

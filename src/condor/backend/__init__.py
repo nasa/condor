@@ -14,6 +14,7 @@ symbol_generator = backend_mod.symbol_generator
 symbol_like = backend_mod.symbol_like
 get_symbol_data = backend_mod.get_symbol_data
 symbol_is = backend_mod.symbol_is
+is_symbol = backend_mod.is_symbol
 BackendSymbolData = backend_mod.BackendSymbolData
 
 

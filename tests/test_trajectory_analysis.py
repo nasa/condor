@@ -64,8 +64,8 @@ def test_ct_lqr():
     # continuous-time LQR
 
     class DblInt(co.ODESystem):
-        A = np.array([[0.0, 1.0], [0.0, 0.0]])
-        B = np.array([[0.0], [1.0]])
+        A = ops.array([[0.0, 1.0], [0.0, 0.0]])
+        B = ops.array([[0.0], [1.0]])
 
         K = parameter(shape=(1, B.shape[0]))
 
@@ -110,8 +110,8 @@ def test_ct_lqr():
 @pytest.mark.skip(reason="Need to fix LTI function")
 def test_sp_lqr():
     # sampled LQR
-    dblint_a = np.array([[0, 1], [0, 0]])
-    dblint_b = np.array([[0], [1]])
+    dblint_a = ops.array([[0, 1], [0, 0]])
+    dblint_b = ops.array([[0], [1]])
     dt = 0.5
 
     DblIntSampled = co.LTI(  # noqa: N806
@@ -191,8 +191,8 @@ def test_time_switched():
     # optimal transfer time with time-based events
 
     class DblInt(co.ODESystem):
-        a = np.array([[0, 1], [0, 0]])
-        b = np.array([[0], [1]])
+        a = ops.array([[0, 1], [0, 0]])
+        b = ops.array([[0], [1]])
 
         x = state(shape=a.shape[0])
         mode = state()
@@ -268,8 +268,8 @@ def test_state_switched():
     # optimal transfer time with state-based events
 
     class DblInt(co.ODESystem):
-        a = np.array([[0, 1], [0, 0]])
-        b = np.array([[0], [1]])
+        a = ops.array([[0, 1], [0, 0]])
+        b = ops.array([[0], [1]])
 
         x = state(shape=a.shape[0])
 
@@ -300,7 +300,7 @@ def test_state_switched():
 
     class Transfer(DblInt.TrajectoryAnalysis):
         initial[x] = [-9.0, 0.0]
-        xd = [1.0, 2.0]
+        xd = ops.array([1.0, 2.0]).reshape((2, 1))
         q = np.eye(2)
         cost = trajectory_output(((x - xd).T @ (x - xd)) / 2)
         tf = 20.0

@@ -109,7 +109,7 @@ class MajorBurn(LinCovCW.Event):
     T_pv = stm[:3, 3:]
     T_pv_inv = ca.solve(T_pv, ops.eye(3))
 
-    Delta_v = (T_pv_inv @ rd - T_pv_inv @ T_pp @ x[:3, 0]) - x[3:, 0]
+    Delta_v = (T_pv_inv @ rd - T_pv_inv @ T_pp @ x[:3, [0]]) - x[3:, [0]]
 
     update[Delta_v_mag] = Delta_v_mag + ca.norm_2(Delta_v)
     update[x] = x + ops.concat([ops.zeros((3, 1)), Delta_v])

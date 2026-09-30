@@ -9,7 +9,7 @@ from condor import backend
 from condor.backend import (
     FunctionOperator,
     expression_to_operator,
-    symbol_class,
+    is_symbol,
 )
 from condor.backend.operators import (
     concat,
@@ -99,9 +99,8 @@ class TrajectoryAnalysis:
         ]
 
         self.traj_out_expr = model.trajectory_output.flatten()
-        self.can_sgm = isinstance(self.p, symbol_class) and isinstance(
-            self.traj_out_expr, symbol_class
-        )
+
+        self.can_sgm = is_symbol(self.p) and is_symbol(self.traj_out_expr)
 
         self.traj_out_integrand = model.trajectory_output.flatten("integrand")
         self.traj_out_integrand_func = expression_to_operator(
@@ -119,9 +118,10 @@ class TrajectoryAnalysis:
 
         self.state0 = get_state_setter(model.initial, [self.p])
 
-        control_subs_pairs = {
-            control.backend_repr: [control.default] for control in ode_model.modal
-        }
+        control_subs_pairs = backend.SymbolCompatibleDict()
+        for control in ode_model.modal:
+            control_subs_pairs[control.backend_repr] = [control.default]
+
         for mode in model._meta.modes:
             for act in mode.action:
                 control_subs_pairs[act.match.backend_repr].insert(
@@ -140,7 +140,7 @@ class TrajectoryAnalysis:
 
         if isinstance(model.t0, BaseElement):
             t0 = model.t0.backend_repr
-        elif isinstance(model.t0, (backend.symbol_class, float, np.ndarray)):
+        elif isinstance(model.t0, (float, np.ndarray)) or is_symbol(model.t0):
             t0 = model.t0
         else:
             unexpcted_t0 = "unexpected value for t0"
@@ -202,7 +202,7 @@ class TrajectoryAnalysis:
                     e_expr = mod(model.t - at_time_start, at_time.step)
 
                     # TODO: verify start and stop for at_time slice
-                    if isinstance(at_time_start, symbol_class) or at_time_start != 0.0:
+                    if is_symbol(at_time_start) or at_time_start != 0.0:
                         e_expr = e_expr * (model.t >= at_time_start)
                         # if there is a start offset, add a linear term to provide a
                         # zero-crossing at first occurance

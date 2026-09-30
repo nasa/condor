@@ -11,8 +11,8 @@ import condor as co
 
 
 class DblIntSampled(co.ODESystem):
-    A = np.array([[0.0, 1.0], [0.0, 0.0]])
-    B = np.array([[0.0], [1.0]])
+    A = co.backend.operators.array([[0.0, 1.0], [0.0, 0.0]])
+    B = co.backend.operators.array([[0.0], [1.0]])
 
     K = parameter(shape=(1, B.shape[0]))
     dt = parameter()
