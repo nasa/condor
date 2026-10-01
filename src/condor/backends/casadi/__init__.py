@@ -1,3 +1,4 @@
+import contextlib
 import dataclasses as dc
 
 import numpy as np
@@ -5,6 +6,9 @@ import numpy as np
 import casadi
 from condor.backends.casadi import operators as operators  # noqa: PLC0414
 from condor.backends.element_mixin import BackendSymbolDataMixin
+
+with contextlib.suppress(AttributeError):
+    casadi.GlobalOptions.setNumpyMode(-1)
 
 symbol_class = casadi.MX
 
