@@ -14,3 +14,7 @@ docs/tutorial/
 docs/howto/
 docs/examples/
 docs/sg_execution_times.rst
+
+# IDE files and folders
+.idea/
+.vscode/

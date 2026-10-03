@@ -270,7 +270,6 @@ def test_jacobian_empty():
     ops.jacobian(TestJacobian.output.flatten(), TestJacobian.input.flatten())
 
 
-@pytest.mark.skip(reason="Casadi backend doesn't support matrix/matrix jacobian yet")
 def test_jacobian():
     A = rng.random((3, 3))  # noqa: N806
 

@@ -446,7 +446,7 @@ class TrajectoryAnalysis:
             dg_dt = jacobian(e_expr, model.t)
             dg_dp = jacobian(e_expr, self.p)
 
-            dte_dx = dg_dx / (dg_dx @ state_equation_func.expr)
+            dte_dx = dg_dx / (dg_dx @ state_equation_func.expr + dg_dt)
             dte_dp = -dg_dp / (dg_dx @ state_equation_func.expr + dg_dt)
 
             dh_dx = jacobian(h_expr.expr, self.x)

@@ -86,6 +86,31 @@ def test_callback():
     assert callback.parameter is not None
 
 
+@pytest.mark.parametrize("restriction", ["bounds", "constraints"])
+def test_scipy_cg_rejects_unsupported_restrictions(restriction):
+    if restriction == "bounds":
+
+        class Opt(co.OptimizationProblem):
+            x = variable(lower_bound=0)
+            objective = x**2
+
+            class Options:
+                __implementation__ = co.implementations.ScipyCG
+
+    else:
+
+        class Opt(co.OptimizationProblem):
+            x = variable()
+            objective = x**2
+            constraint(x <= 1)
+
+            class Options:
+                __implementation__ = co.implementations.ScipyCG
+
+    with pytest.raises(ValueError, match="CG does not support"):
+        Opt()
+
+
 def test_callback_scipy_no_instance():
     class Opt(co.OptimizationProblem):
         p = parameter()

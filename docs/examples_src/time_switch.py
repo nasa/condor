@@ -111,7 +111,7 @@ class MinimumTime(co.OptimizationProblem):
 
     class Options:
         # exact_hessian = False
-        __implementation__ = co.implementations.ScipyCG
+        __implementation__ = co.implementations.ScipySLSQP
 
 
 """

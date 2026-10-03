@@ -175,11 +175,6 @@ def max(x, axis=None):
     return casadi.mmax(x)
 
 
-unsupported_jacobian_message = (
-    "jacobian of matrix expression wrt matrix variable not yet supported"
-)
-
-
 def jacobian(of, wrt):
     """jacobian of expression `of` with respect to symbols `wrt`"""
     """
@@ -203,15 +198,19 @@ def jacobian(of, wrt):
        jac(0.)
     """
     if of.size and wrt.size:
-        transpose_in = False
-        if isinstance(wrt, backend.symbol_class) and wrt.op() == casadi.OP_TRANSPOSE:
-            transpose_in = True
+        transpose_in = (
+            isinstance(wrt, backend.symbol_class) and wrt.op() == casadi.OP_TRANSPOSE
+        )
+        if transpose_in:
+            input_shape = wrt.shape
             wrt = wrt.dep()
 
-        if transpose_in and np.all(np.array(of.shape + wrt.shape) > 1):
-            raise NotImplementedError(unsupported_jacobian_message)
-
         jac = casadi.jacobian(of, wrt)
+
+        if transpose_in and len(input_shape) == 2:
+            # Match derivative columns to matrix inputs encoded as transposed symbols.
+            input_order = np.arange(wrt.numel()).reshape(input_shape).T.ravel()
+            jac = jac[:, input_order]
 
         return jac
 

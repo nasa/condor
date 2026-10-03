@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from scipy import linalg
+from scipy import linalg, signal
 
 import condor as co
 from condor.backend import operators as ops
@@ -107,84 +107,54 @@ def test_ct_lqr():
     np.testing.assert_allclose(k, lqr_sol.K, rtol=1e-4)
 
 
-@pytest.mark.skip(reason="Need to fix LTI function")
 def test_sp_lqr():
     # sampled LQR
     dblint_a = np.array([[0, 1], [0, 0]])
     dblint_b = np.array([[0], [1]])
     dt = 0.5
+    ad, bd = signal.cont2discrete((dblint_a, dblint_b, None, None), dt)[:2]
+    q = np.eye(2)
+    r = np.eye(1)
 
-    DblIntSampled = co.LTI(  # noqa: N806
-        a=dblint_a, b=dblint_b, name="DblIntSampled", dt=dt
-    )
+    class DblIntSampled(co.ODESystem):
+        x = state(shape=2)
+        accumulated_cost = state()
+        K = parameter(shape=(1, 2))
+        u = -K @ x
+        dynamic_output.u = u
+        dot[x] = np.zeros(2)
+        dot[accumulated_cost] = 0.0
+
+    class SampledStep(DblIntSampled.Event):
+        at_time = slice(dt, None, dt)
+        update[accumulated_cost] = accumulated_cost + (x.T @ q @ x + u.T @ r @ u) / 2
+        update[x] = (ad - bd @ K) @ x
 
     class DblIntSampledLQR(DblIntSampled.TrajectoryAnalysis):
         initial[x] = [1.0, 0.1]
-        # initial[u] = -k@initial[x]
-        q = np.eye(2)
-        r = np.eye(1)
-        tf = 32.0  # 12 iters, 21 calls 1E-8 jac
-        # tf = 16. # 9 iters, 20 calls, 1E-7
-        cost = trajectory_output(integrand=(x.T @ q @ x + u.T @ r @ u) / 2)
-
-        class Casadi(co.Options):
-            adjoint_adaptive_max_step_size = False
-            state_max_step_size = dt / 8
-            adjoint_max_step_size = dt / 8
+        initial[accumulated_cost] = 0.0
+        tf = 31.9
+        cost = trajectory_output(terminal_term=accumulated_cost)
 
     class SampledOptLQR(co.OptimizationProblem):
-        k = variable(shape=DblIntSampledLQR.k.shape)
+        k = variable(shape=DblIntSampledLQR.K.shape)
         sim = DblIntSampledLQR(k)
         objective = sim.cost
 
-        class Casadi(co.Options):
+        class Options:
             exact_hessian = False
+            __implementation__ = co.implementations.ScipyCG
 
-    # sim = DblIntSampledLQR([1.00842737, 0.05634044])
-
-    sim = DblIntSampledLQR([0.0, 0.0])
-    sim.implementation.callback.jac_callback(sim.implementation.callback.p, [])
-
+    SampledOptLQR.set_initial(k=[0.7, 1.3])
     lqr_sol_samp = SampledOptLQR()
 
-    # sampled_sim = DblIntSampledLQR([0., 0.])
-    # sampled_sim.implementation.callback.jac_callback([0., 0.,], [0.])
-
-    q = DblIntSampledLQR.q
-    r = DblIntSampledLQR.r
-    a = dblint_a
-    b = dblint_b
-
-    ad, bd = signal.cont2discrete((a, b, None, None), dt)[:2]
-    s = linalg.solve_discrete_are(
-        ad,
-        bd,
-        q,
-        r,
-    )
+    s = linalg.solve_discrete_are(ad, bd, q, r)
     k = linalg.solve(bd.T @ s @ bd + r, bd.T @ s @ ad)
-
-    # sim = DblIntSampledLQR([1.00842737, 0.05634044])
-    sim = DblIntSampledLQR(k)
-
-    sim.implementation.callback.jac_callback(sim.implementation.callback.p, [])
-    LTI_plot(sim)
-    plt.show()
-
-    # sim = DblIntSampledLQR([0., 0.])
-
-    # sampled_sim = DblIntSampledLQR([0., 0.])
-    # sampled_sim.implementation.callback.jac_callback([0., 0.,], [0.])
-
     sampled_sim = DblIntSampledLQR(k)
-    jac_cb = sampled_sim.implementation.callback.jac_callback
-    jac_cb(k, [0.0])
 
     assert lqr_sol_samp._stats.success
-    print(lqr_sol_samp._stats)
-    print(lqr_sol_samp.objective < sampled_sim.cost)
-    print(lqr_sol_samp.objective, sampled_sim.cost)
-    print("      ARE sol:", k, "\niterative sol:", lqr_sol_samp.k)
+    np.testing.assert_allclose(lqr_sol_samp.objective, sampled_sim.cost, rtol=1e-5)
+    np.testing.assert_allclose(lqr_sol_samp.k, k, rtol=1e-3)
 
 
 def test_time_switched():
@@ -239,7 +209,7 @@ def test_time_switched():
 
         class Options:
             exact_hessian = False
-            __implementation__ = co.implementations.ScipyCG
+            __implementation__ = co.implementations.ScipySLSQP
 
     MinimumTime.set_initial(t1=2.163165480675697, t2=4.361971866705403)
     opt = MinimumTime()
