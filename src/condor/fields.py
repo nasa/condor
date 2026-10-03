@@ -913,14 +913,14 @@ class MatchedField(Field):
             match = self._matched_to.get(backend_repr=key)
             if isinstance(match, list):
                 msg = f"Could not find match for {key}"
-                raise ValueError(msg)
+                raise KeyError(msg)
         elif isinstance(key, BaseElement):
             match = key
         elif isinstance(key, str):
             match = self._matched_to.get(name=key)
         else:
             msg = f"Could not find match for {key}"
-            raise ValueError(msg)
+            raise KeyError(msg)
         return match
 
     def __setitem__(self, key, value):
