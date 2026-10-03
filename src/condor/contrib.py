@@ -693,6 +693,11 @@ class TrajectoryAnalysis(
         if dt <= 0.0:
             return self
 
+        resample_options = (dt, include_output, include_events, max_deg)
+        cache = getattr(self, "_resample_cache", None)
+        if cache is not None and resample_options in cache:
+            return cache[resample_options]
+
         new_self = model.__new__(model)
 
         # TODO: add option to rebuild the implemention
@@ -784,6 +789,10 @@ class TrajectoryAnalysis(
         new_self._res = Result(
             t=new_t, x=new_x, y=new_y, e=new_e, p=self._res.p, system=self._res.system
         )
+        if not hasattr(self, "_resample_cache"):
+            self._resample_cache = {}
+        self._resample_cache[resample_options] = new_self
+        new_self._resample_options = resample_options
         return new_self
 
     @classmethod
