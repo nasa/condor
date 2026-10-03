@@ -570,3 +570,35 @@ def test_resample_check_tplus(mass_spring_ode):
     simd = sim.resample(0.1, include_events=False)
     assert all(simd.x[simd.t < 0.45] > 0)
     assert all(simd.x[simd.t > 0.45] < 0)
+
+
+def test_resample_caching_and_options(mass_spring_ode):
+    class Sim(mass_spring_ode.TrajectoryAnalysis):
+        tf = 1.0
+
+    sim = Sim(wn=5.0)
+
+    # First call calculates and caches result
+    res1 = sim.resample(0.1)
+    assert hasattr(res1, "_resample_options")
+    assert res1._resample_options == (0.1, True, True, 3)
+
+    # Calling again on original instance with same options returns cached object
+    res2 = sim.resample(0.1)
+    assert res2 is res1
+
+    # Calling on the resampled instance with same options also returns cached object
+    res3 = res1.resample(0.1)
+    assert res3 is res1
+
+    # Calling with different options calculates new resampled instance and caches it
+    res4 = sim.resample(0.2)
+    assert res4 is not res1
+    assert res4._resample_options == (0.2, True, True, 3)
+
+    res5 = sim.resample(0.2)
+    assert res5 is res4
+
+    # Calling on res1 with dt=0.2 forwards to original and returns res4 from cache
+    res6 = res1.resample(0.2)
+    assert res6 is res4
