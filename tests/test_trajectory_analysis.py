@@ -548,10 +548,12 @@ def test_resample_no_impl(mass_spring_ode):
         tf = 10
 
     sim = Sim(wn=10)
+    expected = sim.resample(0.5, include_output=True)
     del sim.implementation
 
-    with pytest.warns(UserWarning, match="include_output"):
-        sim.resample(0.5, include_output=True)
+    actual = sim.resample(0.5, include_output=True)
+    np.testing.assert_allclose(actual.specific_energy, expected.specific_energy)
+    np.testing.assert_allclose(actual._res.y, expected._res.y)
 
 
 def test_resample_check_tplus(mass_spring_ode):
