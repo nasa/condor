@@ -193,19 +193,13 @@ class TrajectoryAnalysis:
 
                     at_time_start = 0 if at_time.start is None else at_time.start
 
-                    e_expr = (
-                        at_time.step
-                        * sin(pi * (model.t - at_time_start) / at_time.step)
-                        / (pi * 100)
-                    )
-                    # self.events(solver_res.values.t, solver_res.values.y, gs)
                     e_expr = mod(model.t - at_time_start, at_time.step)
 
                     # TODO: verify start and stop for at_time slice
                     if isinstance(at_time_start, symbol_class) or at_time_start != 0.0:
                         e_expr = e_expr * (model.t >= at_time_start)
                         # if there is a start offset, add a linear term to provide a
-                        # zero-crossing at first occurance
+                        # zero-crossing at first occurrence
                         pre_term = (at_time_start - model.t) * (
                             model.t <= at_time_start
                         )
